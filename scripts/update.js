@@ -5,6 +5,9 @@ import * as cheerio from "cheerio";
 const DATA_DIR = "data";
 const DAYS = 30;
 
+// Se 1: non ricostruisce il catalogo, usa quello esistente
+const SKIP_CATALOG = process.env.SKIP_CATALOG === "1";
+
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
 
@@ -31,10 +34,12 @@ function norm(s) {
 }
 
 function median(nums) {
-  const arr = nums.filter(n => typeof n === "number" && !Number.isNaN(n)).sort((a,b)=>a-b);
+  const arr = nums
+    .filter(n => typeof n === "number" && !Number.isNaN(n))
+    .sort((a, b) => a - b);
   if (!arr.length) return null;
   const mid = Math.floor(arr.length / 2);
-  return arr.length % 2 ? arr[mid] : (arr[mid-1] + arr[mid]) / 2;
+  return arr.length % 2 ? arr[mid] : (arr[mid - 1] + arr[mid]) / 2;
 }
 
 function sleep(ms) {
@@ -59,7 +64,6 @@ async function fetchTCGdexCardDetail(lang, cardId) {
 }
 
 async function getPokemonNameEnByDexId(dexId) {
-  // cache su file
   const cache = readJson(DEX_CACHE_FILE, {});
   if (cache[dexId]) return cache[dexId];
 
@@ -67,7 +71,6 @@ async function getPokemonNameEnByDexId(dexId) {
   const j = await fetchJson(url, {
     headers: { "user-agent": "PokeGraadBot/0.1" }
   });
-
   if (!j) return null;
 
   const nameEn =
@@ -77,18 +80,12 @@ async function getPokemonNameEnByDexId(dexId) {
 
   if (nameEn) {
     cache[dexId] = nameEn;
-    // assicura cartella data/ già creata prima di chiamare questa
     writeJson(DEX_CACHE_FILE, cache);
   }
   return nameEn;
 }
 
 // --- 1) Catalogo carte (TCGdex) ---
-//
-// Obiettivo:
-// - includere EN + JA
-// - per le carte JA-only, valorizzare nameEn tramite dexId (TCGdex detail) -> PokeAPI
-// - immagini sempre coerenti con tcgdex assets
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
   const agg = new Map(); // key = setId|localId
@@ -120,7 +117,9 @@ async function buildCatalogFromTCGdex() {
         if (!setId || !localId) continue;
 
         const key = `${setId}|${localId}`;
-        const img = c.image ? tcgdexImg(c.image, "high", "webp") : (c.imageLarge || c.images?.large || "");
+        const img = c.image
+          ? tcgdexImg(c.image, "high", "webp")
+          : (c.imageLarge || c.images?.large || "");
 
         const prev = agg.get(key) ?? {
           setId,
@@ -132,7 +131,6 @@ async function buildCatalogFromTCGdex() {
           imageLarge: img || "",
           nameEn: null,
           nameJa: null,
-          // teniamo gli id carta per poter fetchare il dettaglio se serve
           cardIdEn: null,
           cardIdJa: null
         };
@@ -146,10 +144,8 @@ async function buildCatalogFromTCGdex() {
           prev.cardIdJa = c.id || prev.cardIdJa;
         }
 
-        // se manca immagine e questa lingua ce l’ha, prendi questa
         if (!prev.imageLarge && img) prev.imageLarge = img;
 
-        // rarità/features: riempi se mancanti
         if (!prev.rarity && c.rarity) prev.rarity = c.rarity;
         if ((!prev.features || !prev.features.length) && c.rarity) prev.features = [c.rarity];
 
@@ -158,12 +154,10 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Enrichment: per carte JP-only, prova a derivare nameEn e immagine da dettaglio
-  // Nota: throttling leggero per non stressare le API
+  // Enrichment: JP-only -> nameEn da dexId
   let detailFetches = 0;
 
   for (const v of agg.values()) {
-    // prova a riempire nameEn usando dexId se manca
     if (v.nameJa && !v.nameEn && v.cardIdJa) {
       const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
       detailFetches++;
@@ -178,21 +172,17 @@ async function buildCatalogFromTCGdex() {
         }
       }
 
-      // piccola pausa ogni tot richieste (prudenziale)
       if (detailFetches % 80 === 0) await sleep(300);
     }
 
-    // se per qualche motivo manca immagine in EN ma abbiamo cardIdEn, prova dal dettaglio EN
     if (v.nameEn && !v.imageLarge && v.cardIdEn) {
       const detail = await fetchTCGdexCardDetail("en", v.cardIdEn);
       detailFetches++;
-
       if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
       if (detailFetches % 80 === 0) await sleep(300);
     }
   }
 
-  // Esplosione record per lingua (JA con nameEn valorizzato quando possibile)
   const out = [];
   for (const v of agg.values()) {
     if (v.nameEn) {
@@ -234,9 +224,6 @@ async function buildCatalogFromTCGdex() {
 }
 
 // --- 2) Scraping vendite eBay.it ---
-//
-// Limite: eBay non garantisce “data sold” in HTML. In MVP usiamo la data di raccolta;
-// con update giornaliero è una buona approssimazione per finestra rolling 30 giorni.
 function isLikelyLot(title) {
   const t = norm(title);
   return (
@@ -316,7 +303,6 @@ function bestMatchCard(catalog, title) {
     if (setCode && norm(c.setId) !== norm(setCode)) return false;
     if (num.number && c.number && c.number.toString() !== num.number.toString()) return false;
 
-    // nome: per JA spesso nel titolo c'è l'inglese, quindi matchiamo anche nameEn
     const nameOk =
       t.includes(norm(c.name)) ||
       (c.nameEn && t.includes(norm(c.nameEn)));
@@ -341,13 +327,18 @@ function bestMatchCard(catalog, title) {
   return { card: best, confidence: Math.min(conf, 1.0), num };
 }
 
-async function fetchEbaySoldPageHTML(page = 1) {
-  const url =
+function buildEbaySoldUrl(keyword, page = 1) {
+  return (
     `https://www.ebay.it/sch/i.html` +
-    `?_nkw=${encodeURIComponent("pokemon")}` +
+    `?_nkw=${encodeURIComponent(keyword)}` +
     `&LH_Sold=1&LH_Complete=1` +
     `&rt=nc` +
-    `&_pgn=${page}`;
+    `&_pgn=${page}`
+  );
+}
+
+async function fetchEbaySoldPageHTML(keyword, page = 1) {
+  const url = buildEbaySoldUrl(keyword, page);
 
   const resp = await fetch(url, {
     headers: {
@@ -384,16 +375,27 @@ async function main() {
     writeJson(DEX_CACHE_FILE, {});
   }
 
-  // A) catalogo
+  // A) catalogo (SKIP_CATALOG=1 -> usa quello esistente)
   let catalog;
-  try {
-    catalog = await buildCatalogFromTCGdex();
-  } catch (e) {
-    console.error("Catalog build failed:", e.message);
-    catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
-  }
 
-  writeJson(`${DATA_DIR}/catalog.json`, catalog);
+  if (SKIP_CATALOG) {
+    catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
+
+    // fallback: se non esiste o è vuoto, rigenera comunque
+    if (!catalog.cards || catalog.cards.length === 0) {
+      console.error("SKIP_CATALOG=1 ma catalog.json è vuoto/mancante: rigenero catalogo.");
+      catalog = await buildCatalogFromTCGdex();
+      writeJson(`${DATA_DIR}/catalog.json`, catalog);
+    }
+  } else {
+    try {
+      catalog = await buildCatalogFromTCGdex();
+    } catch (e) {
+      console.error("Catalog build failed:", e.message);
+      catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
+    }
+    writeJson(`${DATA_DIR}/catalog.json`, catalog);
+  }
 
   // B) storico vendite rolling 30 giorni
   const salesFile = `${DATA_DIR}/sales_30d.json`;
@@ -402,41 +404,55 @@ async function main() {
   const cutoff = Date.now() - DAYS * 24 * 3600 * 1000;
   const kept = (salesObj.sales || []).filter(s => new Date(s.collectedAt).getTime() >= cutoff);
 
-  // C) raccogli vendite nuove (MVP: prime 2 pagine)
+  // C) raccogli vendite nuove (4 query mirate, 2 pagine ciascuna)
   const collectedAt = todayISO();
   const newSales = [];
 
-  for (let page = 1; page <= 2; page++) {
-    let html;
-    try {
-      html = await fetchEbaySoldPageHTML(page);
-    } catch (e) {
-      console.error("eBay fetch error:", e.message);
-      continue;
-    }
+  const queries = [
+    // 1) focus grading
+    { label: "graad", keyword: "pokemon graad", pages: 2 },
+    // 2) grading + jap (utile per JP)
+    { label: "graad-jap", keyword: "pokemon graad jap", pages: 2 },
+    // 3) set moderno JP molto comune in Italia
+    { label: "sv9a", keyword: "pokemon sv9a", pages: 2 },
+    // 4) sv9a + jap (ulteriore segnale lingua)
+    { label: "sv9a-jap", keyword: "pokemon sv9a jap", pages: 2 }
+  ];
 
-    const items = parseEbaySearchItems(html);
+  for (const q of queries) {
+    for (let page = 1; page <= q.pages; page++) {
+      let html;
+      try {
+        html = await fetchEbaySoldPageHTML(q.keyword, page);
+      } catch (e) {
+        console.error(`eBay fetch error (${q.label} p${page}):`, e.message);
+        continue;
+      }
 
-    for (const it of items) {
-      if (isLikelyLot(it.title)) continue;
+      const items = parseEbaySearchItems(html);
 
-      const bucket = detectGraadBucket(it.title);
-      const graded = bucket && bucket.startsWith("graad_");
+      for (const it of items) {
+        if (isLikelyLot(it.title)) continue;
 
-      const match = bestMatchCard(catalog, it.title);
-      if (!match.card || match.confidence < 0.85) continue;
+        const bucket = detectGraadBucket(it.title);
+        const graded = bucket && bucket.startsWith("graad_");
 
-      const priceBucket = graded ? bucket : "raw";
+        const match = bestMatchCard(catalog, it.title);
+        if (!match.card || match.confidence < 0.85) continue;
 
-      newSales.push({
-        collectedAt,
-        source: "ebay.it",
-        title: it.title,
-        url: it.url,
-        price_eur: it.price_eur,
-        cardId: match.card.id,
-        bucket: priceBucket
-      });
+        const priceBucket = graded ? bucket : "raw";
+
+        newSales.push({
+          collectedAt,
+          source: "ebay.it",
+          query: q.label,
+          title: it.title,
+          url: it.url,
+          price_eur: it.price_eur,
+          cardId: match.card.id,
+          bucket: priceBucket
+        });
+      }
     }
   }
 
