@@ -1,12 +1,3 @@
 {
-  "byCard": {
-    "sv9a-181-165-snorlax-ja": {
-      "raw": { "median_eur": null, "n": 0 },
-      "graad_7": { "median_eur": null, "n": 0 },
-      "graad_8": { "median_eur": null, "n": 0 },
-      "graad_9": { "median_eur": null, "n": 0 },
-      "graad_9_5": { "median_eur": null, "n": 0 },
-      "graad_10": { "median_eur": null, "n": 0 }
-    }
-  }
+  "byCard": {}
 }
