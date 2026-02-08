@@ -5,13 +5,20 @@ let sets = [];
 let langs = [];
 
 function norm(s) {
-  return (s || "")
+  let t = (s || "")
     .toString()
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ")
     .trim();
+
+  // token lingua comuni
+  t = t
+    .replace(/\b(jap|jpn|jp|giapponese)\b/g, " ja ")
+    .replace(/\b(eng|en|english|inglese)\b/g, " en ");
+
+  return t.replace(/\s+/g, " ").trim();
 }
 
 function buildOptions(select, items, allLabel) {
@@ -52,8 +59,17 @@ function applyFilters() {
   if (q) {
     res = res.filter(c => {
       const hay = norm([
-        c.name, c.setId, c.setName, c.numberFull, c.number, c.lang, c.rarity, c.features?.join(" ")
-      ].join(" "));
+  c.name,
+  c.nameEn,
+  c.nameJa,
+  c.setId,
+  c.setName,
+  c.numberFull,
+  c.number,
+  c.lang,
+  c.rarity,
+  c.features?.join(" ")
+].join(" "));
       return hay.includes(q);
     });
   }
