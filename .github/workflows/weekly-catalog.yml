@@ -24,15 +24,20 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install deps
+      - name: Install deps (generates lockfile if missing)
         run: npm install --no-audit --no-fund
 
-      - name: Quick debug (versions)
+      - name: Commit package-lock.json if newly created
         run: |
-          node -v
-          npm -v
-          ls -la
-          ls -la scripts || true
+          if [ -f package-lock.json ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git diff --cached --quiet || git commit -m "chore: add package-lock"
+            git push
+          else
+            echo "package-lock.json not created (unexpected)"
+          fi
 
       - name: Run updater (catalog + prices)
         run: node scripts/update.js
