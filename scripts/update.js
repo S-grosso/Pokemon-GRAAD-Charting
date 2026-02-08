@@ -4,8 +4,6 @@ import * as cheerio from "cheerio";
 
 const DATA_DIR = "data";
 const DAYS = 30;
-
-// Se 1: non ricostruisce il catalogo, usa quello esistente
 const SKIP_CATALOG = process.env.SKIP_CATALOG === "1";
 
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
@@ -18,11 +16,9 @@ function readJson(path, fallback) {
 function writeJson(path, obj) {
   fs.writeFileSync(path, JSON.stringify(obj, null, 2), "utf8");
 }
-
 function todayISO() {
   return new Date().toISOString().slice(0, 19) + "Z";
 }
-
 function norm(s) {
   return (s || "")
     .toString()
@@ -32,19 +28,15 @@ function norm(s) {
     .replace(/\s+/g, " ")
     .trim();
 }
-
 function median(nums) {
   const arr = nums
-    .filter(n => typeof n === "number" && !Number.isNaN(n))
-    .sort((a, b) => a - b);
+    .filter(n => typeof n === "number" && Number.isFinite(n))
+    .sort((a,b)=>a-b);
   if (!arr.length) return null;
   const mid = Math.floor(arr.length / 2);
-  return arr.length % 2 ? arr[mid] : (arr[mid - 1] + arr[mid]) / 2;
+  return arr.length % 2 ? arr[mid] : (arr[mid-1] + arr[mid]) / 2;
 }
-
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // TCGdex assets: {base}/{quality}.{ext}
 function tcgdexImg(imageBase, quality = "high", ext = "webp") {
@@ -60,7 +52,7 @@ async function fetchJson(url, opts = {}) {
 
 async function fetchTCGdexCardDetail(lang, cardId) {
   const url = `https://api.tcgdex.net/v2/${lang}/cards/${encodeURIComponent(cardId)}`;
-  return await fetchJson(url);
+  return await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.1" } });
 }
 
 async function getPokemonNameEnByDexId(dexId) {
@@ -68,9 +60,7 @@ async function getPokemonNameEnByDexId(dexId) {
   if (cache[dexId]) return cache[dexId];
 
   const url = `https://pokeapi.co/api/v2/pokemon-species/${dexId}/`;
-  const j = await fetchJson(url, {
-    headers: { "user-agent": "PokeGraadBot/0.1" }
-  });
+  const j = await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.1" } });
   if (!j) return null;
 
   const nameEn =
@@ -85,7 +75,10 @@ async function getPokemonNameEnByDexId(dexId) {
   return nameEn;
 }
 
-// --- 1) Catalogo carte (TCGdex) ---
+// --- 1) Catalogo (TCGdex) ---
+// - include EN + JA
+// - esclude TCG Pocket (serie tcgp)
+// - per JP-only prova a valorizzare nameEn via dexId
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
   const agg = new Map(); // key = setId|localId
@@ -93,12 +86,15 @@ async function buildCatalogFromTCGdex() {
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    const sets = await fetchJson(`${base}/sets`);
+    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.1" } });
     if (!sets) throw new Error(`TCGdex sets (${lang}) failed`);
 
     for (const s of sets) {
-      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`);
+      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.1" } });
       if (!set) continue;
+
+      // IMPORTANT: escludi TCG Pocket
+      if (set.serie?.id === "tcgp") continue;
 
       const setId = set.id || s.id;
       const setName = set.name || s.name || setId;
@@ -106,7 +102,6 @@ async function buildCatalogFromTCGdex() {
       const total =
         set.cardCount?.official ??
         set.cardCount?.total ??
-        set.cardCount?.count ??
         null;
 
       if (!Array.isArray(set.cards)) continue;
@@ -117,9 +112,7 @@ async function buildCatalogFromTCGdex() {
         if (!setId || !localId) continue;
 
         const key = `${setId}|${localId}`;
-        const img = c.image
-          ? tcgdexImg(c.image, "high", "webp")
-          : (c.imageLarge || c.images?.large || "");
+        const img = c.image ? tcgdexImg(c.image, "high", "webp") : (c.imageLarge || c.images?.large || "");
 
         const prev = agg.get(key) ?? {
           setId,
@@ -138,8 +131,7 @@ async function buildCatalogFromTCGdex() {
         if (lang === "en") {
           prev.nameEn = name;
           prev.cardIdEn = c.id || prev.cardIdEn;
-        }
-        if (lang === "ja") {
+        } else if (lang === "ja") {
           prev.nameJa = name;
           prev.cardIdJa = c.id || prev.cardIdJa;
         }
@@ -154,31 +146,33 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Enrichment: JP-only -> nameEn da dexId
+  // Enrichment (solo quando serve): JP-only -> nameEn via dexId; immagini via detail
   let detailFetches = 0;
 
   for (const v of agg.values()) {
+    // Se manca immagine, prova dal detail della lingua disponibile
+    if (!v.imageLarge) {
+      const lang = v.cardIdJa ? "ja" : (v.cardIdEn ? "en" : null);
+      const id = v.cardIdJa || v.cardIdEn;
+      if (lang && id) {
+        const detail = await fetchTCGdexCardDetail(lang, id);
+        detailFetches++;
+        if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
+        if (detailFetches % 80 === 0) await sleep(300);
+      }
+    }
+
+    // JP-only: riempi nameEn via dexId
     if (v.nameJa && !v.nameEn && v.cardIdJa) {
       const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
       detailFetches++;
 
-      if (detail) {
-        if (!v.imageLarge && detail.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
-
-        const dex = Array.isArray(detail.dexId) ? detail.dexId[0] : null;
-        if (dex) {
-          const enName = await getPokemonNameEnByDexId(dex);
-          if (enName) v.nameEn = enName;
-        }
+      const dex = Array.isArray(detail?.dexId) ? detail.dexId[0] : null;
+      if (dex) {
+        const enName = await getPokemonNameEnByDexId(dex);
+        if (enName) v.nameEn = enName;
       }
 
-      if (detailFetches % 80 === 0) await sleep(300);
-    }
-
-    if (v.nameEn && !v.imageLarge && v.cardIdEn) {
-      const detail = await fetchTCGdexCardDetail("en", v.cardIdEn);
-      detailFetches++;
-      if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
       if (detailFetches % 80 === 0) await sleep(300);
     }
   }
@@ -229,18 +223,17 @@ function isLikelyLot(title) {
   return (
     /\blot\b/.test(t) ||
     /\bbundle\b/.test(t) ||
+    /\bplayset\b/.test(t) ||
     /\bchoose\b/.test(t) ||
     /\bseleziona\b/.test(t) ||
-    /\b(\d+)\s*(cards|carte)\b/.test(t) ||
-    /\bplayset\b/.test(t)
+    /\b(\d+)\s*(cards|carte)\b/.test(t)
   );
 }
 
 function parseEurPrice(text) {
   const m = text.replace(/\./g, "").match(/(\d+,\d{1,2}|\d+)(?=\s*€|\s*eur)/i);
   if (!m) return null;
-  const n = m[1].replace(",", ".");
-  const v = Number(n);
+  const v = Number(m[1].replace(",", "."));
   return Number.isFinite(v) ? v : null;
 }
 
@@ -257,9 +250,8 @@ function detectGraadBucket(title) {
 
   const m = t.match(/graad\s*([0-9]{1,2}(?:[.,]5)?)/);
   if (!m) return "graad_unknown";
-  const raw = m[1].replace(",", ".");
-  const g = Number(raw);
 
+  const g = Number(m[1].replace(",", "."));
   if (g === 10) return "graad_10";
   if (g === 9.5) return "graad_9_5";
   if (g === 9) return "graad_9";
@@ -273,21 +265,29 @@ function detectGraadBucket(title) {
   return "graad_unknown";
 }
 
-function extractCardNumber(title) {
-  const t = title;
-  const m1 = t.match(/(\d{1,3})\s*\/\s*(\d{1,3})/);
-  if (m1) return { number: m1[1], total: m1[2], full: `${m1[1]}/${m1[2]}` };
-
-  const m2 = t.match(/\b#?\s*(\d{1,3})\b/);
-  if (m2) return { number: m2[1], total: null, full: null };
-
-  return { number: null, total: null, full: null };
-}
-
 function extractSetCode(title) {
   const t = norm(title);
+  // sv9a, sv4a, sv2a, sv8, ecc.
   const m = t.match(/\bsv\d{1,2}[a-z]?\b/);
   return m ? m[0] : null;
+}
+
+function extractLocalId(title) {
+  const raw = title || "";
+
+  // 181/165 -> usa 181
+  const m1 = raw.match(/(\d{1,3})\s*\/\s*(\d{1,3})/);
+  if (m1) return m1[1];
+
+  // Codici promo tipo BW68, SVP123, DPxx ecc. (semplice ma efficace)
+  const mPromo = raw.match(/\b([A-Z]{1,4}\d{1,4})\b/);
+  if (mPromo) return mPromo[1];
+
+  // #181 o 181
+  const m2 = raw.match(/\b#?\s*(\d{1,3})\b/);
+  if (m2) return m2[1];
+
+  return null;
 }
 
 function bestMatchCard(catalog, title) {
@@ -296,53 +296,53 @@ function bestMatchCard(catalog, title) {
 
   const lang = detectLangFromTitle(t);
   const setCode = extractSetCode(title);
-  const num = extractCardNumber(title);
+  const localId = extractLocalId(title);
 
-  const candidates = catalog.cards.filter(c => {
+  if (!localId) return { card: null, confidence: 0 };
+
+  const candidates = (catalog.cards || []).filter(c => {
     if (lang && c.lang !== lang) return false;
     if (setCode && norm(c.setId) !== norm(setCode)) return false;
-    if (num.number && c.number && c.number.toString() !== num.number.toString()) return false;
 
-    const nameOk =
+    // numero: confronto case-insensitive (BW68 ecc.)
+    if (c.number && norm(c.number) !== norm(localId)) return false;
+
+    // nome: match su name oppure nameEn (fondamentale per JA)
+    const okName =
       t.includes(norm(c.name)) ||
       (c.nameEn && t.includes(norm(c.nameEn)));
 
-    return nameOk;
+    return okName;
   });
 
   if (!candidates.length) return { card: null, confidence: 0 };
 
+  // scoring leggero
   let best = candidates[0];
-  let conf = 0.6;
-  if (setCode) conf += 0.2;
-  if (lang) conf += 0.1;
-  if (num.number) conf += 0.1;
+  let conf = 0.65;
+  if (setCode) conf += 0.15;
+  if (lang) conf += 0.10;
+  if (localId) conf += 0.10;
 
+  // preferisci con immagine
   for (const c of candidates) {
     if (c.imageLarge && !best.imageLarge) best = c;
   }
 
-  if (!num.number) return { card: null, confidence: 0 };
-
-  return { card: best, confidence: Math.min(conf, 1.0), num };
+  return { card: best, confidence: Math.min(conf, 1.0) };
 }
 
-function buildEbaySoldUrl(keyword, page = 1) {
-  return (
+async function fetchEbaySoldPageHTML({ keyword, page = 1 }) {
+  const url =
     `https://www.ebay.it/sch/i.html` +
     `?_nkw=${encodeURIComponent(keyword)}` +
     `&LH_Sold=1&LH_Complete=1` +
     `&rt=nc` +
-    `&_pgn=${page}`
-  );
-}
-
-async function fetchEbaySoldPageHTML(keyword, page = 1) {
-  const url = buildEbaySoldUrl(keyword, page);
+    `&_pgn=${page}`;
 
   const resp = await fetch(url, {
     headers: {
-      "user-agent": "Mozilla/5.0 (compatible; PokeGraadBot/0.1; +https://example.invalid)"
+      "user-agent": "Mozilla/5.0 (compatible; PokeGraadBot/0.2; +https://example.invalid)"
     }
   });
   if (!resp.ok) throw new Error(`eBay fetch failed: ${resp.status}`);
@@ -370,31 +370,28 @@ function parseEbaySearchItems(html) {
 async function main() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 
-  // cache dex: assicurati esista (almeno vuota)
-  if (!fs.existsSync(DEX_CACHE_FILE)) {
-    writeJson(DEX_CACHE_FILE, {});
-  }
+  // cache dex
+  if (!fs.existsSync(DEX_CACHE_FILE)) writeJson(DEX_CACHE_FILE, {});
 
-  // A) catalogo (SKIP_CATALOG=1 -> usa quello esistente)
-  let catalog;
+  // A) catalogo
+  const catalogFile = `${DATA_DIR}/catalog.json`;
+  let catalog = readJson(catalogFile, { cards: [] });
 
-  if (SKIP_CATALOG) {
-    catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
-
-    // fallback: se non esiste o è vuoto, rigenera comunque
-    if (!catalog.cards || catalog.cards.length === 0) {
-      console.error("SKIP_CATALOG=1 ma catalog.json è vuoto/mancante: rigenero catalogo.");
-      catalog = await buildCatalogFromTCGdex();
-      writeJson(`${DATA_DIR}/catalog.json`, catalog);
-    }
-  } else {
+  if (!SKIP_CATALOG) {
     try {
       catalog = await buildCatalogFromTCGdex();
+      writeJson(catalogFile, catalog);
     } catch (e) {
       console.error("Catalog build failed:", e.message);
-      catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
+      // fallback: resta quello esistente
+      catalog = readJson(catalogFile, { cards: [] });
     }
-    writeJson(`${DATA_DIR}/catalog.json`, catalog);
+  } else {
+    if (!catalog.cards?.length) {
+      console.warn("SKIP_CATALOG=1 ma catalog.json è vuoto: rigenero comunque.");
+      catalog = await buildCatalogFromTCGdex();
+      writeJson(catalogFile, catalog);
+    }
   }
 
   // B) storico vendite rolling 30 giorni
@@ -404,28 +401,26 @@ async function main() {
   const cutoff = Date.now() - DAYS * 24 * 3600 * 1000;
   const kept = (salesObj.sales || []).filter(s => new Date(s.collectedAt).getTime() >= cutoff);
 
-  // C) raccogli vendite nuove (4 query mirate, 2 pagine ciascuna)
+  // C) raccolta vendite: 4 query mirate (più densità di match rispetto a "pokemon")
   const collectedAt = todayISO();
-  const newSales = [];
 
-  const queries = [
-    // 1) focus grading
-    { label: "graad", keyword: "pokemon graad", pages: 2 },
-    // 2) grading + jap (utile per JP)
-    { label: "graad-jap", keyword: "pokemon graad jap", pages: 2 },
-    // 3) set moderno JP molto comune in Italia
-    { label: "sv9a", keyword: "pokemon sv9a", pages: 2 },
-    // 4) sv9a + jap (ulteriore segnale lingua)
-    { label: "sv9a-jap", keyword: "pokemon sv9a jap", pages: 2 }
+  const keywords = [
+    "pokemon graad",
+    "pokemon 151 graad",      // spesso sv2a / 151 jap
+    "pokemon sv9a graad",     // esempio concreto che usi tu
+    "pokemon jap graad"       // intercetta titoli dove la lingua è esplicitata
   ];
 
-  for (const q of queries) {
-    for (let page = 1; page <= q.pages; page++) {
+  const PAGES_PER_QUERY = 2; // tienilo basso per non allungare troppo i job
+
+  const newSales = [];
+  for (const kw of keywords) {
+    for (let page = 1; page <= PAGES_PER_QUERY; page++) {
       let html;
       try {
-        html = await fetchEbaySoldPageHTML(q.keyword, page);
+        html = await fetchEbaySoldPageHTML({ keyword: kw, page });
       } catch (e) {
-        console.error(`eBay fetch error (${q.label} p${page}):`, e.message);
+        console.error("eBay fetch error:", kw, e.message);
         continue;
       }
 
@@ -436,16 +431,16 @@ async function main() {
 
         const bucket = detectGraadBucket(it.title);
         const graded = bucket && bucket.startsWith("graad_");
+        const priceBucket = graded ? bucket : "raw";
 
         const match = bestMatchCard(catalog, it.title);
-        if (!match.card || match.confidence < 0.85) continue;
 
-        const priceBucket = graded ? bucket : "raw";
+        // soglia un filo più permissiva: stai già restringendo con keyword + numero+nome
+        if (!match.card || match.confidence < 0.80) continue;
 
         newSales.push({
           collectedAt,
           source: "ebay.it",
-          query: q.label,
           title: it.title,
           url: it.url,
           price_eur: it.price_eur,
@@ -486,10 +481,7 @@ async function main() {
   for (const [cardId, buckets] of Object.entries(byCard)) {
     priceOut.byCard[cardId] = {};
     for (const [bucket, arr] of Object.entries(buckets)) {
-      priceOut.byCard[cardId][bucket] = {
-        median_eur: median(arr),
-        n: arr.length
-      };
+      priceOut.byCard[cardId][bucket] = { median_eur: median(arr), n: arr.length };
     }
   }
 
