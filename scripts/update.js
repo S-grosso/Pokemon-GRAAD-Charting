@@ -37,73 +37,115 @@ function median(nums) {
 // --- 1) Catalogo carte (TCGdex) ---
 // Per restare “gratis” e multilingua, TCGdex è la scelta più comoda. :contentReference[oaicite:4]{index=4}
 async function buildCatalogFromTCGdex() {
-  // Strategia MVP:
-  // - prendiamo set + carte in EN e JA
-  // - teniamo solo campi minimi per ricerca + immagine (se disponibile)
-  //
-  // Nota: TCGdex ha endpoint per lingua; per semplicità usiamo due fetch separati.
   const langs = ["en", "ja"];
-  const cards = [];
+
+  // mappa chiave stabile -> oggetto aggregato
+  // chiave: setId|localId (es: sv9a|181)
+  const agg = new Map();
 
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    // sets
     const setsResp = await fetch(`${base}/sets`);
     if (!setsResp.ok) throw new Error(`TCGdex sets (${lang}) failed: ${setsResp.status}`);
     const sets = await setsResp.json();
 
-    // Per non esplodere i tempi: in MVP scarichiamo solo i set “sv”/moderni?
-    // Qui lasciamo TUTTI i set; se diventa pesante, si mette un filtro.
     for (const s of sets) {
-      // recupero dettagli set (contiene lista carte)
       const setResp = await fetch(`${base}/sets/${encodeURIComponent(s.id)}`);
       if (!setResp.ok) continue;
       const set = await setResp.json();
 
-      // set.cards può essere enorme; prendiamo i riferimenti e poi dettagli per carta?
-      // TCGdex spesso include già info utili nei dettagli set; gestiamo entrambe.
-      const setName = set.name || s.name || s.id;
+      const setId = set.id || s.id;
+      const setName = set.name || s.name || setId;
 
-      if (Array.isArray(set.cards)) {
-        for (const c of set.cards) {
-          // c può essere oggetto ricco o un riferimento; proviamo a leggere campi base.
-          const name = c.name || null;
-          const localId = c.localId || c.number || null;     // dipende dai dati
-          const id = c.id || null;
+      // prova a recuperare "totale" set per numberFull
+      const total =
+        set.cardCount?.official ??
+        set.cardCount?.total ??
+        set.cardCount?.count ??
+        null;
 
-          // Se manca l’id carta, saltiamo (in pratica succede raramente).
-          if (!id) continue;
+      if (!Array.isArray(set.cards)) continue;
 
-          // Creiamo un id interno stabile per il sito:
-          // setId + localId + lang + nome normalizzato.
-          const num = (localId || "").toString();
-          const internalId = `${set.id}-${num}-${norm(name || "card")}-${lang}`;
+      for (const c of set.cards) {
+        const name = c.name || "Unknown";
+        const localId = (c.localId ?? c.number ?? "").toString().trim();
+        if (!setId || !localId) continue;
 
-          cards.push({
-            id: internalId,
-            name: name || "Unknown",
-            lang,
-            setId: set.id,
-            setName,
-            number: num,
-            numberFull: null, // lo riempiamo se lo ricaviamo dal title eBay, o da altre fonti
-            rarity: c.rarity || null,
-            features: c.rarity ? [c.rarity] : [],
-            imageLarge: c.image ? (c.image + "/high.webp") : (c.imageLarge || c.images?.large || "")
-          });
-        }
+        const key = `${setId}|${localId}`;
+        const prev = agg.get(key) ?? {
+          setId,
+          setName,
+          number: localId,
+          numberFull: total ? `${localId}/${total}` : null,
+          rarity: c.rarity || null,
+          features: c.rarity ? [c.rarity] : [],
+          // immagini: teniamo quella migliore disponibile tra lingue
+          imageLarge: c.image ? (c.image + "/high.webp") : (c.imageLarge || c.images?.large || ""),
+          // nomi per ricerca cross-lingua
+          nameEn: null,
+          nameJa: null
+        };
+
+        if (lang === "en") prev.nameEn = name;
+        if (lang === "ja") prev.nameJa = name;
+
+        // se manca immagine e questa lingua ce l’ha, prendi questa
+        const img = c.image ? (c.image + "/high.webp") : (c.imageLarge || c.images?.large || "");
+        if (!prev.imageLarge && img) prev.imageLarge = img;
+
+        // rarità/features: se una lingua non le ha e l'altra sì, riempi
+        if (!prev.rarity && c.rarity) prev.rarity = c.rarity;
+        if ((!prev.features || !prev.features.length) && c.rarity) prev.features = [c.rarity];
+
+        agg.set(key, prev);
       }
     }
   }
 
-  // Dedup grezzo (se stesso id interno appare doppio)
-  const uniq = new Map();
-  for (const c of cards) {
-    if (!uniq.has(c.id)) uniq.set(c.id, c);
+  // Ora “esplodiamo” in record per lingua, ma con alias cross-lingua.
+  // Così: le carte JA avranno name in giapponese + nameEn in inglese.
+  const out = [];
+
+  for (const v of agg.values()) {
+    // record EN
+    if (v.nameEn) {
+      out.push({
+        id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
+        name: v.nameEn,
+        nameEn: v.nameEn,
+        nameJa: v.nameJa,
+        lang: "en",
+        setId: v.setId,
+        setName: v.setName,
+        number: v.number,
+        numberFull: v.numberFull,
+        rarity: v.rarity,
+        features: v.features,
+        imageLarge: v.imageLarge
+      });
+    }
+
+    // record JA
+    if (v.nameJa) {
+      out.push({
+        id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
+        name: v.nameJa,
+        nameEn: v.nameEn,     // <- questo è il pezzo chiave per la ricerca
+        nameJa: v.nameJa,
+        lang: "ja",
+        setId: v.setId,
+        setName: v.setName,
+        number: v.number,
+        numberFull: v.numberFull,
+        rarity: v.rarity,
+        features: v.features,
+        imageLarge: v.imageLarge
+      });
+    }
   }
 
-  return { cards: [...uniq.values()] };
+  return { cards: out };
 }
 
 // --- 2) Scraping vendite eBay.it ---
