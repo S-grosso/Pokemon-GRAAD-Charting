@@ -5,6 +5,9 @@ import * as cheerio from "cheerio";
 const DATA_DIR = "data";
 const DAYS = 30;
 
+// cache locale per dexId -> nome inglese (per non martellare PokeAPI)
+const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
+
 // --- Utils ---
 function readJson(path, fallback) {
   try { return JSON.parse(fs.readFileSync(path, "utf8")); } catch { return fallback; }
@@ -34,31 +37,75 @@ function median(nums) {
   return arr.length % 2 ? arr[mid] : (arr[mid-1] + arr[mid]) / 2;
 }
 
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
+}
+
+// TCGdex assets: {base}/{quality}.{ext}
+function tcgdexImg(imageBase, quality = "high", ext = "webp") {
+  if (!imageBase) return "";
+  return `${imageBase}/${quality}.${ext}`;
+}
+
+async function fetchJson(url, opts = {}) {
+  const resp = await fetch(url, opts);
+  if (!resp.ok) return null;
+  return await resp.json();
+}
+
+async function fetchTCGdexCardDetail(lang, cardId) {
+  const url = `https://api.tcgdex.net/v2/${lang}/cards/${encodeURIComponent(cardId)}`;
+  return await fetchJson(url);
+}
+
+async function getPokemonNameEnByDexId(dexId) {
+  // cache su file
+  const cache = readJson(DEX_CACHE_FILE, {});
+  if (cache[dexId]) return cache[dexId];
+
+  const url = `https://pokeapi.co/api/v2/pokemon-species/${dexId}/`;
+  const j = await fetchJson(url, {
+    headers: { "user-agent": "PokeGraadBot/0.1" }
+  });
+
+  if (!j) return null;
+
+  const nameEn =
+    (j.names || []).find(x => x.language?.name === "en")?.name ||
+    j.name ||
+    null;
+
+  if (nameEn) {
+    cache[dexId] = nameEn;
+    // assicura cartella data/ già creata prima di chiamare questa
+    writeJson(DEX_CACHE_FILE, cache);
+  }
+  return nameEn;
+}
+
 // --- 1) Catalogo carte (TCGdex) ---
-// Per restare “gratis” e multilingua, TCGdex è la scelta più comoda. :contentReference[oaicite:4]{index=4}
+//
+// Obiettivo:
+// - includere EN + JA
+// - per le carte JA-only, valorizzare nameEn tramite dexId (TCGdex detail) -> PokeAPI
+// - immagini sempre coerenti con tcgdex assets
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
-
-  // mappa chiave stabile -> oggetto aggregato
-  // chiave: setId|localId (es: sv9a|181)
-  const agg = new Map();
+  const agg = new Map(); // key = setId|localId
 
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    const setsResp = await fetch(`${base}/sets`);
-    if (!setsResp.ok) throw new Error(`TCGdex sets (${lang}) failed: ${setsResp.status}`);
-    const sets = await setsResp.json();
+    const sets = await fetchJson(`${base}/sets`);
+    if (!sets) throw new Error(`TCGdex sets (${lang}) failed`);
 
     for (const s of sets) {
-      const setResp = await fetch(`${base}/sets/${encodeURIComponent(s.id)}`);
-      if (!setResp.ok) continue;
-      const set = await setResp.json();
+      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`);
+      if (!set) continue;
 
       const setId = set.id || s.id;
       const setName = set.name || s.name || setId;
 
-      // prova a recuperare "totale" set per numberFull
       const total =
         set.cardCount?.official ??
         set.cardCount?.total ??
@@ -73,6 +120,8 @@ async function buildCatalogFromTCGdex() {
         if (!setId || !localId) continue;
 
         const key = `${setId}|${localId}`;
+        const img = c.image ? tcgdexImg(c.image, "high", "webp") : (c.imageLarge || c.images?.large || "");
+
         const prev = agg.get(key) ?? {
           setId,
           setName,
@@ -80,21 +129,27 @@ async function buildCatalogFromTCGdex() {
           numberFull: total ? `${localId}/${total}` : null,
           rarity: c.rarity || null,
           features: c.rarity ? [c.rarity] : [],
-          // immagini: teniamo quella migliore disponibile tra lingue
-          imageLarge: c.image ? (c.image + "/high.webp") : (c.imageLarge || c.images?.large || ""),
-          // nomi per ricerca cross-lingua
+          imageLarge: img || "",
           nameEn: null,
-          nameJa: null
+          nameJa: null,
+          // teniamo gli id carta per poter fetchare il dettaglio se serve
+          cardIdEn: null,
+          cardIdJa: null
         };
 
-        if (lang === "en") prev.nameEn = name;
-        if (lang === "ja") prev.nameJa = name;
+        if (lang === "en") {
+          prev.nameEn = name;
+          prev.cardIdEn = c.id || prev.cardIdEn;
+        }
+        if (lang === "ja") {
+          prev.nameJa = name;
+          prev.cardIdJa = c.id || prev.cardIdJa;
+        }
 
         // se manca immagine e questa lingua ce l’ha, prendi questa
-        const img = c.image ? (c.image + "/high.webp") : (c.imageLarge || c.images?.large || "");
         if (!prev.imageLarge && img) prev.imageLarge = img;
 
-        // rarità/features: se una lingua non le ha e l'altra sì, riempi
+        // rarità/features: riempi se mancanti
         if (!prev.rarity && c.rarity) prev.rarity = c.rarity;
         if ((!prev.features || !prev.features.length) && c.rarity) prev.features = [c.rarity];
 
@@ -103,12 +158,43 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Ora “esplodiamo” in record per lingua, ma con alias cross-lingua.
-  // Così: le carte JA avranno name in giapponese + nameEn in inglese.
-  const out = [];
+  // Enrichment: per carte JP-only, prova a derivare nameEn e immagine da dettaglio
+  // Nota: throttling leggero per non stressare le API
+  let detailFetches = 0;
 
   for (const v of agg.values()) {
-    // record EN
+    // prova a riempire nameEn usando dexId se manca
+    if (v.nameJa && !v.nameEn && v.cardIdJa) {
+      const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
+      detailFetches++;
+
+      if (detail) {
+        if (!v.imageLarge && detail.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
+
+        const dex = Array.isArray(detail.dexId) ? detail.dexId[0] : null;
+        if (dex) {
+          const enName = await getPokemonNameEnByDexId(dex);
+          if (enName) v.nameEn = enName;
+        }
+      }
+
+      // piccola pausa ogni tot richieste (prudenziale)
+      if (detailFetches % 80 === 0) await sleep(300);
+    }
+
+    // se per qualche motivo manca immagine in EN ma abbiamo cardIdEn, prova dal dettaglio EN
+    if (v.nameEn && !v.imageLarge && v.cardIdEn) {
+      const detail = await fetchTCGdexCardDetail("en", v.cardIdEn);
+      detailFetches++;
+
+      if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
+      if (detailFetches % 80 === 0) await sleep(300);
+    }
+  }
+
+  // Esplosione record per lingua (JA con nameEn valorizzato quando possibile)
+  const out = [];
+  for (const v of agg.values()) {
     if (v.nameEn) {
       out.push({
         id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
@@ -126,12 +212,11 @@ async function buildCatalogFromTCGdex() {
       });
     }
 
-    // record JA
     if (v.nameJa) {
       out.push({
         id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
         name: v.nameJa,
-        nameEn: v.nameEn,     // <- questo è il pezzo chiave per la ricerca
+        nameEn: v.nameEn || null,
         nameJa: v.nameJa,
         lang: "ja",
         setId: v.setId,
@@ -149,14 +234,6 @@ async function buildCatalogFromTCGdex() {
 }
 
 // --- 2) Scraping vendite eBay.it ---
-// NB: accesso ai “sold” via API ufficiale è in gran parte ristretto; per MVP facciamo scraping. :contentReference[oaicite:5]{index=5}
-//
-// Strategia MVP:
-// - cerchiamo in sold listings in una query “larga” (keyword Pokémon) e filtri che favoriscano singole carte
-// - estraiamo (title, price, url)
-// - applichiamo filtri anti-lotto
-// - proviamo a matchare a catalogo su: nome + lingua (JAP/JP, ENG/EN) + numero carta (es. 181/165 o 181) + set (es. SV9A)
-// - classifichiamo RAW vs GRAAD e bucket grade
 //
 // Limite: eBay non garantisce “data sold” in HTML. In MVP usiamo la data di raccolta;
 // con update giornaliero è una buona approssimazione per finestra rolling 30 giorni.
@@ -167,13 +244,12 @@ function isLikelyLot(title) {
     /\bbundle\b/.test(t) ||
     /\bchoose\b/.test(t) ||
     /\bseleziona\b/.test(t) ||
-    /\b(\\d+)\s*(cards|carte)\b/.test(t) ||
+    /\b(\d+)\s*(cards|carte)\b/.test(t) ||
     /\bplayset\b/.test(t)
   );
 }
 
 function parseEurPrice(text) {
-  // gestisce "12,34 EUR" o "12,34€"
   const m = text.replace(/\./g, "").match(/(\d+,\d{1,2}|\d+)(?=\s*€|\s*eur)/i);
   if (!m) return null;
   const n = m[1].replace(",", ".");
@@ -192,7 +268,6 @@ function detectGraadBucket(title) {
   const t = norm(title);
   if (!t.includes("graad")) return null;
 
-  // Cerca "GRAAD 9.5" ecc
   const m = t.match(/graad\s*([0-9]{1,2}(?:[.,]5)?)/);
   if (!m) return "graad_unknown";
   const raw = m[1].replace(",", ".");
@@ -204,7 +279,6 @@ function detectGraadBucket(title) {
   if (g === 8) return "graad_8";
   if (g === 7) return "graad_7";
 
-  // MVP: se arriva un 8.5 lo buttiamo nel bucket più vicino verso il basso
   if (g > 9 && g < 9.5) return "graad_9";
   if (g > 8 && g < 9) return "graad_8";
   if (g > 7 && g < 8) return "graad_7";
@@ -214,11 +288,9 @@ function detectGraadBucket(title) {
 
 function extractCardNumber(title) {
   const t = title;
-  // 181/165
   const m1 = t.match(/(\d{1,3})\s*\/\s*(\d{1,3})/);
   if (m1) return { number: m1[1], total: m1[2], full: `${m1[1]}/${m1[2]}` };
 
-  // solo numero (es. " #181 ")
   const m2 = t.match(/\b#?\s*(\d{1,3})\b/);
   if (m2) return { number: m2[1], total: null, full: null };
 
@@ -227,54 +299,49 @@ function extractCardNumber(title) {
 
 function extractSetCode(title) {
   const t = norm(title);
-  // sv9a, sv4a, sv8, ecc. (MVP)
   const m = t.match(/\bsv\d{1,2}[a-z]?\b/);
   return m ? m[0] : null;
 }
 
 function bestMatchCard(catalog, title) {
-  // restituisce { card, confidence }
   const t = norm(title);
   if (isLikelyLot(t)) return { card: null, confidence: 0 };
 
-  const lang = detectLangFromTitle(t);      // ja/en/ null
-  const setCode = extractSetCode(title);    // es. sv9a
-  const num = extractCardNumber(title);     // 181/165 etc.
+  const lang = detectLangFromTitle(t);
+  const setCode = extractSetCode(title);
+  const num = extractCardNumber(title);
 
-  // nome: prendiamo la parola prima forte; MVP: match su substring nome carta
-  // Qui facciamo un match “conservativo”: se non c’è almeno set+numero oppure nome+numero+lingua, scartiamo.
   const candidates = catalog.cards.filter(c => {
     if (lang && c.lang !== lang) return false;
     if (setCode && norm(c.setId) !== norm(setCode)) return false;
     if (num.number && c.number && c.number.toString() !== num.number.toString()) return false;
-    // nome presente nel titolo
-    const nameOk = t.includes(norm(c.name));
+
+    // nome: per JA spesso nel titolo c'è l'inglese, quindi matchiamo anche nameEn
+    const nameOk =
+      t.includes(norm(c.name)) ||
+      (c.nameEn && t.includes(norm(c.nameEn)));
+
     return nameOk;
   });
 
   if (!candidates.length) return { card: null, confidence: 0 };
 
-  // confidenza: set+numero+lang+nome = 1.0; senza set 0.8; senza lang 0.7; senza numero 0.0 (scartato)
   let best = candidates[0];
   let conf = 0.6;
   if (setCode) conf += 0.2;
   if (lang) conf += 0.1;
   if (num.number) conf += 0.1;
 
-  // preferisci quello con set match (già filtrato) e magari con immagine disponibile
   for (const c of candidates) {
     if (c.imageLarge && !best.imageLarge) best = c;
   }
 
-  // se manca numero o manca qualsiasi segnale forte, scartiamo per evitare mismatch
   if (!num.number) return { card: null, confidence: 0 };
 
   return { card: best, confidence: Math.min(conf, 1.0), num };
 }
 
 async function fetchEbaySoldPageHTML(page = 1) {
-  // Query “larga” ma orientata a carte singole.
-  // NB: parametri eBay possono cambiare; MVP.
   const url =
     `https://www.ebay.it/sch/i.html` +
     `?_nkw=${encodeURIComponent("pokemon")}` +
@@ -312,12 +379,16 @@ function parseEbaySearchItems(html) {
 async function main() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 
-  // A) catalogo (se già grande, puoi rigenerarlo meno spesso; per MVP lo rigeneriamo sempre)
+  // cache dex: assicurati esista (almeno vuota)
+  if (!fs.existsSync(DEX_CACHE_FILE)) {
+    writeJson(DEX_CACHE_FILE, {});
+  }
+
+  // A) catalogo
   let catalog;
   try {
     catalog = await buildCatalogFromTCGdex();
   } catch (e) {
-    // Se fallisce TCGdex, usiamo l’ultimo catalogo esistente
     console.error("Catalog build failed:", e.message);
     catalog = readJson(`${DATA_DIR}/catalog.json`, { cards: [] });
   }
@@ -328,7 +399,6 @@ async function main() {
   const salesFile = `${DATA_DIR}/sales_30d.json`;
   const salesObj = readJson(salesFile, { sales: [] });
 
-  // pulizia vecchie vendite (basata su timestamp raccolta)
   const cutoff = Date.now() - DAYS * 24 * 3600 * 1000;
   const kept = (salesObj.sales || []).filter(s => new Date(s.collectedAt).getTime() >= cutoff);
 
@@ -354,9 +424,8 @@ async function main() {
       const graded = bucket && bucket.startsWith("graad_");
 
       const match = bestMatchCard(catalog, it.title);
-      if (!match.card || match.confidence < 0.85) continue; // conservativo
+      if (!match.card || match.confidence < 0.85) continue;
 
-      // RAW se non graded
       const priceBucket = graded ? bucket : "raw";
 
       newSales.push({
@@ -371,7 +440,7 @@ async function main() {
     }
   }
 
-  // dedup: per semplicità dedup su (url + price + cardId)
+  // dedup su (url + price + cardId + bucket)
   const seen = new Set(kept.map(s => `${s.url}|${s.price_eur}|${s.cardId}|${s.bucket}`));
   for (const s of newSales) {
     const k = `${s.url}|${s.price_eur}|${s.cardId}|${s.bucket}`;
@@ -383,7 +452,7 @@ async function main() {
 
   writeJson(salesFile, { sales: kept });
 
-  // D) aggregati mediane 30 giorni per carta/bucket
+  // D) mediane 30 giorni per carta/bucket
   const byCard = {};
   for (const s of kept) {
     byCard[s.cardId] ??= {
