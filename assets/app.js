@@ -4,6 +4,9 @@ let catalog = [];
 let sets = [];
 let langs = [];
 
+/* ---------------------------
+   Normalizzazione ricerca
+--------------------------- */
 function norm(s) {
   let t = (s || "")
     .toString()
@@ -21,6 +24,46 @@ function norm(s) {
   return t.replace(/\s+/g, " ").trim();
 }
 
+/* ---------------------------
+   Stato URL (q/set/lang)
+--------------------------- */
+function getStateFromUI() {
+  return {
+    q: $("q").value || "",
+    set: $("set").value || "",
+    lang: $("lang").value || ""
+  };
+}
+
+function applyStateToUI(state) {
+  if (state.q != null) $("q").value = state.q;
+  if (state.set != null) $("set").value = state.set;
+  if (state.lang != null) $("lang").value = state.lang;
+}
+
+function readStateFromURL() {
+  const p = new URLSearchParams(location.search);
+  return {
+    q: p.get("q") || "",
+    set: p.get("set") || "",
+    lang: p.get("lang") || ""
+  };
+}
+
+function writeStateToURL(state) {
+  const url = new URL(location.href);
+  // pulizia parametri vuoti
+  if (state.q) url.searchParams.set("q", state.q); else url.searchParams.delete("q");
+  if (state.set) url.searchParams.set("set", state.set); else url.searchParams.delete("set");
+  if (state.lang) url.searchParams.set("lang", state.lang); else url.searchParams.delete("lang");
+
+  // replaceState per non creare mille voci nella cronologia mentre digiti
+  history.replaceState(null, "", url.toString());
+}
+
+/* ---------------------------
+   UI helpers
+--------------------------- */
 function buildOptions(select, items, allLabel) {
   select.innerHTML = "";
   const opt0 = document.createElement("option");
@@ -36,20 +79,16 @@ function buildOptions(select, items, allLabel) {
   }
 }
 
-function cardLabel(c) {
-  const bits = [
-    c.name,
-    c.setName ? `(${c.setName})` : "",
-    c.numberFull ? `#${c.numberFull}` : (c.number ? `#${c.number}` : ""),
-    c.lang ? c.lang.toUpperCase() : ""
-  ].filter(Boolean);
-  return bits.join(" ");
-}
+/* ---------------------------
+   Filtri + rendering
+--------------------------- */
+function applyFilters({ writeURL = true } = {}) {
+  const state = getStateFromUI();
+  if (writeURL) writeStateToURL(state);
 
-function applyFilters() {
-  const q = norm($("q").value);
-  const set = $("set").value;
-  const lang = $("lang").value;
+  const q = norm(state.q);
+  const set = state.set;
+  const lang = state.lang;
 
   let res = catalog;
 
@@ -59,43 +98,54 @@ function applyFilters() {
   if (q) {
     res = res.filter(c => {
       const hay = norm([
-  c.name,
-  c.nameEn,
-  c.nameJa,
-  c.setId,
-  c.setName,
-  c.numberFull,
-  c.number,
-  c.lang,
-  c.rarity,
-  c.features?.join(" ")
-].join(" "));
+        c.name,
+        c.nameEn,
+        c.nameJa,
+        c.setId,
+        c.setName,
+        c.numberFull,
+        c.number,
+        c.lang,
+        c.rarity,
+        c.features?.join(" ")
+      ].join(" "));
       return hay.includes(q);
     });
   }
 
   $("stats").textContent = `Risultati: ${res.length} carte`;
-  render(res.slice(0, 200));
+  render(res.slice(0, 200), state);
 }
 
-function render(cards) {
+function render(cards, state) {
   const root = $("results");
   root.innerHTML = "";
+
+  const q = encodeURIComponent(state.q || "");
+  const set = encodeURIComponent(state.set || "");
+  const lang = encodeURIComponent(state.lang || "");
+
   for (const c of cards) {
     const div = document.createElement("div");
     div.className = "card";
+
     const a = document.createElement("a");
-    a.href = `card.html?id=${encodeURIComponent(c.id)}`;
+    // Passiamo lo stato corrente anche a card.html
+    a.href = `card.html?id=${encodeURIComponent(c.id)}&q=${q}&set=${set}&lang=${lang}`;
     a.innerHTML = `
       <div><strong>${c.name}</strong></div>
       <div class="small">${c.setName || c.setId} — ${c.numberFull || c.number || ""} — ${c.lang?.toUpperCase() || ""}</div>
       <div class="small">${c.rarity || ""} ${c.features?.length ? "• " + c.features.join(", ") : ""}</div>
     `;
+
     div.appendChild(a);
     root.appendChild(div);
   }
 }
 
+/* ---------------------------
+   Init
+--------------------------- */
 async function init() {
   const r = await fetch("data/catalog.json", { cache: "no-store" });
   const j = await r.json();
@@ -109,20 +159,29 @@ async function init() {
     if (c.lang) langMap.set(c.lang, c.lang.toUpperCase());
   }
 
-  sets = [...setMap.entries()].map(([value, label]) => ({ value, label }))
-    .sort((a,b) => a.label.localeCompare(b.label));
-  langs = [...langMap.entries()].map(([value, label]) => ({ value, label }))
-    .sort((a,b) => a.label.localeCompare(b.label));
+  sets = [...setMap.entries()]
+    .map(([value, label]) => ({ value, label }))
+    .sort((a, b) => a.label.localeCompare(b.label));
+
+  langs = [...langMap.entries()]
+    .map(([value, label]) => ({ value, label }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
   buildOptions($("set"), sets, "Tutte le espansioni");
   buildOptions($("lang"), langs, "Tutte le lingue");
 
-  $("q").addEventListener("input", applyFilters);
-  $("set").addEventListener("change", applyFilters);
-  $("lang").addEventListener("change", applyFilters);
+  // Ripristina stato dall’URL (se arrivi da card.html o da refresh)
+  const urlState = readStateFromURL();
+  applyStateToUI(urlState);
 
+  // Event listeners
+  $("q").addEventListener("input", () => applyFilters({ writeURL: true }));
+  $("set").addEventListener("change", () => applyFilters({ writeURL: true }));
+  $("lang").addEventListener("change", () => applyFilters({ writeURL: true }));
+
+  // Primo render coerente con stato
   $("stats").textContent = `Catalogo caricato: ${catalog.length} carte`;
-  render(catalog.slice(0, 80));
+  applyFilters({ writeURL: true });
 }
 
 init();
