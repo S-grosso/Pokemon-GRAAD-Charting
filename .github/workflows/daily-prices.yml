@@ -2,7 +2,6 @@ name: Daily prices update
 
 on:
   schedule:
-    # Ogni giorno alle 02:15 UTC (03:15 in Italia in inverno)
     - cron: "15 2 * * *"
   workflow_dispatch: {}
 
@@ -24,10 +23,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
 
       - name: Install deps
-        run: npm ci
+        run: npm install --no-audit --no-fund
+
+      - name: Quick debug (versions)
+        run: |
+          node -v
+          npm -v
+          ls -la
+          ls -la scripts || true
 
       - name: Run updater (prices only)
         run: node scripts/update.js
@@ -41,4 +46,3 @@ jobs:
           git add data/*.json
           git diff --cached --quiet || git commit -m "chore: daily prices update"
           git push
-          
