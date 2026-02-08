@@ -1,0 +1,16 @@
+{
+  "cards": [
+    {
+      "id": "sv9a-181-165-snorlax-ja",
+      "name": "Snorlax",
+      "lang": "ja",
+      "setId": "sv9a",
+      "setName": "Pokémon 151 (JP)",
+      "number": "181",
+      "numberFull": "181/165",
+      "rarity": "AR",
+      "features": ["AR"],
+      "imageLarge": ""
+    }
+  ]
+}
