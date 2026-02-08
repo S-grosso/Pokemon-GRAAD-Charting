@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Poke GRAAD Charting</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Poke GRAAD Charting</h1>
+    <div class="small">Ricerca e prezzi (mediana ultimi 30 giorni) per RAW e GRAAD.</div>
+  </header>
+
+  <div class="row">
+    <input id="q" size="45" placeholder="Cerca: nome, set, numero (es. Snorlax sv9a 181/165 jap)" />
+    <select id="set"></select>
+    <select id="lang"></select>
+  </div>
+
+  <div class="hr"></div>
+
+  <div id="stats" class="small"></div>
+  <div id="results" class="grid"></div>
+
+  <script type="module" src="assets/app.js"></script>
+</body>
+</html>
