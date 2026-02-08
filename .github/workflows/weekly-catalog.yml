@@ -23,21 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
-      - name: Install deps (generates lockfile if missing)
-        run: npm install --no-audit --no-fund
-
-      - name: Commit package-lock.json if newly created
-        run: |
-          if [ -f package-lock.json ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add package-lock.json
-            git diff --cached --quiet || git commit -m "chore: add package-lock"
-            git push
-          else
-            echo "package-lock.json not created (unexpected)"
-          fi
+      - name: Install deps
+        run: npm ci
 
       - name: Run updater (catalog + prices)
         run: node scripts/update.js
@@ -46,6 +35,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.json
+          git add data/*.json package-lock.json
           git diff --cached --quiet || git commit -m "chore: weekly catalog rebuild"
           git push
