@@ -1,7 +1,7 @@
 :root{
-  --bg: #eef3fb;                /* sfondo pagina */
-  --panel: #ffffff;             /* pannelli / card */
-  --panel-soft: #f7f9fd;        /* box secondari (prezzi) */
+  --bg: #eef3fb;
+  --panel: #ffffff;
+  --panel-soft: #f7f9fd;
   --text: #0f172a;
   --muted: #475569;
   --border: rgba(15, 23, 42, 0.12);
@@ -21,22 +21,22 @@ body{
 
   /* sfondo su tutta la pagina */
   background:
-    radial-gradient(1200px 600px at 20% -10%, rgba(37, 99, 235, 0.10), transparent 60%),
-    radial-gradient(1000px 500px at 80% 0%, rgba(99, 102, 241, 0.10), transparent 55%),
+    radial-gradient(1200px 600px at 20% -10%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(1000px 500px at 80% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
     var(--bg);
+
+  /* padding globale così lo sfondo rimane visibile attorno ai blocchi */
+  padding: 16px;
 }
 
-/* Manteniamo la larghezza contenuta, ma senza “imbiancare” lo sfondo */
-body > *{
+/* Tutti i blocchi principali centrati e con stessa larghezza */
+header, .row, .hr, #stats, #results, #title, #img, #meta, #prices, #updated, a.back-link, a#back{
   max-width: 1100px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
 }
 
-/* Prima riga: evita doppio padding sopra */
-body > header{ margin-top: 16px; }
+/* ---------------- Header ---------------- */
 
 header{
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(99, 102, 241, 0.10));
@@ -47,13 +47,38 @@ header{
   margin-bottom: 14px;
 }
 
-h1{ margin: 0 0 6px 0; font-size: 22px; }
+/* Header cliccabile come “card link” */
+.header-link{
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
 
+header:hover{
+  border-color: rgba(37, 99, 235, 0.22);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
+}
+
+/* Titoli/testi */
+h1{ margin: 0 0 6px 0; font-size: 22px; }
 .small{ color: var(--muted); font-size: 13px; }
 
-.row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+/* ---------------- Layout ---------------- */
 
-/* Input e select: bianchi, bordi/ombra morbidi */
+.row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hr{
+  height: 1px;
+  background: rgba(15, 23, 42, 0.10);
+  margin: 14px auto;
+}
+
+/* Input e select */
 input, select{
   padding: 11px 12px;
   font-size: 14px;
@@ -69,19 +94,15 @@ input:focus, select:focus{
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-.hr{
-  height: 1px;
-  background: rgba(15, 23, 42, 0.10);
-  margin: 14px 0;
-}
-
+/* Risultati */
 .grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 12px;
-  padding-bottom: 18px; /* respiro in fondo pagina */
+  padding-bottom: 18px;
 }
 
+/* Card risultati */
 .card{
   background: var(--panel);
   border: 1px solid var(--border);
@@ -99,8 +120,9 @@ input:focus, select:focus{
 
 .card a{ text-decoration: none; color: inherit; }
 
+/* Badge */
 .badge{
-  display:inline-block;
+  display: inline-block;
   padding: 2px 8px;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -111,7 +133,8 @@ input:focus, select:focus{
 
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
-.pricegrid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+/* Pagina carta */
+.pricegrid{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .pricebox{
   background: var(--panel-soft);
@@ -127,4 +150,29 @@ img.cardimg{
   border-radius: 16px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
+}
+
+/* ---------------- Back link “card” ---------------- */
+
+.back-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  margin: 0 auto 2px auto;
+
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+
+  color: inherit;
+  text-decoration: none;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.back-link:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.09);
+  border-color: rgba(37, 99, 235, 0.22);
 }
