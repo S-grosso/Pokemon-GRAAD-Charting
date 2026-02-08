@@ -1,12 +1,19 @@
 :root{
+  /* base pagina */
   --bg: #eef3fb;
-  --panel: #ffffff;
-  --panel-soft: #f7f9fd;
+
+  /* “pannelli” e componenti: non più bianchi */
+  --panel: #eaf1fb;        /* cards, barra ricerca, ecc. */
+  --panel-soft: #e4edfa;   /* box secondari (prezzi) */
+  --panel-strong: #dde8f8; /* hover/focus leggermente più marcato */
+
   --text: #0f172a;
   --muted: #475569;
+
   --border: rgba(15, 23, 42, 0.12);
   --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
   --shadow-soft: 0 6px 18px rgba(15, 23, 42, 0.06);
+
   --accent: #2563eb;
 }
 
@@ -14,22 +21,24 @@
 
 html, body{ height: 100%; }
 
+html{
+  background: var(--bg);
+}
+
 body{
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
 
-  /* sfondo su tutta la pagina */
   background:
-    radial-gradient(1200px 600px at 20% -10%, rgba(37, 99, 235, 0.12), transparent 60%),
-    radial-gradient(1000px 500px at 80% 0%, rgba(99, 102, 241, 0.12), transparent 55%),
+    radial-gradient(1200px 600px at 20% -10%, rgba(37, 99, 235, 0.14), transparent 60%),
+    radial-gradient(1000px 500px at 80% 0%, rgba(99, 102, 241, 0.14), transparent 55%),
     var(--bg);
 
-  /* padding globale così lo sfondo rimane visibile attorno ai blocchi */
   padding: 16px;
 }
 
-/* Tutti i blocchi principali centrati e con stessa larghezza */
+/* blocchi principali centrati e stessa larghezza */
 header, .row, .hr, #stats, #results, #title, #img, #meta, #prices, #updated, a.back-link, a#back{
   max-width: 1100px;
   margin-left: auto;
@@ -39,7 +48,7 @@ header, .row, .hr, #stats, #results, #title, #img, #meta, #prices, #updated, a.b
 /* ---------------- Header ---------------- */
 
 header{
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(99, 102, 241, 0.10));
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(99, 102, 241, 0.14));
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 14px 14px;
@@ -47,7 +56,6 @@ header{
   margin-bottom: 14px;
 }
 
-/* Header cliccabile come “card link” */
 .header-link{
   display: block;
   color: inherit;
@@ -55,11 +63,10 @@ header{
 }
 
 header:hover{
-  border-color: rgba(37, 99, 235, 0.22);
+  border-color: rgba(37, 99, 235, 0.24);
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
 }
 
-/* Titoli/testi */
 h1{ margin: 0 0 6px 0; font-size: 22px; }
 .small{ color: var(--muted); font-size: 13px; }
 
@@ -70,6 +77,13 @@ h1{ margin: 0 0 6px 0; font-size: 22px; }
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+
+  /* “barra” coerente col resto: azzurrina */
+  background: rgba(234, 241, 251, 0.65);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow-soft);
 }
 
 .hr{
@@ -78,67 +92,85 @@ h1{ margin: 0 0 6px 0; font-size: 22px; }
   margin: 14px auto;
 }
 
-/* Input e select */
+/* Input e select: azzurrini (non bianchi) */
 input, select{
   padding: 11px 12px;
   font-size: 14px;
   background: var(--panel);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 12px;
   outline: none;
   box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
 }
 
+input::placeholder{
+  color: rgba(71, 85, 105, 0.85);
+}
+
 input:focus, select:focus{
+  background: var(--panel-strong);
   border-color: rgba(37, 99, 235, 0.55);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 
-/* Risultati */
+/* Risultati: un “piano” azzurrino sotto le card */
+#results{
+  background: rgba(234, 241, 251, 0.55);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow-soft);
+}
+
 .grid{
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 12px;
-  padding-bottom: 18px;
+  padding-bottom: 6px;
 }
 
-/* Card risultati */
+/* Card risultati: azzurrine */
 .card{
   background: var(--panel);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 16px;
   padding: 12px;
   box-shadow: var(--shadow-soft);
-  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background 120ms ease;
 }
 
 .card:hover{
   transform: translateY(-2px);
+  background: var(--panel-strong);
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.10);
   border-color: rgba(37, 99, 235, 0.22);
 }
 
 .card a{ text-decoration: none; color: inherit; }
 
-/* Badge */
+/* Badge: teniamoli più chiari per “staccare” */
 .badge{
   display: inline-block;
   padding: 2px 8px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 999px;
   font-size: 12px;
   margin-right: 6px;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.75);
 }
 
 .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 
 /* Pagina carta */
-.pricegrid{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pricegrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 
 .pricebox{
   background: var(--panel-soft);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 16px;
   padding: 10px;
   box-shadow: var(--shadow-soft);
@@ -148,7 +180,7 @@ img.cardimg{
   width: 100%;
   max-width: 360px;
   border-radius: 16px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   box-shadow: var(--shadow);
 }
 
@@ -161,18 +193,19 @@ img.cardimg{
   padding: 10px 12px;
   margin: 0 auto 2px auto;
 
-  background: rgba(255,255,255,0.92);
-  border: 1px solid var(--border);
+  background: var(--panel);
+  border: 1px solid rgba(15, 23, 42, 0.14);
   border-radius: 14px;
   box-shadow: var(--shadow-soft);
 
   color: inherit;
   text-decoration: none;
-  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background 120ms ease;
 }
 
 .back-link:hover{
   transform: translateY(-1px);
+  background: var(--panel-strong);
   box-shadow: 0 10px 22px rgba(15, 23, 42, 0.09);
   border-color: rgba(37, 99, 235, 0.22);
 }
