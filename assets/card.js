@@ -11,6 +11,15 @@ async function init() {
   const id = getParam("id");
   if (!id) return;
 
+  // Ricostruisce il link "indietro" preservando ricerca e filtri
+  const q = getParam("q") || "";
+  const set = getParam("set") || "";
+  const lang = getParam("lang") || "";
+  const back = document.getElementById("back");
+  if (back) {
+    back.href = `index.html?q=${encodeURIComponent(q)}&set=${encodeURIComponent(set)}&lang=${encodeURIComponent(lang)}`;
+  }
+
   const [catR, priceR, metaR] = await Promise.all([
     fetch("data/catalog.json", { cache: "no-store" }),
     fetch("data/prices.json", { cache: "no-store" }),
@@ -64,7 +73,10 @@ async function init() {
     box.className = "pricebox";
     const val = p[key]?.median_eur ?? null;
     const n = p[key]?.n ?? 0;
-    box.innerHTML = `<div class="small">${label}</div><div style="font-size:22px; font-weight:700;">${euro(val)}</div><div class="small">vendite: ${n}</div>`;
+    box.innerHTML =
+      `<div class="small">${label}</div>` +
+      `<div style="font-size:22px; font-weight:700;">${euro(val)}</div>` +
+      `<div class="small">vendite: ${n}</div>`;
     root.appendChild(box);
   }
 
