@@ -5,7 +5,9 @@ import * as cheerio from "cheerio";
 const DATA_DIR = "data";
 const DAYS = 30;
 const SKIP_CATALOG = process.env.SKIP_CATALOG === "1";
-const CATALOG_STRATEGY = process.env.CATALOG_STRATEGY || "split"; // "split" | "tcgdex"
+const CATALOG_STRATEGY = process.env.CATALOG_STRATEGY || "tcgdex"; // "tcgdex" | "split"
+const MIN_CATALOG_CARDS = 12000;
+const MIN_EN_CARDS = 8000;
 
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
@@ -282,7 +284,7 @@ async function buildCatalogFromSplitSources() {
   const out = [];
 
   for (const c of fromEnApi) {
-    const setId = (c.set?.ptcgoCode || c.set?.id || "").toString().toLowerCase();
+    const setId = (c.set?.id || c.set?.ptcgoCode || "").toString().toLowerCase();
     const setName = c.set?.name || setId || "Unknown";
     const number = (c.number || "").toString().trim();
     if (!setId || !number || !c.name) continue;
@@ -338,6 +340,25 @@ async function buildCatalogFromSplitSources() {
   }
 
   return { cards: out };
+}
+
+function validateCatalogShape(catalog) {
+  const cards = Array.isArray(catalog?.cards) ? catalog.cards : [];
+  const langCounts = cards.reduce((acc, c) => {
+    const k = c?.lang || "unknown";
+    acc[k] = (acc[k] || 0) + 1;
+    return acc;
+  }, {});
+
+  if (cards.length < MIN_CATALOG_CARDS) {
+    throw new Error(`Catalog too small: ${cards.length} cards`);
+  }
+
+  if ((langCounts.en || 0) < MIN_EN_CARDS) {
+    throw new Error(`Catalog EN coverage too low: ${langCounts.en || 0}`);
+  }
+
+  return langCounts;
 }
 
 /* -------------------------------------------------------
@@ -542,9 +563,12 @@ async function main() {
 
   if (!SKIP_CATALOG) {
     try {
-      catalog = CATALOG_STRATEGY === "tcgdex"
-        ? await buildCatalogFromTCGdex()
-        : await buildCatalogFromSplitSources();
+      catalog = CATALOG_STRATEGY === "split"
+        ? await buildCatalogFromSplitSources()
+        : await buildCatalogFromTCGdex();
+
+      const langCounts = validateCatalogShape(catalog);
+      console.log(`Catalog rebuilt: total=${catalog.cards.length} en=${langCounts.en || 0} ja=${langCounts.ja || 0}`);
       writeJson(catalogFile, catalog);
     } catch (e) {
       console.error("Catalog build failed:", e.message);
