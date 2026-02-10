@@ -177,45 +177,50 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Esplosione record per lingua
-  const out = [];
-  for (const v of agg.values()) {
-    if (v.nameEn) {
-      out.push({
-        id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
-        name: v.nameEn,
-        nameEn: v.nameEn,
-        nameJa: v.nameJa,
-        lang: "en",
-        setId: v.setId,
-        setName: v.setName,
-        number: v.number,
-        numberFull: v.numberFull,
-        rarity: v.rarity,
-        features: v.features,
-        imageLarge: v.imageLarge
-      });
-    }
+  // Esplosione record per lingua:
+// Regola anti-duplicati: se esiste la versione JA per la stessa chiave,
+// NON generiamo anche la versione EN “tradotta”.
+const out = [];
+for (const v of agg.values()) {
+  const hasJa = !!v.nameJa;
 
-    if (v.nameJa) {
-      out.push({
-        id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
-        name: v.nameJa,
-        nameEn: v.nameEn || null,
-        nameJa: v.nameJa,
-        lang: "ja",
-        setId: v.setId,
-        setName: v.setName,
-        number: v.number,
-        numberFull: v.numberFull,
-        rarity: v.rarity,
-        features: v.features,
-        imageLarge: v.imageLarge
-      });
-    }
+  // record EN solo se non esiste JA per la stessa carta
+  if (v.nameEn && !hasJa) {
+    out.push({
+      id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
+      name: v.nameEn,
+      nameEn: v.nameEn,
+      nameJa: v.nameJa,
+      lang: "en",
+      setId: v.setId,
+      setName: v.setName,
+      number: v.number,
+      numberFull: v.numberFull,
+      rarity: v.rarity,
+      features: v.features,
+      imageLarge: v.imageLarge
+    });
   }
 
-  return { cards: out };
+  // record JA (con nameEn come alias di ricerca)
+  if (v.nameJa) {
+    out.push({
+      id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
+      name: v.nameJa,
+      nameEn: v.nameEn || null,
+      nameJa: v.nameJa,
+      lang: "ja",
+      setId: v.setId,
+      setName: v.setName,
+      number: v.number,
+      numberFull: v.numberFull,
+      rarity: v.rarity,
+      features: v.features,
+      imageLarge: v.imageLarge
+    });
+  }
+}
+return { cards: out };
 }
 
 // --- 2) Scraping vendite eBay.it ---
