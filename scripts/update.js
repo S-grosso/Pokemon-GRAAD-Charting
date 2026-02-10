@@ -31,17 +31,12 @@ function norm(s) {
 function median(nums) {
   const arr = nums
     .filter(n => typeof n === "number" && Number.isFinite(n))
-    .sort((a,b)=>a-b);
+    .sort((a, b) => a - b);
   if (!arr.length) return null;
   const mid = Math.floor(arr.length / 2);
-  return arr.length % 2 ? arr[mid] : (arr[mid-1] + arr[mid]) / 2;
+  return arr.length % 2 ? arr[mid] : (arr[mid - 1] + arr[mid]) / 2;
 }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function forceHttps(url) {
-  if (!url) return "";
-  return url.replace(/^http:\/\//i, "https://");
-}
 
 // TCGdex assets: {base}/{quality}.{ext}
 function tcgdexImg(imageBase, quality = "high", ext = "webp") {
@@ -57,22 +52,7 @@ async function fetchJson(url, opts = {}) {
 
 async function fetchTCGdexCardDetail(lang, cardId) {
   const url = `https://api.tcgdex.net/v2/${lang}/cards/${encodeURIComponent(cardId)}`;
-  return await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.2" } });
-}
-
-// prova a leggere dexId in più forme possibili
-function getDexIdFromTCGdexDetail(detail) {
-  const cand =
-    detail?.dexId ??
-    detail?.pokemon?.dexId ??
-    detail?.pokemon?.id ??
-    detail?.pokemon?.dex ??
-    null;
-
-  if (Array.isArray(cand)) return cand[0] ?? null;
-  if (typeof cand === "number") return cand;
-  if (typeof cand === "string" && /^\d+$/.test(cand)) return Number(cand);
-  return null;
+  return await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.3" } });
 }
 
 async function getPokemonNameEnByDexId(dexId) {
@@ -80,7 +60,7 @@ async function getPokemonNameEnByDexId(dexId) {
   if (cache[dexId]) return cache[dexId];
 
   const url = `https://pokeapi.co/api/v2/pokemon-species/${dexId}/`;
-  const j = await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.2" } });
+  const j = await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.3" } });
   if (!j) return null;
 
   const nameEn =
@@ -106,11 +86,11 @@ async function buildCatalogFromTCGdex() {
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.2" } });
+    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.3" } });
     if (!sets) throw new Error(`TCGdex sets (${lang}) failed`);
 
     for (const s of sets) {
-      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.2" } });
+      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.3" } });
       if (!set) continue;
 
       // IMPORTANT: escludi TCG Pocket
@@ -132,9 +112,7 @@ async function buildCatalogFromTCGdex() {
         if (!setId || !localId) continue;
 
         const key = `${setId}|${localId}`;
-        const img = c.image
-          ? forceHttps(tcgdexImg(c.image, "high", "webp"))
-          : forceHttps(c.imageLarge || c.images?.large || "");
+        const img = c.image ? tcgdexImg(c.image, "high", "webp") : (c.imageLarge || c.images?.large || "");
 
         const prev = agg.get(key) ?? {
           setId,
@@ -168,7 +146,7 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Enrichment (solo quando serve): JP-only -> nameEn via dexId; immagini via detail
+  // Enrichment: JP-only -> nameEn via dexId; immagini via detail (solo quando serve)
   let detailFetches = 0;
 
   for (const v of agg.values()) {
@@ -179,20 +157,17 @@ async function buildCatalogFromTCGdex() {
       if (lang && id) {
         const detail = await fetchTCGdexCardDetail(lang, id);
         detailFetches++;
-        if (detail?.image) v.imageLarge = forceHttps(tcgdexImg(detail.image, "high", "webp"));
+        if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
         if (detailFetches % 80 === 0) await sleep(300);
       }
     }
 
-    // JP-only: riempi nameEn via dexId (robusto)
+    // JP-only: riempi nameEn via dexId
     if (v.nameJa && !v.nameEn && v.cardIdJa) {
       const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
       detailFetches++;
 
-      // a volte anche l’immagine “vera” sta qui
-      if (!v.imageLarge && detail?.image) v.imageLarge = forceHttps(tcgdexImg(detail.image, "high", "webp"));
-
-      const dex = getDexIdFromTCGdexDetail(detail);
+      const dex = Array.isArray(detail?.dexId) ? detail.dexId[0] : null;
       if (dex) {
         const enName = await getPokemonNameEnByDexId(dex);
         if (enName) v.nameEn = enName;
@@ -202,6 +177,7 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
+  // Esplosione record per lingua
   const out = [];
   for (const v of agg.values()) {
     if (v.nameEn) {
@@ -217,7 +193,7 @@ async function buildCatalogFromTCGdex() {
         numberFull: v.numberFull,
         rarity: v.rarity,
         features: v.features,
-        imageLarge: forceHttps(v.imageLarge)
+        imageLarge: v.imageLarge
       });
     }
 
@@ -225,7 +201,7 @@ async function buildCatalogFromTCGdex() {
       out.push({
         id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
         name: v.nameJa,
-        nameEn: v.nameEn || null, // <- fondamentale per cercare “Meloetta” e trovare JA
+        nameEn: v.nameEn || null,
         nameJa: v.nameJa,
         lang: "ja",
         setId: v.setId,
@@ -234,7 +210,7 @@ async function buildCatalogFromTCGdex() {
         numberFull: v.numberFull,
         rarity: v.rarity,
         features: v.features,
-        imageLarge: forceHttps(v.imageLarge)
+        imageLarge: v.imageLarge
       });
     }
   }
@@ -290,46 +266,20 @@ function detectGraadBucket(title) {
   return "graad_unknown";
 }
 
-// set code: sv2a/sv9a ecc + codici “deck” tipo MDB (escludendo sigle rumorose)
 function extractSetCode(title) {
-  const raw = title || "";
-  const t = norm(raw);
-
-  // codici “standard”
-  const mStd =
-    t.match(/\bsv\d{1,2}[a-z]\b/) ||
-    t.match(/\bsv\d{1,2}\b/) ||
-    t.match(/\bswsh\d{1,2}[a-z]?\b/) ||
-    t.match(/\bsm\d{1,2}[a-z]?\b/);
-
-  if (mStd) return mStd[0];
-
-  // codici tipo MDB (2-4 lettere), ma evita AR/EX/GRAAD/JAP ecc.
-  const mCaps = raw.match(/\b([A-Z]{2,4})\b/);
-  if (!mCaps) return null;
-
-  const code = mCaps[1].toUpperCase();
-  const banned = new Set([
-    "AR","SR","SAR","UR","EX","GX","V","VMAX","VSTAR",
-    "PSA","BGS","CGC","GRAAD",
-    "JAP","JP","JPN","ENG","EN","ITA",
-    "TCG"
-  ]);
-
-  if (banned.has(code)) return null;
-
-  // ritorna in minuscolo, perché i setId in catalogo sono di solito lower
-  return code.toLowerCase();
+  const t = norm(title);
+  const m = t.match(/\bsv\d{1,2}[a-z]?\b/);
+  return m ? m[0] : null;
 }
 
 function extractLocalId(title) {
   const raw = title || "";
 
-  // 181/165 -> usa 181
+  // 181/165 -> 181
   const m1 = raw.match(/(\d{1,3})\s*\/\s*(\d{1,3})/);
   if (m1) return m1[1];
 
-  // Codici promo tipo BW68, SVP123, DPxx ecc.
+  // promo / codici tipo BW68, SVP123, ecc.
   const mPromo = raw.match(/\b([A-Z]{1,4}\d{1,4})\b/);
   if (mPromo) return mPromo[1];
 
@@ -341,78 +291,69 @@ function extractLocalId(title) {
 }
 
 function bestMatchCard(catalog, title) {
-  const raw = title || "";
-  const t = norm(raw);
+  const t = norm(title);
   if (isLikelyLot(t)) return { card: null, confidence: 0 };
 
   const lang = detectLangFromTitle(t);
-  const setCodeRaw = extractSetCode(raw);
-  const localId = extractLocalId(raw);
+  const setCode = extractSetCode(title);
+  const localId = extractLocalId(title);
+
   if (!localId) return { card: null, confidence: 0 };
 
-  const mentions151 =
-    /\bpokemon\s*151\b/.test(t) ||
-    /\bcard\s*151\b/.test(t) ||
-    /ポケモンカード\s*151/.test(raw);
+  const candidates = (catalog.cards || []).filter(c => {
+    if (lang && c.lang !== lang) return false;
+    if (setCode && norm(c.setId) !== norm(setCode)) return false;
 
-  // se vedo "Pokemon 151" + JP, non mi fido del setcode: molti venditori sbagliano (sv9a ecc.)
-  const distrustSet = !!setCodeRaw && mentions151 && (lang === "ja" || /\b(jap|jp|jpn)\b/.test(t));
+    if (c.number && norm(c.number) !== norm(localId)) return false;
 
-  const filterCandidates = (useSet) => {
-    return (catalog.cards || []).filter(c => {
-      if (lang && c.lang !== lang) return false;
+    // nome: match su name oppure nameEn (fondamentale per JA)
+    const okName =
+      t.includes(norm(c.name)) ||
+      (c.nameEn && t.includes(norm(c.nameEn)));
 
-      if (useSet && setCodeRaw && norm(c.setId) !== norm(setCodeRaw)) return false;
-
-      // numero: confronto case-insensitive (BW68 ecc.)
-      if (c.number && norm(c.number) !== norm(localId)) return false;
-
-      // nome: match su name oppure nameEn (fondamentale per JA)
-      const okName =
-        t.includes(norm(c.name)) ||
-        (c.nameEn && t.includes(norm(c.nameEn)));
-
-      return okName;
-    });
-  };
-
-  // 1) se non mi fido del set, provo senza
-  // 2) altrimenti provo con
-  // 3) se zero, fallback senza set (molto comune su eBay)
-  let candidates = distrustSet ? filterCandidates(false) : filterCandidates(true);
-  if (!candidates.length) candidates = filterCandidates(false);
+    return okName;
+  });
 
   if (!candidates.length) return { card: null, confidence: 0 };
 
-  // scoring
   let best = candidates[0];
+  let conf = 0.65;
+  if (setCode) conf += 0.15;
+  if (lang) conf += 0.10;
+  if (localId) conf += 0.10;
 
   // preferisci con immagine
   for (const c of candidates) {
     if (c.imageLarge && !best.imageLarge) best = c;
   }
 
-  let conf = 0.70;           // base nome+numero
-  if (lang) conf += 0.10;
-  if (setCodeRaw && !distrustSet) conf += 0.10;
-  if (mentions151) conf += 0.05;
-  conf = Math.min(conf, 0.95);
-
-  return { card: best, confidence: conf };
+  return { card: best, confidence: Math.min(conf, 1.0) };
 }
 
-async function fetchEbaySoldPageHTML({ keyword, page = 1 }) {
-  const url =
-    `https://www.ebay.it/sch/i.html` +
-    `?_nkw=${encodeURIComponent(keyword)}` +
-    `&LH_Sold=1&LH_Complete=1` +
-    `&rt=nc` +
-    `&_pgn=${page}`;
+async function fetchEbaySoldPageHTML({ keyword, page = 1, categoryId = "183454", gradedOnly = false }) {
+  // 183454 = Trading Card Singles (di solito include le carte Pokémon singole)
+  // gradedOnly -> LH_ItemCondition=2750 (graded)
+  const params = new URLSearchParams({
+    _nkw: keyword,
+    LH_Sold: "1",
+    LH_Complete: "1",
+    rt: "nc",
+    _pgn: String(page),
+    _sacat: categoryId,
+
+    // più risultati per pagina, meno pagine
+    _ipg: "240",
+
+    // sort: spesso 13 = "End Time: newly listed" / "recent first" (eBay cambia, ma non rompe se ignorato)
+    _sop: "13"
+  });
+
+  if (gradedOnly) params.set("LH_ItemCondition", "2750");
+
+  const url = `https://www.ebay.it/sch/i.html?${params.toString()}`;
 
   const resp = await fetch(url, {
-    headers: {
-      "user-agent": "Mozilla/5.0 (compatible; PokeGraadBot/0.3; +https://example.invalid)"
-    }
+    headers: { "user-agent": "Mozilla/5.0 (compatible; PokeGraadBot/0.3)" }
   });
   if (!resp.ok) throw new Error(`eBay fetch failed: ${resp.status}`);
   return await resp.text();
@@ -462,44 +403,90 @@ async function main() {
     }
   }
 
-  // B) storico vendite rolling 30 giorni
+  // B) rolling 30 giorni (basato su collectedAt)
   const salesFile = `${DATA_DIR}/sales_30d.json`;
   const salesObj = readJson(salesFile, { sales: [] });
 
   const cutoff = Date.now() - DAYS * 24 * 3600 * 1000;
   const kept = (salesObj.sales || []).filter(s => new Date(s.collectedAt).getTime() >= cutoff);
 
-  // C) raccolta vendite: 4 query mirate
+  // C) raccolta vendite: query mirate + esclusioni grading USA
   const collectedAt = todayISO();
 
-  const keywords = [
-    "pokemon graad",
-    "pokemon 151 graad",
-    "pokemon jap graad",
-    "pokemon card graad"
+  const gradedQueries = [
+    `"GRAAD" pokemon -psa -bgs -bsg -cgc -ace`,
+    `"GRAAD" jap pokemon -psa -bgs -bsg -cgc -ace`,
+    `"GRAAD" sv9a pokemon -psa -bgs -bsg -cgc -ace`,
+    `"GRAAD" "pokemon 151" -psa -bgs -bsg -cgc -ace`
   ];
 
-  const PAGES_PER_QUERY = 2;
+  // RAW “mirate” (non serve gradedOnly)
+  // Nota: queste servono soprattutto a popolare subito qualche card popolare, ma non farle troppo generiche.
+  const rawQueries = [
+    `pokemon sv9a 181/165 jap -psa -bgs -bsg -cgc -ace -graad -graded`,
+    `pokemon meloetta jap -psa -bgs -bsg -cgc -ace -graad -graded`
+  ];
+
+  const PAGES_PER_QUERY = 2; // tienilo basso, ma _ipg alto
+
   const newSales = [];
 
-  for (const kw of keywords) {
+  // Helper per evitare di salvare vendite “non graad” quando stai facendo query graad
+  function isActuallyGraad(title) {
+    return /\bgraad\b/i.test(title || "");
+  }
+
+  for (const kw of gradedQueries) {
     for (let page = 1; page <= PAGES_PER_QUERY; page++) {
       let html;
       try {
-        html = await fetchEbaySoldPageHTML({ keyword: kw, page });
+        html = await fetchEbaySoldPageHTML({ keyword: kw, page, gradedOnly: true });
       } catch (e) {
-        console.error("eBay fetch error:", kw, e.message);
+        console.error("eBay fetch error (graded):", kw, e.message);
         continue;
       }
 
       const items = parseEbaySearchItems(html);
+      for (const it of items) {
+        if (!isActuallyGraad(it.title)) continue;
+        if (isLikelyLot(it.title)) continue;
 
+        const bucket = detectGraadBucket(it.title) ?? "graad_unknown";
+        const priceBucket = bucket.startsWith("graad_") ? bucket : "graad_unknown";
+
+        const match = bestMatchCard(catalog, it.title);
+        if (!match.card || match.confidence < 0.80) continue;
+
+        newSales.push({
+          collectedAt,
+          source: "ebay.it",
+          title: it.title,
+          url: it.url,
+          price_eur: it.price_eur,
+          cardId: match.card.id,
+          bucket: priceBucket
+        });
+      }
+    }
+  }
+
+  for (const kw of rawQueries) {
+    for (let page = 1; page <= PAGES_PER_QUERY; page++) {
+      let html;
+      try {
+        html = await fetchEbaySoldPageHTML({ keyword: kw, page, gradedOnly: false });
+      } catch (e) {
+        console.error("eBay fetch error (raw):", kw, e.message);
+        continue;
+      }
+
+      const items = parseEbaySearchItems(html);
       for (const it of items) {
         if (isLikelyLot(it.title)) continue;
 
-        const bucket = detectGraadBucket(it.title);
-        const graded = bucket && bucket.startsWith("graad_");
-        const priceBucket = graded ? bucket : "raw";
+        // Se trovi graad in una query raw, lo classifichi comunque come graad
+        const bucketMaybe = detectGraadBucket(it.title);
+        const priceBucket = bucketMaybe && bucketMaybe.startsWith("graad_") ? bucketMaybe : "raw";
 
         const match = bestMatchCard(catalog, it.title);
         if (!match.card || match.confidence < 0.80) continue;
@@ -538,7 +525,8 @@ async function main() {
       graad_8: [],
       graad_9: [],
       graad_9_5: [],
-      graad_10: []
+      graad_10: [],
+      graad_unknown: []
     };
     if (byCard[s.cardId][s.bucket]) byCard[s.cardId][s.bucket].push(s.price_eur);
   }
