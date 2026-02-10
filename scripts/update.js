@@ -5,12 +5,14 @@ import * as cheerio from "cheerio";
 const DATA_DIR = "data";
 const DAYS = 30;
 const SKIP_CATALOG = process.env.SKIP_CATALOG === "1";
+const CATALOG_STRATEGY = process.env.CATALOG_STRATEGY || "split"; // "split" | "tcgdex"
 
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
 
 // eBay: categoria “Trading Card Singles”
 const EBAY_CATEGORY_ID = "183454";
+const USER_AGENT = "PokeGraadBot/0.6";
 
 // --- Utils ---
 function readJson(path, fallback) {
@@ -74,7 +76,36 @@ async function fetchJson(url, opts = {}, retries = 2) {
 
 async function fetchTCGdexCardDetail(lang, cardId) {
   const url = `https://api.tcgdex.net/v2/${lang}/cards/${encodeURIComponent(cardId)}`;
-  return await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.4" } });
+  return await fetchJson(url, { headers: { "user-agent": USER_AGENT } });
+}
+
+async function fetchPokemonTcgEnCards() {
+  const all = [];
+  const pageSize = 250;
+  let page = 1;
+  let totalCount = Number.POSITIVE_INFINITY;
+
+  while (all.length < totalCount) {
+    const params = new URLSearchParams({
+      page: String(page),
+      pageSize: String(pageSize),
+      q: "supertype:pokemon"
+    });
+
+    const url = `https://api.pokemontcg.io/v2/cards?${params.toString()}`;
+    const payload = await fetchJson(url, { headers: { "user-agent": USER_AGENT } }, 2);
+    if (!payload?.data) break;
+
+    totalCount = Number(payload.totalCount || 0);
+    all.push(...payload.data);
+
+    if (!payload.data.length) break;
+    page += 1;
+
+    if (page % 6 === 0) await sleep(200);
+  }
+
+  return all;
 }
 
 async function getPokemonNameEnByDexId(dexId) {
@@ -82,7 +113,7 @@ async function getPokemonNameEnByDexId(dexId) {
   if (cache[dexId]) return cache[dexId];
 
   const url = `https://pokeapi.co/api/v2/pokemon-species/${dexId}/`;
-  const j = await fetchJson(url, { headers: { "user-agent": "PokeGraadBot/0.4" } }, 2);
+  const j = await fetchJson(url, { headers: { "user-agent": USER_AGENT } }, 2);
   if (!j) return null;
 
   const nameEn =
@@ -110,11 +141,11 @@ async function buildCatalogFromTCGdex() {
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.4" } }, 2);
+    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": USER_AGENT } }, 2);
     if (!sets) throw new Error(`TCGdex sets (${lang}) failed`);
 
     for (const s of sets) {
-      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.4" } }, 2);
+      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
       if (!set) continue;
 
       // IMPORTANT: escludi TCG Pocket
@@ -246,6 +277,69 @@ async function buildCatalogFromTCGdex() {
   return { cards: out };
 }
 
+async function buildCatalogFromSplitSources() {
+  const fromEnApi = await fetchPokemonTcgEnCards();
+  const out = [];
+
+  for (const c of fromEnApi) {
+    const setId = (c.set?.ptcgoCode || c.set?.id || "").toString().toLowerCase();
+    const setName = c.set?.name || setId || "Unknown";
+    const number = (c.number || "").toString().trim();
+    if (!setId || !number || !c.name) continue;
+
+    const total = c.set?.printedTotal ?? c.set?.total ?? null;
+    out.push({
+      id: `${setId}-${number}-${norm(c.name)}-en`,
+      name: c.name,
+      nameEn: c.name,
+      nameJa: null,
+      lang: "en",
+      setId,
+      setName,
+      number,
+      numberFull: total ? `${number}/${total}` : null,
+      rarity: c.rarity || null,
+      features: c.rarity ? [c.rarity] : [],
+      imageLarge: c.images?.large || ""
+    });
+  }
+
+  // Per il catalogo JA usiamo TCGdex (migliore copertura lingua giapponese)
+  const base = "https://api.tcgdex.net/v2/ja";
+  const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": USER_AGENT } }, 2);
+  if (!sets) return { cards: out };
+
+  for (const s of sets) {
+    const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
+    if (!set) continue;
+    if (set.serie?.id === "tcgp") continue;
+    if (!Array.isArray(set.cards)) continue;
+
+    const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
+    for (const c of set.cards) {
+      const localId = (c.localId ?? c.number ?? "").toString().trim();
+      if (!localId || !c.name) continue;
+
+      out.push({
+        id: `${set.id}-${localId}-${norm(c.name)}-ja`,
+        name: c.name,
+        nameEn: null,
+        nameJa: c.name,
+        lang: "ja",
+        setId: set.id,
+        setName: set.name || set.id,
+        number: localId,
+        numberFull: total ? `${localId}/${total}` : null,
+        rarity: c.rarity || null,
+        features: c.rarity ? [c.rarity] : [],
+        imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : ""
+      });
+    }
+  }
+
+  return { cards: out };
+}
+
 /* -------------------------------------------------------
    2) Scraping vendite eBay.it
 -------------------------------------------------------- */
@@ -272,6 +366,13 @@ function detectLangFromTitle(title) {
   const t = norm(title);
   if (/\b(jap|jpn|jp|giapponese)\b/.test(t)) return "ja";
   if (/\b(eng|english|en|inglese)\b/.test(t)) return "en";
+  return null;
+}
+
+function inferLangFromSetCode(setCode) {
+  const code = norm(setCode || "");
+  // Sv2a/Sv9a ecc. sono quasi sempre release JP.
+  if (/^sv\d{1,2}a$/.test(code)) return "ja";
   return null;
 }
 
@@ -335,6 +436,8 @@ function bestMatchCard(catalog, title) {
 
   const lang = detectLangFromTitle(t);
   const setCode = extractSetCode(title);   // può essere sbagliato nel titolo
+  const langBySet = inferLangFromSetCode(setCode);
+  const finalLang = lang || langBySet;
   const localId = extractLocalId(title);
 
   if (!localId) return { card: null, confidence: 0 };
@@ -344,6 +447,7 @@ function bestMatchCard(catalog, title) {
   // PASS 1 (strict): lingua + setCode + numero + nome
   let strict = cards.filter(c => {
     if (lang && c.lang !== lang) return false;
+    if (!lang && finalLang && c.lang !== finalLang) return false;
     if (setCode && norm(c.setId) !== norm(setCode)) return false;
     if (c.number && norm(c.number) !== norm(localId)) return false;
     return titleHasName(t, c);
@@ -355,7 +459,7 @@ function bestMatchCard(catalog, title) {
     for (const c of strict) if (c.imageLarge && !best.imageLarge) best = c;
 
     let conf = 0.86;
-    if (lang) conf += 0.04;
+    if (finalLang) conf += 0.04;
     return { card: best, confidence: Math.min(conf, 1.0), mode: "strict" };
   }
 
@@ -363,6 +467,7 @@ function bestMatchCard(catalog, title) {
   // Richiediamo però: numero + nome + (lingua se presente)
   let loose = cards.filter(c => {
     if (lang && c.lang !== lang) return false;
+    if (!lang && finalLang && c.lang !== finalLang) return false;
     if (c.number && norm(c.number) !== norm(localId)) return false;
     return titleHasName(t, c);
   });
@@ -381,7 +486,7 @@ function bestMatchCard(catalog, title) {
 
   // confidence più bassa, ma sufficiente dato che stiamo anche queryando “GRAAD” + filtri
   let conf = 0.80;
-  if (lang) conf += 0.05;
+  if (finalLang) conf += 0.05;
   return { card: best, confidence: Math.min(conf, 0.90), mode: "loose" };
 }
 
@@ -401,7 +506,7 @@ async function fetchEbaySoldPageHTML({ keyword, page = 1, categoryId = EBAY_CATE
   const url = `https://www.ebay.it/sch/i.html?${params.toString()}`;
 
   const resp = await fetch(url, {
-    headers: { "user-agent": "Mozilla/5.0 (compatible; PokeGraadBot/0.5)" }
+    headers: { "user-agent": `Mozilla/5.0 (compatible; ${USER_AGENT})` }
   });
   if (!resp.ok) throw new Error(`eBay fetch failed: ${resp.status}`);
   return await resp.text();
@@ -437,7 +542,9 @@ async function main() {
 
   if (!SKIP_CATALOG) {
     try {
-      catalog = await buildCatalogFromTCGdex();
+      catalog = CATALOG_STRATEGY === "tcgdex"
+        ? await buildCatalogFromTCGdex()
+        : await buildCatalogFromSplitSources();
       writeJson(catalogFile, catalog);
     } catch (e) {
       console.error("Catalog build failed:", e.message);
