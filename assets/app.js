@@ -1,3 +1,4 @@
+// assets/app.js
 const $ = (id) => document.getElementById(id);
 
 let catalog = [];
@@ -52,12 +53,9 @@ function readStateFromURL() {
 
 function writeStateToURL(state) {
   const url = new URL(location.href);
-  // pulizia parametri vuoti
   if (state.q) url.searchParams.set("q", state.q); else url.searchParams.delete("q");
   if (state.set) url.searchParams.set("set", state.set); else url.searchParams.delete("set");
   if (state.lang) url.searchParams.set("lang", state.lang); else url.searchParams.delete("lang");
-
-  // replaceState per non creare mille voci nella cronologia mentre digiti
   history.replaceState(null, "", url.toString());
 }
 
@@ -130,11 +128,14 @@ function render(cards, state) {
     div.className = "card";
 
     const a = document.createElement("a");
-    // Passiamo lo stato corrente anche a card.html
     a.href = `card.html?id=${encodeURIComponent(c.id)}&q=${q}&set=${set}&lang=${lang}`;
+
+    const displayName = (c.lang === "ja" && c.nameEn) ? c.nameEn : c.name;
+    const subtitleExtra = (c.lang === "ja" && c.nameJa && c.nameEn) ? ` • ${c.nameJa}` : "";
+
     a.innerHTML = `
-      <div><strong>${c.name}</strong></div>
-      <div class="small">${c.setName || c.setId} — ${c.numberFull || c.number || ""} — ${c.lang?.toUpperCase() || ""}</div>
+      <div><strong>${displayName}</strong></div>
+      <div class="small">${c.setName || c.setId} — ${c.numberFull || c.number || ""} — ${c.lang?.toUpperCase() || ""}${subtitleExtra}</div>
       <div class="small">${c.rarity || ""} ${c.features?.length ? "• " + c.features.join(", ") : ""}</div>
     `;
 
@@ -151,7 +152,6 @@ async function init() {
   const j = await r.json();
   catalog = j.cards || [];
 
-  // sets/langs per dropdown
   const setMap = new Map();
   const langMap = new Map();
   for (const c of catalog) {
@@ -170,16 +170,13 @@ async function init() {
   buildOptions($("set"), sets, "Tutte le espansioni");
   buildOptions($("lang"), langs, "Tutte le lingue");
 
-  // Ripristina stato dall’URL (se arrivi da card.html o da refresh)
   const urlState = readStateFromURL();
   applyStateToUI(urlState);
 
-  // Event listeners
   $("q").addEventListener("input", () => applyFilters({ writeURL: true }));
   $("set").addEventListener("change", () => applyFilters({ writeURL: true }));
   $("lang").addEventListener("change", () => applyFilters({ writeURL: true }));
 
-  // Primo render coerente con stato
   $("stats").textContent = `Catalogo caricato: ${catalog.length} carte`;
   applyFilters({ writeURL: true });
 }
