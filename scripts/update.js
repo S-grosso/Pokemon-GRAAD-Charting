@@ -79,6 +79,7 @@ async function getPokemonNameEnByDexId(dexId) {
 // - include EN + JA
 // - esclude TCG Pocket (serie tcgp)
 // - per JP-only prova a valorizzare nameEn via dexId
+// - OUTPUT CANONICO: 1 record per carta (JA se esiste, altrimenti EN) per evitare duplicati
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
   const agg = new Map(); // key = setId|localId
@@ -86,11 +87,11 @@ async function buildCatalogFromTCGdex() {
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
 
-    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.3" } });
+    const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": "PokeGraadBot/0.1" } });
     if (!sets) throw new Error(`TCGdex sets (${lang}) failed`);
 
     for (const s of sets) {
-      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.3" } });
+      const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": "PokeGraadBot/0.1" } });
       if (!set) continue;
 
       // IMPORTANT: escludi TCG Pocket
@@ -146,7 +147,7 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Enrichment: JP-only -> nameEn via dexId; immagini via detail (solo quando serve)
+  // Enrichment: JP-only -> nameEn via dexId; immagini via detail quando mancano
   let detailFetches = 0;
 
   for (const v of agg.values()) {
@@ -177,50 +178,50 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Esplosione record per lingua:
-// Regola anti-duplicati: se esiste la versione JA per la stessa chiave,
-// NON generiamo anche la versione EN “tradotta”.
-const out = [];
-for (const v of agg.values()) {
-  const hasJa = !!v.nameJa;
+  // OUTPUT CANONICO (no duplicati):
+  // - se esiste nameJa => emetti SOLO record JA (ma con nameEn se disponibile)
+  // - altrimenti emetti record EN
+  const out = [];
 
-  // record EN solo se non esiste JA per la stessa carta
-  if (v.nameEn && !hasJa) {
-    out.push({
-      id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
-      name: v.nameEn,
-      nameEn: v.nameEn,
-      nameJa: v.nameJa,
-      lang: "en",
-      setId: v.setId,
-      setName: v.setName,
-      number: v.number,
-      numberFull: v.numberFull,
-      rarity: v.rarity,
-      features: v.features,
-      imageLarge: v.imageLarge
-    });
+  for (const v of agg.values()) {
+    if (v.nameJa) {
+      // nota: l’id usa norm(nameEn || nameJa) per stabilità e per non cambiare troppo tra rebuild
+      out.push({
+        id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
+        name: v.nameJa,
+        nameEn: v.nameEn || null,
+        nameJa: v.nameJa,
+        lang: "ja",
+        setId: v.setId,
+        setName: v.setName,
+        number: v.number,
+        numberFull: v.numberFull,
+        rarity: v.rarity,
+        features: v.features,
+        imageLarge: v.imageLarge
+      });
+      continue;
+    }
+
+    if (v.nameEn) {
+      out.push({
+        id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
+        name: v.nameEn,
+        nameEn: v.nameEn,
+        nameJa: null,
+        lang: "en",
+        setId: v.setId,
+        setName: v.setName,
+        number: v.number,
+        numberFull: v.numberFull,
+        rarity: v.rarity,
+        features: v.features,
+        imageLarge: v.imageLarge
+      });
+    }
   }
 
-  // record JA (con nameEn come alias di ricerca)
-  if (v.nameJa) {
-    out.push({
-      id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
-      name: v.nameJa,
-      nameEn: v.nameEn || null,
-      nameJa: v.nameJa,
-      lang: "ja",
-      setId: v.setId,
-      setName: v.setName,
-      number: v.number,
-      numberFull: v.numberFull,
-      rarity: v.rarity,
-      features: v.features,
-      imageLarge: v.imageLarge
-    });
-  }
-}
-return { cards: out };
+  return { cards: out };
 }
 
 // --- 2) Scraping vendite eBay.it ---
