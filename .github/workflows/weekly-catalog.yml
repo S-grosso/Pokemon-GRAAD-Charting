@@ -30,6 +30,22 @@ jobs:
 
       - name: Run updater (catalog + prices)
         run: node scripts/update.js
+        env:
+          STRICT_CATALOG: "1"
+
+      - name: Debug output
+        run: |
+          echo "== File info =="
+          ls -lh data/catalog.json data/prices.json data/meta.json || true
+          echo ""
+          echo "== Hashes =="
+          sha256sum data/catalog.json data/prices.json data/meta.json || true
+          echo ""
+          echo "== Git status (porcelain) =="
+          git status --porcelain
+          echo ""
+          echo "== Git diff (name-only) =="
+          git diff --name-only
 
       - name: Commit and push if changed
         run: |
