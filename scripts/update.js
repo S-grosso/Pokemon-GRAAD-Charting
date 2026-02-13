@@ -15,6 +15,9 @@ const ENRICH_TCGDEX_EN_POKEMONKEY = process.env.ENRICH_TCGDEX_EN_POKEMONKEY === 
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
 
+// NEW: cache locale jaName -> { dexId, enName, pokemonKey }
+const SPECIES_NAME_MAP_FILE = `${DATA_DIR}/poke_species_name_map.json`;
+
 // eBay: categoria “Trading Card Singles”
 const EBAY_CATEGORY_ID = "183454";
 const USER_AGENT = "PokeGraadBot/0.6";
@@ -144,6 +147,44 @@ async function getPokemonNameEnByDexId(dexId) {
   return nameEn;
 }
 
+// NEW: costruisce/legge la mappa jaName -> enName/pokemonKey (1 volta, poi cache su file)
+async function getOrBuildSpeciesNameMap() {
+  const cached = readJson(SPECIES_NAME_MAP_FILE, null);
+  if (cached && typeof cached === "object" && Object.keys(cached).length > 0) return cached;
+
+  const map = {}; // key: jaName (esatto) -> { dexId, enName, pokemonKey }
+  let url = "https://pokeapi.co/api/v2/pokemon-species?limit=200&offset=0";
+
+  while (url) {
+    const page = await fetchJson(url, { headers: { "user-agent": USER_AGENT } }, 2);
+    if (!page?.results?.length) break;
+
+    for (const r of page.results) {
+      const detail = await fetchJson(r.url, { headers: { "user-agent": USER_AGENT } }, 2);
+      if (!detail) continue;
+
+      const dexId = Number(detail.id) || null;
+      const enName =
+        (detail.names || []).find(x => x.language?.name === "en")?.name ||
+        detail.name ||
+        null;
+      const jaName =
+        (detail.names || []).find(x => x.language?.name === "ja")?.name ||
+        null;
+
+      if (dexId && enName && jaName) {
+        map[jaName] = { dexId, enName, pokemonKey: norm(enName) };
+      }
+    }
+
+    url = page.next || null;
+    await sleep(150); // leggero throttle
+  }
+
+  writeJson(SPECIES_NAME_MAP_FILE, map);
+  return map;
+}
+
 // --- helper: cardKey + pokemonKey ---
 function makeCardKey(setId, number, printingLang) {
   return `${setId}|${number}|${printingLang}`;
@@ -160,11 +201,12 @@ async function getPokemonKeyEnByDexId(dexId) {
    - per JP-only prova a valorizzare nameEn + pokemonKey via dexId
    - opzionale: EN pokemonKey via dexId (flag ENRICH_TCGDEX_EN_POKEMONKEY=1)
    - NEW: jpSetIds (deriva lingua di stampa dal fatto che il set esiste sotto /ja)
+   - NEW: fallback JP da nameJa tramite SPECIES_NAME_MAP_FILE quando dexId manca
 -------------------------------------------------------- */
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
   const agg = new Map(); // key = setId|localId
-  const jpSetIds = new Set(); // <-- PATCH: set visti sotto /ja (stampa JP)
+  const jpSetIds = new Set(); // set visti sotto /ja (stampa JP)
 
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
@@ -182,7 +224,7 @@ async function buildCatalogFromTCGdex() {
       const setId = set.id || s.id;
       const setName = set.name || s.name || setId;
 
-      // <-- PATCH: marca i set che compaiono sotto /ja
+      // marca i set che compaiono sotto /ja
       if (lang === "ja" && setId) jpSetIds.add(setId);
 
       const total =
@@ -245,6 +287,9 @@ async function buildCatalogFromTCGdex() {
   // Enrichment: immagini via detail se mancanti; pokemonKey/nameEn via dexId (JP always; EN opzionale)
   let detailFetches = 0;
 
+  // NEW: species map caricata una volta
+  const speciesMap = await getOrBuildSpeciesNameMap();
+
   for (const v of agg.values()) {
     const inferred = inferPrintingLangFromSetId(v.setId); // "ja" | null
 
@@ -260,12 +305,13 @@ async function buildCatalogFromTCGdex() {
       }
     }
 
-    // JP sets: riempi nameEn + pokemonKey via dexId (anche se nameEn esiste ma pokemonKey manca)
+    // JP sets: riempi nameEn + pokemonKey via dexId; fallback da nameJa->speciesMap se dexId manca
     if (inferred === "ja" && v.cardIdJa && (!v.nameEn || !v.pokemonKey)) {
       const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
       detailFetches++;
 
       const dex = pickDexId(detail);
+
       if (dex != null) {
         if (!v.nameEn) {
           const enName = await getPokemonNameEnByDexId(dex);
@@ -274,6 +320,13 @@ async function buildCatalogFromTCGdex() {
         if (!v.pokemonKey) {
           const pk = await getPokemonKeyEnByDexId(dex);
           if (pk) v.pokemonKey = pk;
+        }
+      } else {
+        const jaName = v.nameJa || null;
+        const hit = jaName ? speciesMap[jaName] : null;
+        if (hit) {
+          if (!v.nameEn) v.nameEn = hit.enName;
+          if (!v.pokemonKey) v.pokemonKey = hit.pokemonKey;
         }
       }
 
@@ -409,7 +462,7 @@ async function buildCatalogFromSplitSources() {
   const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": USER_AGENT } }, 2);
   if (!sets) return { cards: out };
 
-  // <-- PATCH: anche qui, teniamo traccia dei set JP realmente esistenti sotto /ja
+  // traccia set JP realmente esistenti sotto /ja (qui non serve per la split, ma lo lasciamo)
   const jpSetIds = new Set();
 
   for (const s of sets) {
@@ -634,7 +687,6 @@ function bestMatchCard(catalog, title) {
   });
 
   if (strict.length) {
-    // scegli il primo; se vuoi, puoi preferire quello con immagine
     let best = strict[0];
     for (const c of strict) if (c.imageLarge && !best.imageLarge) best = c;
 
@@ -643,8 +695,7 @@ function bestMatchCard(catalog, title) {
     return { card: best, confidence: Math.min(conf, 1.0), mode: "strict" };
   }
 
-  // PASS 2 (loose): se il setCode è probabilmente “rumore”, non bloccare la vendita
-  // Richiediamo però: numero + nome + (lingua se presente)
+  // PASS 2 (loose): numero + nome + (lingua se presente)
   let loose = cards.filter(c => {
     if (lang && c.lang !== lang) return false;
     if (!lang && finalLang && c.lang !== finalLang) return false;
@@ -654,7 +705,6 @@ function bestMatchCard(catalog, title) {
 
   if (!loose.length) return { card: null, confidence: 0 };
 
-  // Se abbiamo setCode, preferisci un candidato che “assomiglia” (solo come tie-break)
   let best = loose[0];
 
   if (setCode) {
@@ -664,7 +714,6 @@ function bestMatchCard(catalog, title) {
 
   for (const c of loose) if (c.imageLarge && !best.imageLarge) best = c;
 
-  // confidence più bassa, ma sufficiente dato che stiamo anche queryando “GRAAD” + filtri
   let conf = 0.80;
   if (finalLang) conf += 0.05;
   return { card: best, confidence: Math.min(conf, 0.90), mode: "loose" };
@@ -714,7 +763,10 @@ function parseEbaySearchItems(html) {
 -------------------------------------------------------- */
 async function main() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
+
+  // crea file cache se mancanti (workflow committa data/)
   if (!fs.existsSync(DEX_CACHE_FILE)) writeJson(DEX_CACHE_FILE, {});
+  if (!fs.existsSync(SPECIES_NAME_MAP_FILE)) writeJson(SPECIES_NAME_MAP_FILE, {});
 
   // A) catalogo
   const catalogFile = `${DATA_DIR}/catalog.json`;
@@ -752,8 +804,6 @@ async function main() {
   // C) raccolta vendite: query mirate (eBay sold è rumoroso)
   const collectedAt = todayISO();
 
-  // Nota: eBay interpreta i “-term” come esclusioni nella UI; in URL spesso funziona comunque.
-  // Qui lo usiamo per togliere PSA/BGS/CGC/BSG che “sporcano” le sold.
   const gradedQueries = [
     `"GRAAD" pokemon -psa -bgs -bsg -cgc`,
     `"GRAAD" sv2a -psa -bgs -bsg -cgc`,
@@ -761,8 +811,6 @@ async function main() {
     `"GRAAD" jap -psa -bgs -bsg -cgc`
   ];
 
-  // Query RAW (senza graad) solo se vuoi davvero: per ora le tengo “minime”
-  // perché le sold RAW sono ancora più rumorose e il matching diventa fragile.
   const rawQueries = [
     `pokemon sv2a 181/165 -psa -bgs -bsg -cgc -graad -graded`,
     `pokemon meloetta 022/021 -psa -bgs -bsg -cgc -graad -graded`
@@ -770,7 +818,6 @@ async function main() {
 
   const queries = [
     ...gradedQueries.map(q => ({ keyword: q, gradedOnly: true })),
-    // se vuoi partire solo dal graded per far “comparire mediane subito”, commenta queste due:
     ...rawQueries.map(q => ({ keyword: q, gradedOnly: false }))
   ];
 
