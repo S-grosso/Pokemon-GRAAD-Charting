@@ -622,8 +622,9 @@ async function main() {
       writeJson(catalogFile, catalog);
     } catch (e) {
       console.error("Catalog build failed:", e.message);
-      catalog = readJson(catalogFile, { cards: [] });
-    }
+    if (process.env.STRICT_CATALOG === "1") process.exit(1);
+    catalog = readJson(catalogFile, { cards: [] });
+  }
   } else {
     if (!catalog.cards?.length) {
       console.warn("SKIP_CATALOG=1 ma catalog.json è vuoto: rigenero comunque.");
