@@ -46,6 +46,7 @@ jobs:
         run: node scripts/update.js
         env:
           STRICT_CATALOG: "1"
+          CATALOG_STRATEGY: "split"
 
       - name: Debug (post)
         if: always()
