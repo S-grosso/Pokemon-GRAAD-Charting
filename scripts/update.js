@@ -52,14 +52,14 @@ function tcgdexImg(imageBase, quality = "high", ext = "webp") {
 }
 
 // fetch JSON con un minimo di resilienza
-async function fetchJson(url, opts = {}, retries = 2) {
+async function fetchJson(url, opts = {}, retries = 4) {
   for (let i = 0; i <= retries; i++) {
     try {
       const resp = await fetch(url, opts);
       if (!resp.ok) {
         // retry su 429/5xx
         if ((resp.status === 429 || resp.status >= 500) && i < retries) {
-          await sleep(250 * (i + 1));
+          await sleep(400 * (i + 1));
           continue;
         }
         return null;
@@ -67,7 +67,7 @@ async function fetchJson(url, opts = {}, retries = 2) {
       return await resp.json();
     } catch (e) {
       if (i < retries) {
-        await sleep(250 * (i + 1));
+        await sleep(400 * (i + 1));
         continue;
       }
       return null;
@@ -428,16 +428,19 @@ function extractSetCode(title) {
 function extractLocalId(title) {
   const raw = title || "";
 
-  // 181/165 -> 181
+  // 181/165 -> 181 (caso più affidabile)
   const m1 = raw.match(/(\d{1,3})\s*\/\s*(\d{1,3})/);
   if (m1) return m1[1];
 
-  // promo/seriale tipo BW68 / SVP123 / mBD022 (lasciamo che norm gestisca case)
+  // promo/seriale tipo BW68 / SVP123 / mBD022
   const mPromo = raw.match(/\b([A-Z]{1,4}\d{1,4})\b/);
   if (mPromo) return mPromo[1];
 
-  // #181 o 181
-  const m2 = raw.match(/\b#?\s*(\d{1,3})\b/);
+  // evita di prendere il voto GRAAD (es. 9.5, 10)
+  const rawWithoutGrade = raw.replace(/graad\s*[0-9]{1,2}(?:[.,]5)?/ig, " ");
+
+  // #181 o 181 (fallback)
+  const m2 = rawWithoutGrade.match(/\b#?\s*(\d{2,3})\b/);
   if (m2) return m2[1];
 
   return null;
@@ -460,10 +463,27 @@ function bestMatchCard(catalog, title) {
   const langBySet = inferLangFromSetCode(setCode);
   const finalLang = lang || langBySet;
   const localId = extractLocalId(title);
-
-  if (!localId) return { card: null, confidence: 0 };
-
   const cards = catalog.cards || [];
+
+  if (!localId) {
+    // Fallback: alcuni titoli eBay non riportano il numero carta.
+    const byName = cards.filter(c => {
+      if (lang && c.lang !== lang) return false;
+      if (!lang && finalLang && c.lang !== finalLang) return false;
+      if (setCode && norm(c.setId) !== norm(setCode)) return false;
+      return titleHasName(t, c);
+    });
+
+    if (!byName.length) return { card: null, confidence: 0 };
+
+    let best = byName[0];
+    for (const c of byName) if (c.imageLarge && !best.imageLarge) best = c;
+
+    let conf = 0.72;
+    if (setCode) conf += 0.05;
+    if (finalLang) conf += 0.03;
+    return { card: best, confidence: Math.min(conf, 0.82), mode: "name_only" };
+  }
 
   // PASS 1 (strict): lingua + setCode + numero + nome
   let strict = cards.filter(c => {
@@ -645,7 +665,7 @@ async function main() {
         if (q.gradedOnly && !graded) continue;
 
         const match = bestMatchCard(catalog, it.title);
-        if (!match.card || match.confidence < 0.80) continue;
+        if (!match.card || match.confidence < 0.72) continue;
 
         newSales.push({
           collectedAt,
@@ -659,6 +679,9 @@ async function main() {
       }
     }
   }
+
+  const matchedCount = newSales.length;
+  console.log(`Sales collected: matched=${matchedCount} kept_before_dedup=${kept.length}`);
 
   // dedup su (url + price + cardId + bucket)
   const seen = new Set(kept.map(s => `${s.url}|${s.price_eur}|${s.cardId}|${s.bucket}`));
