@@ -15,12 +15,16 @@ const ENRICH_TCGDEX_EN_POKEMONKEY = process.env.ENRICH_TCGDEX_EN_POKEMONKEY === 
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
 
-// NEW: cache locale jaName -> { dexId, enName, pokemonKey }
+// cache locale jaName -> { dexId, enName, pokemonKey }
 const SPECIES_NAME_MAP_FILE = `${DATA_DIR}/poke_species_name_map.json`;
 
 // eBay: categoria “Trading Card Singles”
 const EBAY_CATEGORY_ID = "183454";
 const USER_AGENT = "PokeGraadBot/0.6";
+
+// Limitless JP (HTML)
+const LIMITLESS_BASE = "https://limitlesstcg.com";
+const LIMITLESS_JP_INDEX = `${LIMITLESS_BASE}/cards/jp`;
 
 // --- Utils ---
 function readJson(path, fallback) {
@@ -62,6 +66,16 @@ function pickDexId(detail) {
   return null;
 }
 
+function hasJapaneseChars(s) {
+  const t = (s || "").toString();
+  return /[\u3040-\u30ff\u3400-\u9fff]/.test(t);
+}
+
+function absUrl(maybeRelative) {
+  if (!maybeRelative) return "";
+  try { return new URL(maybeRelative, LIMITLESS_BASE).toString(); } catch { return ""; }
+}
+
 // TCGdex assets: {base}/{quality}.{ext}
 function tcgdexImg(imageBase, quality = "high", ext = "webp") {
   if (!imageBase) return "";
@@ -85,6 +99,30 @@ async function fetchJson(url, opts = {}, retries = 4) {
     } catch (e) {
       if (i < retries) {
         await sleep(400 * (i + 1));
+        continue;
+      }
+      return null;
+    }
+  }
+  return null;
+}
+
+// fetch HTML con resilienza
+async function fetchHtml(url, opts = {}, retries = 4) {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const resp = await fetch(url, opts);
+      if (!resp.ok) {
+        if ((resp.status === 429 || resp.status >= 500) && i < retries) {
+          await sleep(500 * (i + 1));
+          continue;
+        }
+        return null;
+      }
+      return await resp.text();
+    } catch (e) {
+      if (i < retries) {
+        await sleep(500 * (i + 1));
         continue;
       }
       return null;
@@ -147,7 +185,7 @@ async function getPokemonNameEnByDexId(dexId) {
   return nameEn;
 }
 
-// NEW: costruisce/legge la mappa jaName -> enName/pokemonKey (1 volta, poi cache su file)
+// costruisce/legge la mappa jaName -> enName/pokemonKey (1 volta, poi cache su file)
 async function getOrBuildSpeciesNameMap() {
   const cached = readJson(SPECIES_NAME_MAP_FILE, null);
   if (cached && typeof cached === "object" && Object.keys(cached).length > 0) return cached;
@@ -192,6 +230,199 @@ function makeCardKey(setId, number, printingLang) {
 async function getPokemonKeyEnByDexId(dexId) {
   const en = await getPokemonNameEnByDexId(dexId);
   return en ? norm(en) : null;
+}
+
+/* -------------------------------------------------------
+   Limitless JP adapter + TCGdex image preference
+-------------------------------------------------------- */
+
+// cache in-memory: setId -> Map(localId -> tcgdex imageLarge)
+const TCGDEX_JA_IMG_MAP_CACHE = new Map();
+
+async function getTcgdexJaImageMapForSet(setId) {
+  const key = (setId || "").toString().trim();
+  if (!key) return new Map();
+  if (TCGDEX_JA_IMG_MAP_CACHE.has(key)) return TCGDEX_JA_IMG_MAP_CACHE.get(key);
+
+  const map = new Map();
+  const base = "https://api.tcgdex.net/v2/ja";
+  const set = await fetchJson(`${base}/sets/${encodeURIComponent(key)}`, { headers: { "user-agent": USER_AGENT } }, 2);
+
+  if (set?.serie?.id === "tcgp") {
+    TCGDEX_JA_IMG_MAP_CACHE.set(key, map);
+    return map;
+  }
+
+  if (Array.isArray(set?.cards)) {
+    for (const c of set.cards) {
+      const localId = (c.localId ?? c.number ?? "").toString().trim();
+      if (!localId) continue;
+      const img = c.image ? tcgdexImg(c.image, "high", "webp") : "";
+      if (img) map.set(localId, img);
+    }
+  }
+
+  TCGDEX_JA_IMG_MAP_CACHE.set(key, map);
+  return map;
+}
+
+async function fetchLimitlessJpSetsIndex() {
+  const html = await fetchHtml(LIMITLESS_JP_INDEX, { headers: { "user-agent": USER_AGENT } }, 3);
+  if (!html) return [];
+
+  const $ = cheerio.load(html);
+  const seen = new Map(); // setId -> setName
+
+  // Link tipo /cards/jp/SV2a
+  $('a[href^="/cards/jp/"]').each((_, el) => {
+    const href = $(el).attr("href") || "";
+    const m = href.match(/^\/cards\/jp\/([^\/\?#]+)$/i);
+    if (!m) return;
+
+    const setId = (m[1] || "").trim();
+    if (!setId) return;
+
+    const label = ($(el).text() || "").replace(/\s+/g, " ").trim();
+    let setName = label || setId;
+
+    if (label.toLowerCase().startsWith(setId.toLowerCase())) {
+      setName = label.slice(setId.length).replace(/^[\s—-]+/, "").trim() || setId;
+    }
+
+    if (!seen.has(setId)) seen.set(setId, setName);
+  });
+
+  // fallback se la struttura pagina cambia
+  if (seen.size === 0) {
+    $("table a").each((_, el) => {
+      const href = $(el).attr("href") || "";
+      const m = href.match(/^\/cards\/jp\/([^\/\?#]+)$/i);
+      if (!m) return;
+
+      const setId = (m[1] || "").trim();
+      if (!setId) return;
+
+      const label = ($(el).text() || "").replace(/\s+/g, " ").trim();
+      if (!seen.has(setId)) seen.set(setId, label || setId);
+    });
+  }
+
+  return [...seen.entries()].map(([setId, setName]) => ({ setId, setName }));
+}
+
+function parseLimitlessSetCards(html, setId, setName) {
+  const $ = cheerio.load(html);
+  const tmp = [];
+
+  // Link carta: /cards/jp/{setId}/{number}
+  $(`a[href^="/cards/jp/${setId}/"]`).each((_, a) => {
+    const href = $(a).attr("href") || "";
+    const m = href.match(new RegExp(`^\\/cards\\/jp\\/${setId}\\/([^\\/?#]+)$`, "i"));
+    if (!m) return;
+
+    const number = (m[1] || "").toString().trim();
+    if (!number) return;
+
+    const nameRaw = ($(a).text() || "").replace(/\s+/g, " ").trim();
+    const nameJa = nameRaw || null;
+
+    // prova immagine dalla riga
+    let imageLarge = "";
+    const row = $(a).closest("tr");
+    if (row && row.length) {
+      const img = row.find("img").first();
+      const src = img.attr("src") || img.attr("data-src") || "";
+      imageLarge = absUrl(src);
+    }
+
+    const sourceId = absUrl(href);
+
+    tmp.push({ setId, setName, number, nameJa, imageLarge, sourceId });
+  });
+
+  // dedup per number
+  const byKey = new Map();
+  for (const c of tmp) {
+    const k = `${c.setId}|${c.number}`;
+    if (!byKey.has(k)) byKey.set(k, c);
+    else {
+      const prev = byKey.get(k);
+      if ((!prev.imageLarge && c.imageLarge) || (!prev.nameJa && c.nameJa)) byKey.set(k, c);
+    }
+  }
+
+  return [...byKey.values()];
+}
+
+async function fetchLimitlessCardDetail(cardUrl) {
+  const html = await fetchHtml(cardUrl, { headers: { "user-agent": USER_AGENT } }, 2);
+  if (!html) return { dexId: null, nameJa: null, imageLarge: "" };
+
+  const $ = cheerio.load(html);
+
+  // Nome: h1 spesso contiene il nome. Se contiene kana/kanji, ottimo.
+  const h1 = ($("h1").first().text() || "").replace(/\s+/g, " ").trim();
+  let nameJa = hasJapaneseChars(h1) ? h1 : null;
+
+  // fallback: primo testo breve che contenga caratteri giapponesi
+  if (!nameJa) {
+    const cand = $("body").find("*").toArray()
+      .map(el => ($(el).text() || "").replace(/\s+/g, " ").trim())
+      .find(t => t && t.length <= 40 && hasJapaneseChars(t));
+    if (cand) nameJa = cand;
+  }
+
+  // DexId: regex su testo pagina
+  const bodyText = $("body").text().replace(/\s+/g, " ");
+  let dexId = null;
+
+  const m1 = bodyText.match(/Pok[ée]dex\s*[:#]?\s*(\d{1,4})/i);
+  if (m1) dexId = Number(m1[1]) || null;
+
+  if (!dexId) {
+    const m2 = bodyText.match(/National\s+Pok[ée]dex\s*[:#]?\s*(\d{1,4})/i);
+    if (m2) dexId = Number(m2[1]) || null;
+  }
+
+  // Immagine: og:image se presente
+  let imageLarge = "";
+  const og = $('meta[property="og:image"]').attr("content") || "";
+  if (og) imageLarge = absUrl(og);
+
+  if (!imageLarge) {
+    const img = $("img").toArray()
+      .map(el => $(el).attr("src") || $(el).attr("data-src") || "")
+      .map(src => absUrl(src))
+      .find(src => src && /cards|card|img/i.test(src));
+    if (img) imageLarge = img;
+  }
+
+  return { dexId, nameJa, imageLarge };
+}
+
+async function fetchJapaneseCatalogCards() {
+  const sets = await fetchLimitlessJpSetsIndex();
+  if (!sets.length) return [];
+
+  const out = [];
+  let i = 0;
+
+  for (const s of sets) {
+    i += 1;
+    const setId = s.setId;
+    const setName = s.setName || setId;
+
+    const url = `${LIMITLESS_JP_INDEX}/${encodeURIComponent(setId)}`;
+    const html = await fetchHtml(url, { headers: { "user-agent": USER_AGENT } }, 3);
+    if (!html) continue;
+
+    const cards = parseLimitlessSetCards(html, setId, setName);
+    out.push(...cards);
+
+    if (i % 10 === 0) await sleep(350);
+  }
+
+  return out;
 }
 
 /* -------------------------------------------------------
@@ -287,7 +518,7 @@ async function buildCatalogFromTCGdex() {
   // Enrichment: immagini via detail se mancanti; pokemonKey/nameEn via dexId (JP always; EN opzionale)
   let detailFetches = 0;
 
-  // NEW: species map caricata una volta
+  // species map caricata una volta
   const speciesMap = await getOrBuildSpeciesNameMap();
 
   for (const v of agg.values()) {
@@ -422,7 +653,19 @@ async function buildCatalogFromTCGdex() {
   return { cards: out };
 }
 
+/* -------------------------------------------------------
+   Split sources (PATCH)
+   - EN: PokémonTCG.io (invariato)
+   - JP: Limitless (/cards/jp) pagine set + (on-demand) pagine carta
+   - Immagini JP: preferisci TCGdex quando possibile, altrimenti Limitless
+   - Enrichment JP sempre: dexId se disponibile, altrimenti speciesMap[nameJa]
+   - Fallback extra: se nameJa è romaji/inglese e non matcha speciesMap, visita pagina carta (solo quando necessario)
+-------------------------------------------------------- */
 async function buildCatalogFromSplitSources() {
+  // speciesMap una volta
+  const speciesMap = await getOrBuildSpeciesNameMap();
+
+  // --- EN (unchanged) ---
   const fromEnApi = await fetchPokemonTcgEnCards();
   const out = [];
 
@@ -457,73 +700,103 @@ async function buildCatalogFromSplitSources() {
     });
   }
 
-  // Per il catalogo JA usiamo TCGdex (migliore copertura lingua giapponese)
-  const base = "https://api.tcgdex.net/v2/ja";
-  const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": USER_AGENT } }, 2);
-  if (!sets) return { cards: out };
+  // --- JP via Limitless ---
+  const jpRaw = await fetchJapaneseCatalogCards();
+  if (!jpRaw.length) return { cards: out };
 
-  // traccia set JP realmente esistenti sotto /ja (qui non serve per la split, ma lo lasciamo)
-  const jpSetIds = new Set();
-
-  for (const s of sets) {
-    const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
-    if (!set) continue;
-    if (set.serie?.id === "tcgp") continue;
-    if (!Array.isArray(set.cards)) continue;
-
-    const setId = set.id || s.id;
-    if (setId) jpSetIds.add(setId);
-
-    const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
-    for (const c of set.cards) {
-      const localId = (c.localId ?? c.number ?? "").toString().trim();
-      if (!localId || !c.name) continue;
-
-      out.push({
-        id: `${setId}-${localId}-${norm(c.name)}-ja`,
-        cardKey: makeCardKey(setId, localId, "ja"),
-        name: c.name,
-        nameEn: null,
-        nameJa: c.name,
-        pokemonKey: null,
-        lang: "ja",
-        setId: setId,
-        setName: set.name || setId,
-        number: localId,
-        numberFull: total ? `${localId}/${total}` : null,
-        rarity: c.rarity || null,
-        features: c.rarity ? [c.rarity] : [],
-        imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : "",
-        cardIdJa: c.id
-      });
-    }
-  }
-
-  // --- enrichment JA: valorizza nameEn + pokemonKey via dexId (per ricerca EN sulle JP)
   let detailFetches = 0;
-  for (const card of out) {
-    if (card.lang !== "ja") continue;
-    if (card.nameEn && card.pokemonKey) continue;
-    if (!card.cardIdJa) continue;
+  let tcgdexImgLookups = 0;
 
-    const detail = await fetchTCGdexCardDetail("ja", card.cardIdJa);
-    detailFetches++;
+  for (const c of jpRaw) {
+    const setId = (c.setId || "").toString().trim();
+    const setName = c.setName || setId || "Unknown";
+    const number = (c.number || "").toString().trim();
+    if (!setId || !number) continue;
 
-    const dex = pickDexId(detail);
-    if (dex != null) {
-      if (!card.nameEn) {
-        const enName = await getPokemonNameEnByDexId(dex);
-        if (enName) card.nameEn = enName;
-      }
-      if (!card.pokemonKey) {
-        const pk = await getPokemonKeyEnByDexId(dex);
-        if (pk) card.pokemonKey = pk;
+    // nameJa dal listing può essere romaji: teniamolo ma puntiamo a “JA vero” quando serve
+    let nameJa = c.nameJa || null;
+
+    // immagini: preferisci TCGdex se esiste per quel set/numero
+    let imageLarge = c.imageLarge || "";
+    const imgMap = await getTcgdexJaImageMapForSet(setId);
+    tcgdexImgLookups++;
+    if (imgMap && imgMap.size) {
+      const tcgImg = imgMap.get(number);
+      if (tcgImg) imageLarge = tcgImg;
+    }
+
+    // enrichment
+    let dexId = c.dexId ?? null; // normalmente assente
+    let nameEn = null;
+    let pokemonKey = null;
+
+    // (A) se nameJa sembra già giapponese, prova speciesMap subito
+    if (!dexId && nameJa && hasJapaneseChars(nameJa)) {
+      const hit = speciesMap[nameJa];
+      if (hit) {
+        nameEn = hit.enName;
+        pokemonKey = hit.pokemonKey;
       }
     }
 
-    if (detailFetches % 40 === 0) await sleep(700);
+    // (B) se non risolto, fetch pagina carta (solo quando necessario) per recuperare dexId e/o JA vero
+    if (!dexId && (!nameEn || !pokemonKey) && c.sourceId) {
+      const detail = await fetchLimitlessCardDetail(c.sourceId);
+      detailFetches++;
+
+      if (detail?.dexId) dexId = detail.dexId;
+
+      if (detail?.nameJa && hasJapaneseChars(detail.nameJa)) {
+        nameJa = detail.nameJa;
+      }
+
+      // se non abbiamo immagine (o non abbiamo TCGdex), usa og:image Limitless
+      if (!imageLarge && detail?.imageLarge) imageLarge = detail.imageLarge;
+
+      // retry speciesMap con nome JA vero
+      if (!nameEn || !pokemonKey) {
+        const hit2 = nameJa ? speciesMap[nameJa] : null;
+        if (hit2) {
+          nameEn = hit2.enName;
+          pokemonKey = hit2.pokemonKey;
+        }
+      }
+
+      if (detailFetches % 50 === 0) await sleep(650);
+    }
+
+    // (C) se dexId c’è, enrichment “forte”
+    if (dexId != null && (!nameEn || !pokemonKey)) {
+      if (!nameEn) {
+        const enName = await getPokemonNameEnByDexId(dexId);
+        if (enName) nameEn = enName;
+      }
+      if (!pokemonKey) {
+        const pk = await getPokemonKeyEnByDexId(dexId);
+        if (pk) pokemonKey = pk;
+      }
+    }
+
+    out.push({
+      id: `${setId}-${number}-${norm(nameEn || nameJa || `${setId}-${number}`)}-ja`,
+      cardKey: makeCardKey(setId, number, "ja"),
+      name: nameJa || nameEn || `${setId} ${number}`,
+      nameEn: nameEn || null,
+      nameJa: nameJa || null,
+      pokemonKey: pokemonKey || (nameEn ? norm(nameEn) : null),
+      lang: "ja",
+      setId,
+      setName,
+      number,
+      numberFull: null,       // Limitless non espone sempre total in modo stabile: aggiungibile dopo
+      rarity: null,
+      features: [],
+      imageLarge,
+      sourceId: c.sourceId || null
+    });
   }
 
+  console.log(`JP(Limitless) cards=${jpRaw.length} tcgdexImgLookups=${tcgdexImgLookups} cardDetailFetches=${detailFetches}`);
   return { cards: out };
 }
 
