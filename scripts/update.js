@@ -45,6 +45,17 @@ function median(nums) {
 }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+function pickDexId(detail) {
+  const d = detail?.dexId;
+  if (Array.isArray(d) && d.length) return Number(d[0]) || null;
+  if (typeof d === "number") return d;
+  if (typeof d === "string" && d.trim()) {
+    const n = Number(d.trim());
+    return Number.isFinite(n) ? n : null;
+  }
+  return null;
+}
+
 // TCGdex assets: {base}/{quality}.{ext}
 function tcgdexImg(imageBase, quality = "high", ext = "webp") {
   if (!imageBase) return "";
@@ -218,24 +229,23 @@ async function buildCatalogFromTCGdex() {
         const detail = await fetchTCGdexCardDetail(lang, id);
         detailFetches++;
         if (detail?.image) v.imageLarge = tcgdexImg(detail.image, "high", "webp");
-        if (detailFetches % 80 === 0) await sleep(300);
+        if (detailFetches % 40 === 0) await sleep(700);
       }
     }
 
     // JP-only: riempi nameEn via dexId
-    if (v.nameJa && !v.nameEn && v.cardIdJa) {
-      const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
-      detailFetches++;
+if (v.nameJa && !v.nameEn && v.cardIdJa) {
+  const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
+  detailFetches++;
 
-      const dex = Array.isArray(detail?.dexId) ? detail.dexId[0] : null;
-      if (dex) {
-        const enName = await getPokemonNameEnByDexId(dex);
-        if (enName) v.nameEn = enName;
-      }
-
-      if (detailFetches % 80 === 0) await sleep(300);
-    }
+  const dex = pickDexId(detail);
+  if (dex != null) {
+    const enName = await getPokemonNameEnByDexId(dex);
+    if (enName) v.nameEn = enName;
   }
+
+  if (detailFetches % 40 === 0) await sleep(700);
+}
 
   // Esplodi in record per lingua
   const out = [];
@@ -312,34 +322,54 @@ async function buildCatalogFromSplitSources() {
   if (!sets) return { cards: out };
 
   for (const s of sets) {
-    const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
-    if (!set) continue;
-    if (set.serie?.id === "tcgp") continue;
-    if (!Array.isArray(set.cards)) continue;
+  const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
+  if (!set) continue;
+  if (set.serie?.id === "tcgp") continue;
+  if (!Array.isArray(set.cards)) continue;
 
-    const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
-    for (const c of set.cards) {
-      const localId = (c.localId ?? c.number ?? "").toString().trim();
-      if (!localId || !c.name) continue;
+  const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
+  for (const c of set.cards) {
+    const localId = (c.localId ?? c.number ?? "").toString().trim();
+    if (!localId || !c.name) continue;
 
-      out.push({
-        id: `${set.id}-${localId}-${norm(c.name)}-ja`,
-        name: c.name,
-        nameEn: null,
-        nameJa: c.name,
-        lang: "ja",
-        setId: set.id,
-        setName: set.name || set.id,
-        number: localId,
-        numberFull: total ? `${localId}/${total}` : null,
-        rarity: c.rarity || null,
-        features: c.rarity ? [c.rarity] : [],
-        imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : ""
-      });
-    }
+    out.push({
+      id: `${set.id}-${localId}-${norm(c.name)}-ja`,
+      name: c.name,
+      nameEn: null,
+      nameJa: c.name,
+      lang: "ja",
+      setId: set.id,
+      setName: set.name || set.id,
+      number: localId,
+      numberFull: total ? `${localId}/${total}` : null,
+      rarity: c.rarity || null,
+      features: c.rarity ? [c.rarity] : [],
+      imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : "",
+      cardIdJa: c.id
+    });
+  }
+}
+
+// --- enrichment JA: prova a valorizzare nameEn via dexId (per rendere ricercabili le JP con query inglesi)
+let detailFetches = 0;
+for (const card of out) {
+  if (card.lang !== "ja") continue;
+  if (card.nameEn) continue;
+  if (!card.cardIdJa) continue;
+
+  const detail = await fetchTCGdexCardDetail("ja", card.cardIdJa);
+  detailFetches++;
+
+  const dex = pickDexId(detail);
+  if (dex != null) {
+    const enName = await getPokemonNameEnByDexId(dex);
+    if (enName) card.nameEn = enName;
   }
 
-  return { cards: out };
+  if (detailFetches % 40 === 0) await sleep(700);
+}
+
+return { cards: out };
 }
 
 function validateCatalogShape(catalog) {
