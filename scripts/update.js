@@ -9,6 +9,9 @@ const CATALOG_STRATEGY = process.env.CATALOG_STRATEGY || "tcgdex"; // "tcgdex" |
 const MIN_CATALOG_CARDS = 12000;
 const MIN_EN_CARDS = 8000;
 
+// (TCGdex-only) abilita enrichment EN via dexId (molto più costoso: fa chiamate /cards/:id anche per EN)
+const ENRICH_TCGDEX_EN_POKEMONKEY = process.env.ENRICH_TCGDEX_EN_POKEMONKEY === "1";
+
 // cache locale per dexId -> nome inglese (per non martellare PokeAPI)
 const DEX_CACHE_FILE = `${DATA_DIR}/dex_en_cache.json`;
 
@@ -141,15 +144,27 @@ async function getPokemonNameEnByDexId(dexId) {
   return nameEn;
 }
 
+// --- helper: cardKey + pokemonKey ---
+function makeCardKey(setId, number, printingLang) {
+  return `${setId}|${number}|${printingLang}`;
+}
+async function getPokemonKeyEnByDexId(dexId) {
+  const en = await getPokemonNameEnByDexId(dexId);
+  return en ? norm(en) : null;
+}
+
 /* -------------------------------------------------------
    1) Catalogo (TCGdex)
    - include EN + JA
    - esclude TCG Pocket (serie tcgp)
-   - per JP-only prova a valorizzare nameEn via dexId
+   - per JP-only prova a valorizzare nameEn + pokemonKey via dexId
+   - opzionale: EN pokemonKey via dexId (flag ENRICH_TCGDEX_EN_POKEMONKEY=1)
+   - NEW: jpSetIds (deriva lingua di stampa dal fatto che il set esiste sotto /ja)
 -------------------------------------------------------- */
 async function buildCatalogFromTCGdex() {
   const langs = ["en", "ja"];
   const agg = new Map(); // key = setId|localId
+  const jpSetIds = new Set(); // <-- PATCH: set visti sotto /ja (stampa JP)
 
   for (const lang of langs) {
     const base = `https://api.tcgdex.net/v2/${lang}`;
@@ -166,6 +181,9 @@ async function buildCatalogFromTCGdex() {
 
       const setId = set.id || s.id;
       const setName = set.name || s.name || setId;
+
+      // <-- PATCH: marca i set che compaiono sotto /ja
+      if (lang === "ja" && setId) jpSetIds.add(setId);
 
       const total =
         set.cardCount?.official ??
@@ -196,7 +214,8 @@ async function buildCatalogFromTCGdex() {
           nameEn: null,
           nameJa: null,
           cardIdEn: null,
-          cardIdJa: null
+          cardIdJa: null,
+          pokemonKey: null
         };
 
         if (lang === "en") {
@@ -217,10 +236,18 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-    // Enrichment: JP-only -> nameEn via dexId; immagini via detail se mancanti
+  // helper locale: lingua di stampa stimata (prima jpSetIds, poi fallback inferLangFromSetCode)
+  function inferPrintingLangFromSetId(setId) {
+    if (jpSetIds.has(setId)) return "ja";
+    return inferLangFromSetCode(setId); // fallback euristico dove serve
+  }
+
+  // Enrichment: immagini via detail se mancanti; pokemonKey/nameEn via dexId (JP always; EN opzionale)
   let detailFetches = 0;
 
   for (const v of agg.values()) {
+    const inferred = inferPrintingLangFromSetId(v.setId); // "ja" | null
+
     // se manca immagine, tenta dal dettaglio della lingua disponibile
     if (!v.imageLarge) {
       const lang = v.cardIdJa ? "ja" : (v.cardIdEn ? "en" : null);
@@ -233,31 +260,81 @@ async function buildCatalogFromTCGdex() {
       }
     }
 
-    // JP-only: riempi nameEn via dexId
-    if (v.nameJa && !v.nameEn && v.cardIdJa) {
+    // JP sets: riempi nameEn + pokemonKey via dexId (anche se nameEn esiste ma pokemonKey manca)
+    if (inferred === "ja" && v.cardIdJa && (!v.nameEn || !v.pokemonKey)) {
       const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
       detailFetches++;
 
       const dex = pickDexId(detail);
       if (dex != null) {
-        const enName = await getPokemonNameEnByDexId(dex);
-        if (enName) v.nameEn = enName;
+        if (!v.nameEn) {
+          const enName = await getPokemonNameEnByDexId(dex);
+          if (enName) v.nameEn = enName;
+        }
+        if (!v.pokemonKey) {
+          const pk = await getPokemonKeyEnByDexId(dex);
+          if (pk) v.pokemonKey = pk;
+        }
       }
 
       if (detailFetches % 40 === 0) await sleep(700);
     }
-  } // <-- QUESTA era la graffa mancante
 
-  // Esplodi in record per lingua
+    // EN (non-JP sets): opzionale -> pokemonKey via dexId (costoso)
+    if (inferred !== "ja" && ENRICH_TCGDEX_EN_POKEMONKEY && v.cardIdEn && !v.pokemonKey) {
+      const detail = await fetchTCGdexCardDetail("en", v.cardIdEn);
+      detailFetches++;
+
+      const dex = pickDexId(detail);
+      if (dex != null) {
+        const pk = await getPokemonKeyEnByDexId(dex);
+        if (pk) v.pokemonKey = pk;
+      }
+
+      if (detailFetches % 40 === 0) await sleep(700);
+    }
+  }
+
+  // Esplodi in record per lingua (lang = lingua di stampa)
   const out = [];
 
   for (const v of agg.values()) {
+    const inferred = inferPrintingLangFromSetId(v.setId); // "ja" | null
+
+    // Caso: set JP -> UNA SOLA entry, lang=ja
+    if (inferred === "ja") {
+      const displayJa = v.nameJa || v.nameEn;
+      if (!displayJa) continue;
+
+      out.push({
+        id: `${v.setId}-${v.number}-${norm(v.nameEn || displayJa)}-ja`,
+        cardKey: makeCardKey(v.setId, v.number, "ja"),
+        name: displayJa,
+        nameEn: v.nameEn || null,
+        nameJa: v.nameJa || null,
+        pokemonKey: v.pokemonKey || (v.nameEn ? norm(v.nameEn) : null),
+        lang: "ja",
+        setId: v.setId,
+        setName: v.setName,
+        number: v.number,
+        numberFull: v.numberFull,
+        rarity: v.rarity,
+        features: v.features,
+        imageLarge: v.imageLarge
+      });
+
+      continue;
+    }
+
+    // Caso: non-JP -> puoi avere davvero EN e/o JA distinti
     if (v.nameEn) {
       out.push({
         id: `${v.setId}-${v.number}-${norm(v.nameEn)}-en`,
+        cardKey: makeCardKey(v.setId, v.number, "en"),
         name: v.nameEn,
         nameEn: v.nameEn,
-        nameJa: v.nameJa,
+        nameJa: v.nameJa || null,
+        pokemonKey: v.pokemonKey || norm(v.nameEn),
         lang: "en",
         setId: v.setId,
         setName: v.setName,
@@ -272,9 +349,11 @@ async function buildCatalogFromTCGdex() {
     if (v.nameJa) {
       out.push({
         id: `${v.setId}-${v.number}-${norm(v.nameEn || v.nameJa)}-ja`,
+        cardKey: makeCardKey(v.setId, v.number, "ja"),
         name: v.nameJa,
         nameEn: v.nameEn || null,
         nameJa: v.nameJa,
+        pokemonKey: v.pokemonKey || (v.nameEn ? norm(v.nameEn) : null),
         lang: "ja",
         setId: v.setId,
         setName: v.setName,
@@ -300,12 +379,20 @@ async function buildCatalogFromSplitSources() {
     const number = (c.number || "").toString().trim();
     if (!setId || !number || !c.name) continue;
 
+    const dexId = Array.isArray(c.nationalPokedexNumbers) && c.nationalPokedexNumbers.length
+      ? Number(c.nationalPokedexNumbers[0])
+      : null;
+
+    const pokemonKey = dexId ? await getPokemonKeyEnByDexId(dexId) : norm(c.name);
+
     const total = c.set?.printedTotal ?? c.set?.total ?? null;
     out.push({
       id: `${setId}-${number}-${norm(c.name)}-en`,
+      cardKey: makeCardKey(setId, number, "en"),
       name: c.name,
       nameEn: c.name,
       nameJa: null,
+      pokemonKey,
       lang: "en",
       setId,
       setName,
@@ -322,55 +409,69 @@ async function buildCatalogFromSplitSources() {
   const sets = await fetchJson(`${base}/sets`, { headers: { "user-agent": USER_AGENT } }, 2);
   if (!sets) return { cards: out };
 
+  // <-- PATCH: anche qui, teniamo traccia dei set JP realmente esistenti sotto /ja
+  const jpSetIds = new Set();
+
   for (const s of sets) {
-  const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
-  if (!set) continue;
-  if (set.serie?.id === "tcgp") continue;
-  if (!Array.isArray(set.cards)) continue;
+    const set = await fetchJson(`${base}/sets/${encodeURIComponent(s.id)}`, { headers: { "user-agent": USER_AGENT } }, 2);
+    if (!set) continue;
+    if (set.serie?.id === "tcgp") continue;
+    if (!Array.isArray(set.cards)) continue;
 
-  const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
-  for (const c of set.cards) {
-    const localId = (c.localId ?? c.number ?? "").toString().trim();
-    if (!localId || !c.name) continue;
+    const setId = set.id || s.id;
+    if (setId) jpSetIds.add(setId);
 
-    out.push({
-      id: `${set.id}-${localId}-${norm(c.name)}-ja`,
-      name: c.name,
-      nameEn: null,
-      nameJa: c.name,
-      lang: "ja",
-      setId: set.id,
-      setName: set.name || set.id,
-      number: localId,
-      numberFull: total ? `${localId}/${total}` : null,
-      rarity: c.rarity || null,
-      features: c.rarity ? [c.rarity] : [],
-      imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : "",
-      cardIdJa: c.id
-    });
-  }
-}
+    const total = set.cardCount?.official ?? set.cardCount?.total ?? null;
+    for (const c of set.cards) {
+      const localId = (c.localId ?? c.number ?? "").toString().trim();
+      if (!localId || !c.name) continue;
 
-// --- enrichment JA: prova a valorizzare nameEn via dexId (per rendere ricercabili le JP con query inglesi)
-let detailFetches = 0;
-for (const card of out) {
-  if (card.lang !== "ja") continue;
-  if (card.nameEn) continue;
-  if (!card.cardIdJa) continue;
-
-  const detail = await fetchTCGdexCardDetail("ja", card.cardIdJa);
-  detailFetches++;
-
-  const dex = pickDexId(detail);
-  if (dex != null) {
-    const enName = await getPokemonNameEnByDexId(dex);
-    if (enName) card.nameEn = enName;
+      out.push({
+        id: `${setId}-${localId}-${norm(c.name)}-ja`,
+        cardKey: makeCardKey(setId, localId, "ja"),
+        name: c.name,
+        nameEn: null,
+        nameJa: c.name,
+        pokemonKey: null,
+        lang: "ja",
+        setId: setId,
+        setName: set.name || setId,
+        number: localId,
+        numberFull: total ? `${localId}/${total}` : null,
+        rarity: c.rarity || null,
+        features: c.rarity ? [c.rarity] : [],
+        imageLarge: c.image ? tcgdexImg(c.image, "high", "webp") : "",
+        cardIdJa: c.id
+      });
+    }
   }
 
-  if (detailFetches % 40 === 0) await sleep(700);
-}
+  // --- enrichment JA: valorizza nameEn + pokemonKey via dexId (per ricerca EN sulle JP)
+  let detailFetches = 0;
+  for (const card of out) {
+    if (card.lang !== "ja") continue;
+    if (card.nameEn && card.pokemonKey) continue;
+    if (!card.cardIdJa) continue;
 
-return { cards: out };
+    const detail = await fetchTCGdexCardDetail("ja", card.cardIdJa);
+    detailFetches++;
+
+    const dex = pickDexId(detail);
+    if (dex != null) {
+      if (!card.nameEn) {
+        const enName = await getPokemonNameEnByDexId(dex);
+        if (enName) card.nameEn = enName;
+      }
+      if (!card.pokemonKey) {
+        const pk = await getPokemonKeyEnByDexId(dex);
+        if (pk) card.pokemonKey = pk;
+      }
+    }
+
+    if (detailFetches % 40 === 0) await sleep(700);
+  }
+
+  return { cards: out };
 }
 
 function validateCatalogShape(catalog) {
@@ -421,10 +522,14 @@ function detectLangFromTitle(title) {
   return null;
 }
 
+// --- fallback euristico (usato SOLO dove non hai jpSetIds)
 function inferLangFromSetCode(setCode) {
   const code = norm(setCode || "");
-  // Sv2a/Sv9a ecc. sono quasi sempre release JP.
-  if (/^sv\d{1,2}a$/.test(code)) return "ja";
+
+  // JP mainline special sets spesso finiscono con "a"
+  // Esempi: sv2a, sv9a, s8a, s12a, sm12a, xy8a
+  if (/^(sv|s|sm|bw|xy)\d{1,3}a$/.test(code)) return "ja";
+
   return null;
 }
 
@@ -491,7 +596,10 @@ function bestMatchCard(catalog, title) {
 
   const lang = detectLangFromTitle(t);
   const setCode = extractSetCode(title);   // può essere sbagliato nel titolo
+
+  // qui NON hai jpSetIds: fallback euristico ok
   const langBySet = inferLangFromSetCode(setCode);
+
   const finalLang = lang || langBySet;
   const localId = extractLocalId(title);
   const cards = catalog.cards || [];
@@ -621,7 +729,7 @@ async function main() {
       const langCounts = validateCatalogShape(catalog);
       console.log(`Catalog rebuilt: total=${catalog.cards.length} en=${langCounts.en || 0} ja=${langCounts.ja || 0}`);
       writeJson(catalogFile, catalog);
-        } catch (e) {
+    } catch (e) {
       console.error("Catalog build failed:", e.message);
       if (process.env.STRICT_CATALOG === "1") process.exit(1);
       catalog = readJson(catalogFile, { cards: [] });
