@@ -1,0 +1,5127 @@
+{
+  "フシギダネ": {
+    "dexId": 1,
+    "enName": "Bulbasaur",
+    "pokemonKey": "bulbasaur"
+  },
+  "フシギソウ": {
+    "dexId": 2,
+    "enName": "Ivysaur",
+    "pokemonKey": "ivysaur"
+  },
+  "フシギバナ": {
+    "dexId": 3,
+    "enName": "Venusaur",
+    "pokemonKey": "venusaur"
+  },
+  "ヒトカゲ": {
+    "dexId": 4,
+    "enName": "Charmander",
+    "pokemonKey": "charmander"
+  },
+  "リザード": {
+    "dexId": 5,
+    "enName": "Charmeleon",
+    "pokemonKey": "charmeleon"
+  },
+  "リザードン": {
+    "dexId": 6,
+    "enName": "Charizard",
+    "pokemonKey": "charizard"
+  },
+  "ゼニガメ": {
+    "dexId": 7,
+    "enName": "Squirtle",
+    "pokemonKey": "squirtle"
+  },
+  "カメール": {
+    "dexId": 8,
+    "enName": "Wartortle",
+    "pokemonKey": "wartortle"
+  },
+  "カメックス": {
+    "dexId": 9,
+    "enName": "Blastoise",
+    "pokemonKey": "blastoise"
+  },
+  "キャタピー": {
+    "dexId": 10,
+    "enName": "Caterpie",
+    "pokemonKey": "caterpie"
+  },
+  "トランセル": {
+    "dexId": 11,
+    "enName": "Metapod",
+    "pokemonKey": "metapod"
+  },
+  "バタフリー": {
+    "dexId": 12,
+    "enName": "Butterfree",
+    "pokemonKey": "butterfree"
+  },
+  "ビードル": {
+    "dexId": 13,
+    "enName": "Weedle",
+    "pokemonKey": "weedle"
+  },
+  "コクーン": {
+    "dexId": 14,
+    "enName": "Kakuna",
+    "pokemonKey": "kakuna"
+  },
+  "スピアー": {
+    "dexId": 15,
+    "enName": "Beedrill",
+    "pokemonKey": "beedrill"
+  },
+  "ポッポ": {
+    "dexId": 16,
+    "enName": "Pidgey",
+    "pokemonKey": "pidgey"
+  },
+  "ピジョン": {
+    "dexId": 17,
+    "enName": "Pidgeotto",
+    "pokemonKey": "pidgeotto"
+  },
+  "ピジョット": {
+    "dexId": 18,
+    "enName": "Pidgeot",
+    "pokemonKey": "pidgeot"
+  },
+  "コラッタ": {
+    "dexId": 19,
+    "enName": "Rattata",
+    "pokemonKey": "rattata"
+  },
+  "ラッタ": {
+    "dexId": 20,
+    "enName": "Raticate",
+    "pokemonKey": "raticate"
+  },
+  "オニスズメ": {
+    "dexId": 21,
+    "enName": "Spearow",
+    "pokemonKey": "spearow"
+  },
+  "オニドリル": {
+    "dexId": 22,
+    "enName": "Fearow",
+    "pokemonKey": "fearow"
+  },
+  "アーボ": {
+    "dexId": 23,
+    "enName": "Ekans",
+    "pokemonKey": "ekans"
+  },
+  "アーボック": {
+    "dexId": 24,
+    "enName": "Arbok",
+    "pokemonKey": "arbok"
+  },
+  "ピカチュウ": {
+    "dexId": 25,
+    "enName": "Pikachu",
+    "pokemonKey": "pikachu"
+  },
+  "ライチュウ": {
+    "dexId": 26,
+    "enName": "Raichu",
+    "pokemonKey": "raichu"
+  },
+  "サンド": {
+    "dexId": 27,
+    "enName": "Sandshrew",
+    "pokemonKey": "sandshrew"
+  },
+  "サンドパン": {
+    "dexId": 28,
+    "enName": "Sandslash",
+    "pokemonKey": "sandslash"
+  },
+  "ニドラン♀": {
+    "dexId": 29,
+    "enName": "Nidoran♀",
+    "pokemonKey": "nidoran♀"
+  },
+  "ニドリーナ": {
+    "dexId": 30,
+    "enName": "Nidorina",
+    "pokemonKey": "nidorina"
+  },
+  "ニドクイン": {
+    "dexId": 31,
+    "enName": "Nidoqueen",
+    "pokemonKey": "nidoqueen"
+  },
+  "ニドラン♂": {
+    "dexId": 32,
+    "enName": "Nidoran♂",
+    "pokemonKey": "nidoran♂"
+  },
+  "ニドリーノ": {
+    "dexId": 33,
+    "enName": "Nidorino",
+    "pokemonKey": "nidorino"
+  },
+  "ニドキング": {
+    "dexId": 34,
+    "enName": "Nidoking",
+    "pokemonKey": "nidoking"
+  },
+  "ピッピ": {
+    "dexId": 35,
+    "enName": "Clefairy",
+    "pokemonKey": "clefairy"
+  },
+  "ピクシー": {
+    "dexId": 36,
+    "enName": "Clefable",
+    "pokemonKey": "clefable"
+  },
+  "ロコン": {
+    "dexId": 37,
+    "enName": "Vulpix",
+    "pokemonKey": "vulpix"
+  },
+  "キュウコン": {
+    "dexId": 38,
+    "enName": "Ninetales",
+    "pokemonKey": "ninetales"
+  },
+  "プリン": {
+    "dexId": 39,
+    "enName": "Jigglypuff",
+    "pokemonKey": "jigglypuff"
+  },
+  "プクリン": {
+    "dexId": 40,
+    "enName": "Wigglytuff",
+    "pokemonKey": "wigglytuff"
+  },
+  "ズバット": {
+    "dexId": 41,
+    "enName": "Zubat",
+    "pokemonKey": "zubat"
+  },
+  "ゴルバット": {
+    "dexId": 42,
+    "enName": "Golbat",
+    "pokemonKey": "golbat"
+  },
+  "ナゾノクサ": {
+    "dexId": 43,
+    "enName": "Oddish",
+    "pokemonKey": "oddish"
+  },
+  "クサイハナ": {
+    "dexId": 44,
+    "enName": "Gloom",
+    "pokemonKey": "gloom"
+  },
+  "ラフレシア": {
+    "dexId": 45,
+    "enName": "Vileplume",
+    "pokemonKey": "vileplume"
+  },
+  "パラス": {
+    "dexId": 46,
+    "enName": "Paras",
+    "pokemonKey": "paras"
+  },
+  "パラセクト": {
+    "dexId": 47,
+    "enName": "Parasect",
+    "pokemonKey": "parasect"
+  },
+  "コンパン": {
+    "dexId": 48,
+    "enName": "Venonat",
+    "pokemonKey": "venonat"
+  },
+  "モルフォン": {
+    "dexId": 49,
+    "enName": "Venomoth",
+    "pokemonKey": "venomoth"
+  },
+  "ディグダ": {
+    "dexId": 50,
+    "enName": "Diglett",
+    "pokemonKey": "diglett"
+  },
+  "ダグトリオ": {
+    "dexId": 51,
+    "enName": "Dugtrio",
+    "pokemonKey": "dugtrio"
+  },
+  "ニャース": {
+    "dexId": 52,
+    "enName": "Meowth",
+    "pokemonKey": "meowth"
+  },
+  "ペルシアン": {
+    "dexId": 53,
+    "enName": "Persian",
+    "pokemonKey": "persian"
+  },
+  "コダック": {
+    "dexId": 54,
+    "enName": "Psyduck",
+    "pokemonKey": "psyduck"
+  },
+  "ゴルダック": {
+    "dexId": 55,
+    "enName": "Golduck",
+    "pokemonKey": "golduck"
+  },
+  "マンキー": {
+    "dexId": 56,
+    "enName": "Mankey",
+    "pokemonKey": "mankey"
+  },
+  "オコリザル": {
+    "dexId": 57,
+    "enName": "Primeape",
+    "pokemonKey": "primeape"
+  },
+  "ガーディ": {
+    "dexId": 58,
+    "enName": "Growlithe",
+    "pokemonKey": "growlithe"
+  },
+  "ウインディ": {
+    "dexId": 59,
+    "enName": "Arcanine",
+    "pokemonKey": "arcanine"
+  },
+  "ニョロモ": {
+    "dexId": 60,
+    "enName": "Poliwag",
+    "pokemonKey": "poliwag"
+  },
+  "ニョロゾ": {
+    "dexId": 61,
+    "enName": "Poliwhirl",
+    "pokemonKey": "poliwhirl"
+  },
+  "ニョロボン": {
+    "dexId": 62,
+    "enName": "Poliwrath",
+    "pokemonKey": "poliwrath"
+  },
+  "ケーシィ": {
+    "dexId": 63,
+    "enName": "Abra",
+    "pokemonKey": "abra"
+  },
+  "ユンゲラー": {
+    "dexId": 64,
+    "enName": "Kadabra",
+    "pokemonKey": "kadabra"
+  },
+  "フーディン": {
+    "dexId": 65,
+    "enName": "Alakazam",
+    "pokemonKey": "alakazam"
+  },
+  "ワンリキー": {
+    "dexId": 66,
+    "enName": "Machop",
+    "pokemonKey": "machop"
+  },
+  "ゴーリキー": {
+    "dexId": 67,
+    "enName": "Machoke",
+    "pokemonKey": "machoke"
+  },
+  "カイリキー": {
+    "dexId": 68,
+    "enName": "Machamp",
+    "pokemonKey": "machamp"
+  },
+  "マダツボミ": {
+    "dexId": 69,
+    "enName": "Bellsprout",
+    "pokemonKey": "bellsprout"
+  },
+  "ウツドン": {
+    "dexId": 70,
+    "enName": "Weepinbell",
+    "pokemonKey": "weepinbell"
+  },
+  "ウツボット": {
+    "dexId": 71,
+    "enName": "Victreebel",
+    "pokemonKey": "victreebel"
+  },
+  "メノクラゲ": {
+    "dexId": 72,
+    "enName": "Tentacool",
+    "pokemonKey": "tentacool"
+  },
+  "ドククラゲ": {
+    "dexId": 73,
+    "enName": "Tentacruel",
+    "pokemonKey": "tentacruel"
+  },
+  "イシツブテ": {
+    "dexId": 74,
+    "enName": "Geodude",
+    "pokemonKey": "geodude"
+  },
+  "ゴローン": {
+    "dexId": 75,
+    "enName": "Graveler",
+    "pokemonKey": "graveler"
+  },
+  "ゴローニャ": {
+    "dexId": 76,
+    "enName": "Golem",
+    "pokemonKey": "golem"
+  },
+  "ポニータ": {
+    "dexId": 77,
+    "enName": "Ponyta",
+    "pokemonKey": "ponyta"
+  },
+  "ギャロップ": {
+    "dexId": 78,
+    "enName": "Rapidash",
+    "pokemonKey": "rapidash"
+  },
+  "ヤドン": {
+    "dexId": 79,
+    "enName": "Slowpoke",
+    "pokemonKey": "slowpoke"
+  },
+  "ヤドラン": {
+    "dexId": 80,
+    "enName": "Slowbro",
+    "pokemonKey": "slowbro"
+  },
+  "コイル": {
+    "dexId": 81,
+    "enName": "Magnemite",
+    "pokemonKey": "magnemite"
+  },
+  "レアコイル": {
+    "dexId": 82,
+    "enName": "Magneton",
+    "pokemonKey": "magneton"
+  },
+  "カモネギ": {
+    "dexId": 83,
+    "enName": "Farfetch’d",
+    "pokemonKey": "farfetch’d"
+  },
+  "ドードー": {
+    "dexId": 84,
+    "enName": "Doduo",
+    "pokemonKey": "doduo"
+  },
+  "ドードリオ": {
+    "dexId": 85,
+    "enName": "Dodrio",
+    "pokemonKey": "dodrio"
+  },
+  "パウワウ": {
+    "dexId": 86,
+    "enName": "Seel",
+    "pokemonKey": "seel"
+  },
+  "ジュゴン": {
+    "dexId": 87,
+    "enName": "Dewgong",
+    "pokemonKey": "dewgong"
+  },
+  "ベトベター": {
+    "dexId": 88,
+    "enName": "Grimer",
+    "pokemonKey": "grimer"
+  },
+  "ベトベトン": {
+    "dexId": 89,
+    "enName": "Muk",
+    "pokemonKey": "muk"
+  },
+  "シェルダー": {
+    "dexId": 90,
+    "enName": "Shellder",
+    "pokemonKey": "shellder"
+  },
+  "パルシェン": {
+    "dexId": 91,
+    "enName": "Cloyster",
+    "pokemonKey": "cloyster"
+  },
+  "ゴース": {
+    "dexId": 92,
+    "enName": "Gastly",
+    "pokemonKey": "gastly"
+  },
+  "ゴースト": {
+    "dexId": 93,
+    "enName": "Haunter",
+    "pokemonKey": "haunter"
+  },
+  "ゲンガー": {
+    "dexId": 94,
+    "enName": "Gengar",
+    "pokemonKey": "gengar"
+  },
+  "イワーク": {
+    "dexId": 95,
+    "enName": "Onix",
+    "pokemonKey": "onix"
+  },
+  "スリープ": {
+    "dexId": 96,
+    "enName": "Drowzee",
+    "pokemonKey": "drowzee"
+  },
+  "スリーパー": {
+    "dexId": 97,
+    "enName": "Hypno",
+    "pokemonKey": "hypno"
+  },
+  "クラブ": {
+    "dexId": 98,
+    "enName": "Krabby",
+    "pokemonKey": "krabby"
+  },
+  "キングラー": {
+    "dexId": 99,
+    "enName": "Kingler",
+    "pokemonKey": "kingler"
+  },
+  "ビリリダマ": {
+    "dexId": 100,
+    "enName": "Voltorb",
+    "pokemonKey": "voltorb"
+  },
+  "マルマイン": {
+    "dexId": 101,
+    "enName": "Electrode",
+    "pokemonKey": "electrode"
+  },
+  "タマタマ": {
+    "dexId": 102,
+    "enName": "Exeggcute",
+    "pokemonKey": "exeggcute"
+  },
+  "ナッシー": {
+    "dexId": 103,
+    "enName": "Exeggutor",
+    "pokemonKey": "exeggutor"
+  },
+  "カラカラ": {
+    "dexId": 104,
+    "enName": "Cubone",
+    "pokemonKey": "cubone"
+  },
+  "ガラガラ": {
+    "dexId": 105,
+    "enName": "Marowak",
+    "pokemonKey": "marowak"
+  },
+  "サワムラー": {
+    "dexId": 106,
+    "enName": "Hitmonlee",
+    "pokemonKey": "hitmonlee"
+  },
+  "エビワラー": {
+    "dexId": 107,
+    "enName": "Hitmonchan",
+    "pokemonKey": "hitmonchan"
+  },
+  "ベロリンガ": {
+    "dexId": 108,
+    "enName": "Lickitung",
+    "pokemonKey": "lickitung"
+  },
+  "ドガース": {
+    "dexId": 109,
+    "enName": "Koffing",
+    "pokemonKey": "koffing"
+  },
+  "マタドガス": {
+    "dexId": 110,
+    "enName": "Weezing",
+    "pokemonKey": "weezing"
+  },
+  "サイホーン": {
+    "dexId": 111,
+    "enName": "Rhyhorn",
+    "pokemonKey": "rhyhorn"
+  },
+  "サイドン": {
+    "dexId": 112,
+    "enName": "Rhydon",
+    "pokemonKey": "rhydon"
+  },
+  "ラッキー": {
+    "dexId": 113,
+    "enName": "Chansey",
+    "pokemonKey": "chansey"
+  },
+  "モンジャラ": {
+    "dexId": 114,
+    "enName": "Tangela",
+    "pokemonKey": "tangela"
+  },
+  "ガルーラ": {
+    "dexId": 115,
+    "enName": "Kangaskhan",
+    "pokemonKey": "kangaskhan"
+  },
+  "タッツー": {
+    "dexId": 116,
+    "enName": "Horsea",
+    "pokemonKey": "horsea"
+  },
+  "シードラ": {
+    "dexId": 117,
+    "enName": "Seadra",
+    "pokemonKey": "seadra"
+  },
+  "トサキント": {
+    "dexId": 118,
+    "enName": "Goldeen",
+    "pokemonKey": "goldeen"
+  },
+  "アズマオウ": {
+    "dexId": 119,
+    "enName": "Seaking",
+    "pokemonKey": "seaking"
+  },
+  "ヒトデマン": {
+    "dexId": 120,
+    "enName": "Staryu",
+    "pokemonKey": "staryu"
+  },
+  "スターミー": {
+    "dexId": 121,
+    "enName": "Starmie",
+    "pokemonKey": "starmie"
+  },
+  "バリヤード": {
+    "dexId": 122,
+    "enName": "Mr. Mime",
+    "pokemonKey": "mr. mime"
+  },
+  "ストライク": {
+    "dexId": 123,
+    "enName": "Scyther",
+    "pokemonKey": "scyther"
+  },
+  "ルージュラ": {
+    "dexId": 124,
+    "enName": "Jynx",
+    "pokemonKey": "jynx"
+  },
+  "エレブー": {
+    "dexId": 125,
+    "enName": "Electabuzz",
+    "pokemonKey": "electabuzz"
+  },
+  "ブーバー": {
+    "dexId": 126,
+    "enName": "Magmar",
+    "pokemonKey": "magmar"
+  },
+  "カイロス": {
+    "dexId": 127,
+    "enName": "Pinsir",
+    "pokemonKey": "pinsir"
+  },
+  "ケンタロス": {
+    "dexId": 128,
+    "enName": "Tauros",
+    "pokemonKey": "tauros"
+  },
+  "コイキング": {
+    "dexId": 129,
+    "enName": "Magikarp",
+    "pokemonKey": "magikarp"
+  },
+  "ギャラドス": {
+    "dexId": 130,
+    "enName": "Gyarados",
+    "pokemonKey": "gyarados"
+  },
+  "ラプラス": {
+    "dexId": 131,
+    "enName": "Lapras",
+    "pokemonKey": "lapras"
+  },
+  "メタモン": {
+    "dexId": 132,
+    "enName": "Ditto",
+    "pokemonKey": "ditto"
+  },
+  "イーブイ": {
+    "dexId": 133,
+    "enName": "Eevee",
+    "pokemonKey": "eevee"
+  },
+  "シャワーズ": {
+    "dexId": 134,
+    "enName": "Vaporeon",
+    "pokemonKey": "vaporeon"
+  },
+  "サンダース": {
+    "dexId": 135,
+    "enName": "Jolteon",
+    "pokemonKey": "jolteon"
+  },
+  "ブースター": {
+    "dexId": 136,
+    "enName": "Flareon",
+    "pokemonKey": "flareon"
+  },
+  "ポリゴン": {
+    "dexId": 137,
+    "enName": "Porygon",
+    "pokemonKey": "porygon"
+  },
+  "オムナイト": {
+    "dexId": 138,
+    "enName": "Omanyte",
+    "pokemonKey": "omanyte"
+  },
+  "オムスター": {
+    "dexId": 139,
+    "enName": "Omastar",
+    "pokemonKey": "omastar"
+  },
+  "カブト": {
+    "dexId": 140,
+    "enName": "Kabuto",
+    "pokemonKey": "kabuto"
+  },
+  "カブトプス": {
+    "dexId": 141,
+    "enName": "Kabutops",
+    "pokemonKey": "kabutops"
+  },
+  "プテラ": {
+    "dexId": 142,
+    "enName": "Aerodactyl",
+    "pokemonKey": "aerodactyl"
+  },
+  "カビゴン": {
+    "dexId": 143,
+    "enName": "Snorlax",
+    "pokemonKey": "snorlax"
+  },
+  "フリーザー": {
+    "dexId": 144,
+    "enName": "Articuno",
+    "pokemonKey": "articuno"
+  },
+  "サンダー": {
+    "dexId": 145,
+    "enName": "Zapdos",
+    "pokemonKey": "zapdos"
+  },
+  "ファイヤー": {
+    "dexId": 146,
+    "enName": "Moltres",
+    "pokemonKey": "moltres"
+  },
+  "ミニリュウ": {
+    "dexId": 147,
+    "enName": "Dratini",
+    "pokemonKey": "dratini"
+  },
+  "ハクリュー": {
+    "dexId": 148,
+    "enName": "Dragonair",
+    "pokemonKey": "dragonair"
+  },
+  "カイリュー": {
+    "dexId": 149,
+    "enName": "Dragonite",
+    "pokemonKey": "dragonite"
+  },
+  "ミュウツー": {
+    "dexId": 150,
+    "enName": "Mewtwo",
+    "pokemonKey": "mewtwo"
+  },
+  "ミュウ": {
+    "dexId": 151,
+    "enName": "Mew",
+    "pokemonKey": "mew"
+  },
+  "チコリータ": {
+    "dexId": 152,
+    "enName": "Chikorita",
+    "pokemonKey": "chikorita"
+  },
+  "ベイリーフ": {
+    "dexId": 153,
+    "enName": "Bayleef",
+    "pokemonKey": "bayleef"
+  },
+  "メガニウム": {
+    "dexId": 154,
+    "enName": "Meganium",
+    "pokemonKey": "meganium"
+  },
+  "ヒノアラシ": {
+    "dexId": 155,
+    "enName": "Cyndaquil",
+    "pokemonKey": "cyndaquil"
+  },
+  "マグマラシ": {
+    "dexId": 156,
+    "enName": "Quilava",
+    "pokemonKey": "quilava"
+  },
+  "バクフーン": {
+    "dexId": 157,
+    "enName": "Typhlosion",
+    "pokemonKey": "typhlosion"
+  },
+  "ワニノコ": {
+    "dexId": 158,
+    "enName": "Totodile",
+    "pokemonKey": "totodile"
+  },
+  "アリゲイツ": {
+    "dexId": 159,
+    "enName": "Croconaw",
+    "pokemonKey": "croconaw"
+  },
+  "オーダイル": {
+    "dexId": 160,
+    "enName": "Feraligatr",
+    "pokemonKey": "feraligatr"
+  },
+  "オタチ": {
+    "dexId": 161,
+    "enName": "Sentret",
+    "pokemonKey": "sentret"
+  },
+  "オオタチ": {
+    "dexId": 162,
+    "enName": "Furret",
+    "pokemonKey": "furret"
+  },
+  "ホーホー": {
+    "dexId": 163,
+    "enName": "Hoothoot",
+    "pokemonKey": "hoothoot"
+  },
+  "ヨルノズク": {
+    "dexId": 164,
+    "enName": "Noctowl",
+    "pokemonKey": "noctowl"
+  },
+  "レディバ": {
+    "dexId": 165,
+    "enName": "Ledyba",
+    "pokemonKey": "ledyba"
+  },
+  "レディアン": {
+    "dexId": 166,
+    "enName": "Ledian",
+    "pokemonKey": "ledian"
+  },
+  "イトマル": {
+    "dexId": 167,
+    "enName": "Spinarak",
+    "pokemonKey": "spinarak"
+  },
+  "アリアドス": {
+    "dexId": 168,
+    "enName": "Ariados",
+    "pokemonKey": "ariados"
+  },
+  "クロバット": {
+    "dexId": 169,
+    "enName": "Crobat",
+    "pokemonKey": "crobat"
+  },
+  "チョンチー": {
+    "dexId": 170,
+    "enName": "Chinchou",
+    "pokemonKey": "chinchou"
+  },
+  "ランターン": {
+    "dexId": 171,
+    "enName": "Lanturn",
+    "pokemonKey": "lanturn"
+  },
+  "ピチュー": {
+    "dexId": 172,
+    "enName": "Pichu",
+    "pokemonKey": "pichu"
+  },
+  "ピィ": {
+    "dexId": 173,
+    "enName": "Cleffa",
+    "pokemonKey": "cleffa"
+  },
+  "ププリン": {
+    "dexId": 174,
+    "enName": "Igglybuff",
+    "pokemonKey": "igglybuff"
+  },
+  "トゲピー": {
+    "dexId": 175,
+    "enName": "Togepi",
+    "pokemonKey": "togepi"
+  },
+  "トゲチック": {
+    "dexId": 176,
+    "enName": "Togetic",
+    "pokemonKey": "togetic"
+  },
+  "ネイティ": {
+    "dexId": 177,
+    "enName": "Natu",
+    "pokemonKey": "natu"
+  },
+  "ネイティオ": {
+    "dexId": 178,
+    "enName": "Xatu",
+    "pokemonKey": "xatu"
+  },
+  "メリープ": {
+    "dexId": 179,
+    "enName": "Mareep",
+    "pokemonKey": "mareep"
+  },
+  "モココ": {
+    "dexId": 180,
+    "enName": "Flaaffy",
+    "pokemonKey": "flaaffy"
+  },
+  "デンリュウ": {
+    "dexId": 181,
+    "enName": "Ampharos",
+    "pokemonKey": "ampharos"
+  },
+  "キレイハナ": {
+    "dexId": 182,
+    "enName": "Bellossom",
+    "pokemonKey": "bellossom"
+  },
+  "マリル": {
+    "dexId": 183,
+    "enName": "Marill",
+    "pokemonKey": "marill"
+  },
+  "マリルリ": {
+    "dexId": 184,
+    "enName": "Azumarill",
+    "pokemonKey": "azumarill"
+  },
+  "ウソッキー": {
+    "dexId": 185,
+    "enName": "Sudowoodo",
+    "pokemonKey": "sudowoodo"
+  },
+  "ニョロトノ": {
+    "dexId": 186,
+    "enName": "Politoed",
+    "pokemonKey": "politoed"
+  },
+  "ハネッコ": {
+    "dexId": 187,
+    "enName": "Hoppip",
+    "pokemonKey": "hoppip"
+  },
+  "ポポッコ": {
+    "dexId": 188,
+    "enName": "Skiploom",
+    "pokemonKey": "skiploom"
+  },
+  "ワタッコ": {
+    "dexId": 189,
+    "enName": "Jumpluff",
+    "pokemonKey": "jumpluff"
+  },
+  "エイパム": {
+    "dexId": 190,
+    "enName": "Aipom",
+    "pokemonKey": "aipom"
+  },
+  "ヒマナッツ": {
+    "dexId": 191,
+    "enName": "Sunkern",
+    "pokemonKey": "sunkern"
+  },
+  "キマワリ": {
+    "dexId": 192,
+    "enName": "Sunflora",
+    "pokemonKey": "sunflora"
+  },
+  "ヤンヤンマ": {
+    "dexId": 193,
+    "enName": "Yanma",
+    "pokemonKey": "yanma"
+  },
+  "ウパー": {
+    "dexId": 194,
+    "enName": "Wooper",
+    "pokemonKey": "wooper"
+  },
+  "ヌオー": {
+    "dexId": 195,
+    "enName": "Quagsire",
+    "pokemonKey": "quagsire"
+  },
+  "エーフィ": {
+    "dexId": 196,
+    "enName": "Espeon",
+    "pokemonKey": "espeon"
+  },
+  "ブラッキー": {
+    "dexId": 197,
+    "enName": "Umbreon",
+    "pokemonKey": "umbreon"
+  },
+  "ヤミカラス": {
+    "dexId": 198,
+    "enName": "Murkrow",
+    "pokemonKey": "murkrow"
+  },
+  "ヤドキング": {
+    "dexId": 199,
+    "enName": "Slowking",
+    "pokemonKey": "slowking"
+  },
+  "ムウマ": {
+    "dexId": 200,
+    "enName": "Misdreavus",
+    "pokemonKey": "misdreavus"
+  },
+  "アンノーン": {
+    "dexId": 201,
+    "enName": "Unown",
+    "pokemonKey": "unown"
+  },
+  "ソーナンス": {
+    "dexId": 202,
+    "enName": "Wobbuffet",
+    "pokemonKey": "wobbuffet"
+  },
+  "キリンリキ": {
+    "dexId": 203,
+    "enName": "Girafarig",
+    "pokemonKey": "girafarig"
+  },
+  "クヌギダマ": {
+    "dexId": 204,
+    "enName": "Pineco",
+    "pokemonKey": "pineco"
+  },
+  "フォレトス": {
+    "dexId": 205,
+    "enName": "Forretress",
+    "pokemonKey": "forretress"
+  },
+  "ノコッチ": {
+    "dexId": 206,
+    "enName": "Dunsparce",
+    "pokemonKey": "dunsparce"
+  },
+  "グライガー": {
+    "dexId": 207,
+    "enName": "Gligar",
+    "pokemonKey": "gligar"
+  },
+  "ハガネール": {
+    "dexId": 208,
+    "enName": "Steelix",
+    "pokemonKey": "steelix"
+  },
+  "ブルー": {
+    "dexId": 209,
+    "enName": "Snubbull",
+    "pokemonKey": "snubbull"
+  },
+  "グランブル": {
+    "dexId": 210,
+    "enName": "Granbull",
+    "pokemonKey": "granbull"
+  },
+  "ハリーセン": {
+    "dexId": 211,
+    "enName": "Qwilfish",
+    "pokemonKey": "qwilfish"
+  },
+  "ハッサム": {
+    "dexId": 212,
+    "enName": "Scizor",
+    "pokemonKey": "scizor"
+  },
+  "ツボツボ": {
+    "dexId": 213,
+    "enName": "Shuckle",
+    "pokemonKey": "shuckle"
+  },
+  "ヘラクロス": {
+    "dexId": 214,
+    "enName": "Heracross",
+    "pokemonKey": "heracross"
+  },
+  "ニューラ": {
+    "dexId": 215,
+    "enName": "Sneasel",
+    "pokemonKey": "sneasel"
+  },
+  "ヒメグマ": {
+    "dexId": 216,
+    "enName": "Teddiursa",
+    "pokemonKey": "teddiursa"
+  },
+  "リングマ": {
+    "dexId": 217,
+    "enName": "Ursaring",
+    "pokemonKey": "ursaring"
+  },
+  "マグマッグ": {
+    "dexId": 218,
+    "enName": "Slugma",
+    "pokemonKey": "slugma"
+  },
+  "マグカルゴ": {
+    "dexId": 219,
+    "enName": "Magcargo",
+    "pokemonKey": "magcargo"
+  },
+  "ウリムー": {
+    "dexId": 220,
+    "enName": "Swinub",
+    "pokemonKey": "swinub"
+  },
+  "イノムー": {
+    "dexId": 221,
+    "enName": "Piloswine",
+    "pokemonKey": "piloswine"
+  },
+  "サニーゴ": {
+    "dexId": 222,
+    "enName": "Corsola",
+    "pokemonKey": "corsola"
+  },
+  "テッポウオ": {
+    "dexId": 223,
+    "enName": "Remoraid",
+    "pokemonKey": "remoraid"
+  },
+  "オクタン": {
+    "dexId": 224,
+    "enName": "Octillery",
+    "pokemonKey": "octillery"
+  },
+  "デリバード": {
+    "dexId": 225,
+    "enName": "Delibird",
+    "pokemonKey": "delibird"
+  },
+  "マンタイン": {
+    "dexId": 226,
+    "enName": "Mantine",
+    "pokemonKey": "mantine"
+  },
+  "エアームド": {
+    "dexId": 227,
+    "enName": "Skarmory",
+    "pokemonKey": "skarmory"
+  },
+  "デルビル": {
+    "dexId": 228,
+    "enName": "Houndour",
+    "pokemonKey": "houndour"
+  },
+  "ヘルガー": {
+    "dexId": 229,
+    "enName": "Houndoom",
+    "pokemonKey": "houndoom"
+  },
+  "キングドラ": {
+    "dexId": 230,
+    "enName": "Kingdra",
+    "pokemonKey": "kingdra"
+  },
+  "ゴマゾウ": {
+    "dexId": 231,
+    "enName": "Phanpy",
+    "pokemonKey": "phanpy"
+  },
+  "ドンファン": {
+    "dexId": 232,
+    "enName": "Donphan",
+    "pokemonKey": "donphan"
+  },
+  "ポリゴン２": {
+    "dexId": 233,
+    "enName": "Porygon2",
+    "pokemonKey": "porygon2"
+  },
+  "オドシシ": {
+    "dexId": 234,
+    "enName": "Stantler",
+    "pokemonKey": "stantler"
+  },
+  "ドーブル": {
+    "dexId": 235,
+    "enName": "Smeargle",
+    "pokemonKey": "smeargle"
+  },
+  "バルキー": {
+    "dexId": 236,
+    "enName": "Tyrogue",
+    "pokemonKey": "tyrogue"
+  },
+  "カポエラー": {
+    "dexId": 237,
+    "enName": "Hitmontop",
+    "pokemonKey": "hitmontop"
+  },
+  "ムチュール": {
+    "dexId": 238,
+    "enName": "Smoochum",
+    "pokemonKey": "smoochum"
+  },
+  "エレキッド": {
+    "dexId": 239,
+    "enName": "Elekid",
+    "pokemonKey": "elekid"
+  },
+  "ブビィ": {
+    "dexId": 240,
+    "enName": "Magby",
+    "pokemonKey": "magby"
+  },
+  "ミルタンク": {
+    "dexId": 241,
+    "enName": "Miltank",
+    "pokemonKey": "miltank"
+  },
+  "ハピナス": {
+    "dexId": 242,
+    "enName": "Blissey",
+    "pokemonKey": "blissey"
+  },
+  "ライコウ": {
+    "dexId": 243,
+    "enName": "Raikou",
+    "pokemonKey": "raikou"
+  },
+  "エンテイ": {
+    "dexId": 244,
+    "enName": "Entei",
+    "pokemonKey": "entei"
+  },
+  "スイクン": {
+    "dexId": 245,
+    "enName": "Suicune",
+    "pokemonKey": "suicune"
+  },
+  "ヨーギラス": {
+    "dexId": 246,
+    "enName": "Larvitar",
+    "pokemonKey": "larvitar"
+  },
+  "サナギラス": {
+    "dexId": 247,
+    "enName": "Pupitar",
+    "pokemonKey": "pupitar"
+  },
+  "バンギラス": {
+    "dexId": 248,
+    "enName": "Tyranitar",
+    "pokemonKey": "tyranitar"
+  },
+  "ルギア": {
+    "dexId": 249,
+    "enName": "Lugia",
+    "pokemonKey": "lugia"
+  },
+  "ホウオウ": {
+    "dexId": 250,
+    "enName": "Ho-Oh",
+    "pokemonKey": "ho-oh"
+  },
+  "セレビィ": {
+    "dexId": 251,
+    "enName": "Celebi",
+    "pokemonKey": "celebi"
+  },
+  "キモリ": {
+    "dexId": 252,
+    "enName": "Treecko",
+    "pokemonKey": "treecko"
+  },
+  "ジュプトル": {
+    "dexId": 253,
+    "enName": "Grovyle",
+    "pokemonKey": "grovyle"
+  },
+  "ジュカイン": {
+    "dexId": 254,
+    "enName": "Sceptile",
+    "pokemonKey": "sceptile"
+  },
+  "アチャモ": {
+    "dexId": 255,
+    "enName": "Torchic",
+    "pokemonKey": "torchic"
+  },
+  "ワカシャモ": {
+    "dexId": 256,
+    "enName": "Combusken",
+    "pokemonKey": "combusken"
+  },
+  "バシャーモ": {
+    "dexId": 257,
+    "enName": "Blaziken",
+    "pokemonKey": "blaziken"
+  },
+  "ミズゴロウ": {
+    "dexId": 258,
+    "enName": "Mudkip",
+    "pokemonKey": "mudkip"
+  },
+  "ヌマクロー": {
+    "dexId": 259,
+    "enName": "Marshtomp",
+    "pokemonKey": "marshtomp"
+  },
+  "ラグラージ": {
+    "dexId": 260,
+    "enName": "Swampert",
+    "pokemonKey": "swampert"
+  },
+  "ポチエナ": {
+    "dexId": 261,
+    "enName": "Poochyena",
+    "pokemonKey": "poochyena"
+  },
+  "グラエナ": {
+    "dexId": 262,
+    "enName": "Mightyena",
+    "pokemonKey": "mightyena"
+  },
+  "ジグザグマ": {
+    "dexId": 263,
+    "enName": "Zigzagoon",
+    "pokemonKey": "zigzagoon"
+  },
+  "マッスグマ": {
+    "dexId": 264,
+    "enName": "Linoone",
+    "pokemonKey": "linoone"
+  },
+  "ケムッソ": {
+    "dexId": 265,
+    "enName": "Wurmple",
+    "pokemonKey": "wurmple"
+  },
+  "カラサリス": {
+    "dexId": 266,
+    "enName": "Silcoon",
+    "pokemonKey": "silcoon"
+  },
+  "アゲハント": {
+    "dexId": 267,
+    "enName": "Beautifly",
+    "pokemonKey": "beautifly"
+  },
+  "マユルド": {
+    "dexId": 268,
+    "enName": "Cascoon",
+    "pokemonKey": "cascoon"
+  },
+  "ドクケイル": {
+    "dexId": 269,
+    "enName": "Dustox",
+    "pokemonKey": "dustox"
+  },
+  "ハスボー": {
+    "dexId": 270,
+    "enName": "Lotad",
+    "pokemonKey": "lotad"
+  },
+  "ハスブレロ": {
+    "dexId": 271,
+    "enName": "Lombre",
+    "pokemonKey": "lombre"
+  },
+  "ルンパッパ": {
+    "dexId": 272,
+    "enName": "Ludicolo",
+    "pokemonKey": "ludicolo"
+  },
+  "タネボー": {
+    "dexId": 273,
+    "enName": "Seedot",
+    "pokemonKey": "seedot"
+  },
+  "コノハナ": {
+    "dexId": 274,
+    "enName": "Nuzleaf",
+    "pokemonKey": "nuzleaf"
+  },
+  "ダーテング": {
+    "dexId": 275,
+    "enName": "Shiftry",
+    "pokemonKey": "shiftry"
+  },
+  "スバメ": {
+    "dexId": 276,
+    "enName": "Taillow",
+    "pokemonKey": "taillow"
+  },
+  "オオスバメ": {
+    "dexId": 277,
+    "enName": "Swellow",
+    "pokemonKey": "swellow"
+  },
+  "キャモメ": {
+    "dexId": 278,
+    "enName": "Wingull",
+    "pokemonKey": "wingull"
+  },
+  "ペリッパー": {
+    "dexId": 279,
+    "enName": "Pelipper",
+    "pokemonKey": "pelipper"
+  },
+  "ラルトス": {
+    "dexId": 280,
+    "enName": "Ralts",
+    "pokemonKey": "ralts"
+  },
+  "キルリア": {
+    "dexId": 281,
+    "enName": "Kirlia",
+    "pokemonKey": "kirlia"
+  },
+  "サーナイト": {
+    "dexId": 282,
+    "enName": "Gardevoir",
+    "pokemonKey": "gardevoir"
+  },
+  "アメタマ": {
+    "dexId": 283,
+    "enName": "Surskit",
+    "pokemonKey": "surskit"
+  },
+  "アメモース": {
+    "dexId": 284,
+    "enName": "Masquerain",
+    "pokemonKey": "masquerain"
+  },
+  "キノココ": {
+    "dexId": 285,
+    "enName": "Shroomish",
+    "pokemonKey": "shroomish"
+  },
+  "キノガッサ": {
+    "dexId": 286,
+    "enName": "Breloom",
+    "pokemonKey": "breloom"
+  },
+  "ナマケロ": {
+    "dexId": 287,
+    "enName": "Slakoth",
+    "pokemonKey": "slakoth"
+  },
+  "ヤルキモノ": {
+    "dexId": 288,
+    "enName": "Vigoroth",
+    "pokemonKey": "vigoroth"
+  },
+  "ケッキング": {
+    "dexId": 289,
+    "enName": "Slaking",
+    "pokemonKey": "slaking"
+  },
+  "ツチニン": {
+    "dexId": 290,
+    "enName": "Nincada",
+    "pokemonKey": "nincada"
+  },
+  "テッカニン": {
+    "dexId": 291,
+    "enName": "Ninjask",
+    "pokemonKey": "ninjask"
+  },
+  "ヌケニン": {
+    "dexId": 292,
+    "enName": "Shedinja",
+    "pokemonKey": "shedinja"
+  },
+  "ゴニョニョ": {
+    "dexId": 293,
+    "enName": "Whismur",
+    "pokemonKey": "whismur"
+  },
+  "ドゴーム": {
+    "dexId": 294,
+    "enName": "Loudred",
+    "pokemonKey": "loudred"
+  },
+  "バクオング": {
+    "dexId": 295,
+    "enName": "Exploud",
+    "pokemonKey": "exploud"
+  },
+  "マクノシタ": {
+    "dexId": 296,
+    "enName": "Makuhita",
+    "pokemonKey": "makuhita"
+  },
+  "ハリテヤマ": {
+    "dexId": 297,
+    "enName": "Hariyama",
+    "pokemonKey": "hariyama"
+  },
+  "ルリリ": {
+    "dexId": 298,
+    "enName": "Azurill",
+    "pokemonKey": "azurill"
+  },
+  "ノズパス": {
+    "dexId": 299,
+    "enName": "Nosepass",
+    "pokemonKey": "nosepass"
+  },
+  "エネコ": {
+    "dexId": 300,
+    "enName": "Skitty",
+    "pokemonKey": "skitty"
+  },
+  "エネコロロ": {
+    "dexId": 301,
+    "enName": "Delcatty",
+    "pokemonKey": "delcatty"
+  },
+  "ヤミラミ": {
+    "dexId": 302,
+    "enName": "Sableye",
+    "pokemonKey": "sableye"
+  },
+  "クチート": {
+    "dexId": 303,
+    "enName": "Mawile",
+    "pokemonKey": "mawile"
+  },
+  "ココドラ": {
+    "dexId": 304,
+    "enName": "Aron",
+    "pokemonKey": "aron"
+  },
+  "コドラ": {
+    "dexId": 305,
+    "enName": "Lairon",
+    "pokemonKey": "lairon"
+  },
+  "ボスゴドラ": {
+    "dexId": 306,
+    "enName": "Aggron",
+    "pokemonKey": "aggron"
+  },
+  "アサナン": {
+    "dexId": 307,
+    "enName": "Meditite",
+    "pokemonKey": "meditite"
+  },
+  "チャーレム": {
+    "dexId": 308,
+    "enName": "Medicham",
+    "pokemonKey": "medicham"
+  },
+  "ラクライ": {
+    "dexId": 309,
+    "enName": "Electrike",
+    "pokemonKey": "electrike"
+  },
+  "ライボルト": {
+    "dexId": 310,
+    "enName": "Manectric",
+    "pokemonKey": "manectric"
+  },
+  "プラスル": {
+    "dexId": 311,
+    "enName": "Plusle",
+    "pokemonKey": "plusle"
+  },
+  "マイナン": {
+    "dexId": 312,
+    "enName": "Minun",
+    "pokemonKey": "minun"
+  },
+  "バルビート": {
+    "dexId": 313,
+    "enName": "Volbeat",
+    "pokemonKey": "volbeat"
+  },
+  "イルミーゼ": {
+    "dexId": 314,
+    "enName": "Illumise",
+    "pokemonKey": "illumise"
+  },
+  "ロゼリア": {
+    "dexId": 315,
+    "enName": "Roselia",
+    "pokemonKey": "roselia"
+  },
+  "ゴクリン": {
+    "dexId": 316,
+    "enName": "Gulpin",
+    "pokemonKey": "gulpin"
+  },
+  "マルノーム": {
+    "dexId": 317,
+    "enName": "Swalot",
+    "pokemonKey": "swalot"
+  },
+  "キバニア": {
+    "dexId": 318,
+    "enName": "Carvanha",
+    "pokemonKey": "carvanha"
+  },
+  "サメハダー": {
+    "dexId": 319,
+    "enName": "Sharpedo",
+    "pokemonKey": "sharpedo"
+  },
+  "ホエルコ": {
+    "dexId": 320,
+    "enName": "Wailmer",
+    "pokemonKey": "wailmer"
+  },
+  "ホエルオー": {
+    "dexId": 321,
+    "enName": "Wailord",
+    "pokemonKey": "wailord"
+  },
+  "ドンメル": {
+    "dexId": 322,
+    "enName": "Numel",
+    "pokemonKey": "numel"
+  },
+  "バクーダ": {
+    "dexId": 323,
+    "enName": "Camerupt",
+    "pokemonKey": "camerupt"
+  },
+  "コータス": {
+    "dexId": 324,
+    "enName": "Torkoal",
+    "pokemonKey": "torkoal"
+  },
+  "バネブー": {
+    "dexId": 325,
+    "enName": "Spoink",
+    "pokemonKey": "spoink"
+  },
+  "ブーピッグ": {
+    "dexId": 326,
+    "enName": "Grumpig",
+    "pokemonKey": "grumpig"
+  },
+  "パッチール": {
+    "dexId": 327,
+    "enName": "Spinda",
+    "pokemonKey": "spinda"
+  },
+  "ナックラー": {
+    "dexId": 328,
+    "enName": "Trapinch",
+    "pokemonKey": "trapinch"
+  },
+  "ビブラーバ": {
+    "dexId": 329,
+    "enName": "Vibrava",
+    "pokemonKey": "vibrava"
+  },
+  "フライゴン": {
+    "dexId": 330,
+    "enName": "Flygon",
+    "pokemonKey": "flygon"
+  },
+  "サボネア": {
+    "dexId": 331,
+    "enName": "Cacnea",
+    "pokemonKey": "cacnea"
+  },
+  "ノクタス": {
+    "dexId": 332,
+    "enName": "Cacturne",
+    "pokemonKey": "cacturne"
+  },
+  "チルット": {
+    "dexId": 333,
+    "enName": "Swablu",
+    "pokemonKey": "swablu"
+  },
+  "チルタリス": {
+    "dexId": 334,
+    "enName": "Altaria",
+    "pokemonKey": "altaria"
+  },
+  "ザングース": {
+    "dexId": 335,
+    "enName": "Zangoose",
+    "pokemonKey": "zangoose"
+  },
+  "ハブネーク": {
+    "dexId": 336,
+    "enName": "Seviper",
+    "pokemonKey": "seviper"
+  },
+  "ルナトーン": {
+    "dexId": 337,
+    "enName": "Lunatone",
+    "pokemonKey": "lunatone"
+  },
+  "ソルロック": {
+    "dexId": 338,
+    "enName": "Solrock",
+    "pokemonKey": "solrock"
+  },
+  "ドジョッチ": {
+    "dexId": 339,
+    "enName": "Barboach",
+    "pokemonKey": "barboach"
+  },
+  "ナマズン": {
+    "dexId": 340,
+    "enName": "Whiscash",
+    "pokemonKey": "whiscash"
+  },
+  "ヘイガニ": {
+    "dexId": 341,
+    "enName": "Corphish",
+    "pokemonKey": "corphish"
+  },
+  "シザリガー": {
+    "dexId": 342,
+    "enName": "Crawdaunt",
+    "pokemonKey": "crawdaunt"
+  },
+  "ヤジロン": {
+    "dexId": 343,
+    "enName": "Baltoy",
+    "pokemonKey": "baltoy"
+  },
+  "ネンドール": {
+    "dexId": 344,
+    "enName": "Claydol",
+    "pokemonKey": "claydol"
+  },
+  "リリーラ": {
+    "dexId": 345,
+    "enName": "Lileep",
+    "pokemonKey": "lileep"
+  },
+  "ユレイドル": {
+    "dexId": 346,
+    "enName": "Cradily",
+    "pokemonKey": "cradily"
+  },
+  "アノプス": {
+    "dexId": 347,
+    "enName": "Anorith",
+    "pokemonKey": "anorith"
+  },
+  "アーマルド": {
+    "dexId": 348,
+    "enName": "Armaldo",
+    "pokemonKey": "armaldo"
+  },
+  "ヒンバス": {
+    "dexId": 349,
+    "enName": "Feebas",
+    "pokemonKey": "feebas"
+  },
+  "ミロカロス": {
+    "dexId": 350,
+    "enName": "Milotic",
+    "pokemonKey": "milotic"
+  },
+  "ポワルン": {
+    "dexId": 351,
+    "enName": "Castform",
+    "pokemonKey": "castform"
+  },
+  "カクレオン": {
+    "dexId": 352,
+    "enName": "Kecleon",
+    "pokemonKey": "kecleon"
+  },
+  "カゲボウズ": {
+    "dexId": 353,
+    "enName": "Shuppet",
+    "pokemonKey": "shuppet"
+  },
+  "ジュペッタ": {
+    "dexId": 354,
+    "enName": "Banette",
+    "pokemonKey": "banette"
+  },
+  "ヨマワル": {
+    "dexId": 355,
+    "enName": "Duskull",
+    "pokemonKey": "duskull"
+  },
+  "サマヨール": {
+    "dexId": 356,
+    "enName": "Dusclops",
+    "pokemonKey": "dusclops"
+  },
+  "トロピウス": {
+    "dexId": 357,
+    "enName": "Tropius",
+    "pokemonKey": "tropius"
+  },
+  "チリーン": {
+    "dexId": 358,
+    "enName": "Chimecho",
+    "pokemonKey": "chimecho"
+  },
+  "アブソル": {
+    "dexId": 359,
+    "enName": "Absol",
+    "pokemonKey": "absol"
+  },
+  "ソーナノ": {
+    "dexId": 360,
+    "enName": "Wynaut",
+    "pokemonKey": "wynaut"
+  },
+  "ユキワラシ": {
+    "dexId": 361,
+    "enName": "Snorunt",
+    "pokemonKey": "snorunt"
+  },
+  "オニゴーリ": {
+    "dexId": 362,
+    "enName": "Glalie",
+    "pokemonKey": "glalie"
+  },
+  "タマザラシ": {
+    "dexId": 363,
+    "enName": "Spheal",
+    "pokemonKey": "spheal"
+  },
+  "トドグラー": {
+    "dexId": 364,
+    "enName": "Sealeo",
+    "pokemonKey": "sealeo"
+  },
+  "トドゼルガ": {
+    "dexId": 365,
+    "enName": "Walrein",
+    "pokemonKey": "walrein"
+  },
+  "パールル": {
+    "dexId": 366,
+    "enName": "Clamperl",
+    "pokemonKey": "clamperl"
+  },
+  "ハンテール": {
+    "dexId": 367,
+    "enName": "Huntail",
+    "pokemonKey": "huntail"
+  },
+  "サクラビス": {
+    "dexId": 368,
+    "enName": "Gorebyss",
+    "pokemonKey": "gorebyss"
+  },
+  "ジーランス": {
+    "dexId": 369,
+    "enName": "Relicanth",
+    "pokemonKey": "relicanth"
+  },
+  "ラブカス": {
+    "dexId": 370,
+    "enName": "Luvdisc",
+    "pokemonKey": "luvdisc"
+  },
+  "タツベイ": {
+    "dexId": 371,
+    "enName": "Bagon",
+    "pokemonKey": "bagon"
+  },
+  "コモルー": {
+    "dexId": 372,
+    "enName": "Shelgon",
+    "pokemonKey": "shelgon"
+  },
+  "ボーマンダ": {
+    "dexId": 373,
+    "enName": "Salamence",
+    "pokemonKey": "salamence"
+  },
+  "ダンバル": {
+    "dexId": 374,
+    "enName": "Beldum",
+    "pokemonKey": "beldum"
+  },
+  "メタング": {
+    "dexId": 375,
+    "enName": "Metang",
+    "pokemonKey": "metang"
+  },
+  "メタグロス": {
+    "dexId": 376,
+    "enName": "Metagross",
+    "pokemonKey": "metagross"
+  },
+  "レジロック": {
+    "dexId": 377,
+    "enName": "Regirock",
+    "pokemonKey": "regirock"
+  },
+  "レジアイス": {
+    "dexId": 378,
+    "enName": "Regice",
+    "pokemonKey": "regice"
+  },
+  "レジスチル": {
+    "dexId": 379,
+    "enName": "Registeel",
+    "pokemonKey": "registeel"
+  },
+  "ラティアス": {
+    "dexId": 380,
+    "enName": "Latias",
+    "pokemonKey": "latias"
+  },
+  "ラティオス": {
+    "dexId": 381,
+    "enName": "Latios",
+    "pokemonKey": "latios"
+  },
+  "カイオーガ": {
+    "dexId": 382,
+    "enName": "Kyogre",
+    "pokemonKey": "kyogre"
+  },
+  "グラードン": {
+    "dexId": 383,
+    "enName": "Groudon",
+    "pokemonKey": "groudon"
+  },
+  "レックウザ": {
+    "dexId": 384,
+    "enName": "Rayquaza",
+    "pokemonKey": "rayquaza"
+  },
+  "ジラーチ": {
+    "dexId": 385,
+    "enName": "Jirachi",
+    "pokemonKey": "jirachi"
+  },
+  "デオキシス": {
+    "dexId": 386,
+    "enName": "Deoxys",
+    "pokemonKey": "deoxys"
+  },
+  "ナエトル": {
+    "dexId": 387,
+    "enName": "Turtwig",
+    "pokemonKey": "turtwig"
+  },
+  "ハヤシガメ": {
+    "dexId": 388,
+    "enName": "Grotle",
+    "pokemonKey": "grotle"
+  },
+  "ドダイトス": {
+    "dexId": 389,
+    "enName": "Torterra",
+    "pokemonKey": "torterra"
+  },
+  "ヒコザル": {
+    "dexId": 390,
+    "enName": "Chimchar",
+    "pokemonKey": "chimchar"
+  },
+  "モウカザル": {
+    "dexId": 391,
+    "enName": "Monferno",
+    "pokemonKey": "monferno"
+  },
+  "ゴウカザル": {
+    "dexId": 392,
+    "enName": "Infernape",
+    "pokemonKey": "infernape"
+  },
+  "ポッチャマ": {
+    "dexId": 393,
+    "enName": "Piplup",
+    "pokemonKey": "piplup"
+  },
+  "ポッタイシ": {
+    "dexId": 394,
+    "enName": "Prinplup",
+    "pokemonKey": "prinplup"
+  },
+  "エンペルト": {
+    "dexId": 395,
+    "enName": "Empoleon",
+    "pokemonKey": "empoleon"
+  },
+  "ムックル": {
+    "dexId": 396,
+    "enName": "Starly",
+    "pokemonKey": "starly"
+  },
+  "ムクバード": {
+    "dexId": 397,
+    "enName": "Staravia",
+    "pokemonKey": "staravia"
+  },
+  "ムクホーク": {
+    "dexId": 398,
+    "enName": "Staraptor",
+    "pokemonKey": "staraptor"
+  },
+  "ビッパ": {
+    "dexId": 399,
+    "enName": "Bidoof",
+    "pokemonKey": "bidoof"
+  },
+  "ビーダル": {
+    "dexId": 400,
+    "enName": "Bibarel",
+    "pokemonKey": "bibarel"
+  },
+  "コロボーシ": {
+    "dexId": 401,
+    "enName": "Kricketot",
+    "pokemonKey": "kricketot"
+  },
+  "コロトック": {
+    "dexId": 402,
+    "enName": "Kricketune",
+    "pokemonKey": "kricketune"
+  },
+  "コリンク": {
+    "dexId": 403,
+    "enName": "Shinx",
+    "pokemonKey": "shinx"
+  },
+  "ルクシオ": {
+    "dexId": 404,
+    "enName": "Luxio",
+    "pokemonKey": "luxio"
+  },
+  "レントラー": {
+    "dexId": 405,
+    "enName": "Luxray",
+    "pokemonKey": "luxray"
+  },
+  "スボミー": {
+    "dexId": 406,
+    "enName": "Budew",
+    "pokemonKey": "budew"
+  },
+  "ロズレイド": {
+    "dexId": 407,
+    "enName": "Roserade",
+    "pokemonKey": "roserade"
+  },
+  "ズガイドス": {
+    "dexId": 408,
+    "enName": "Cranidos",
+    "pokemonKey": "cranidos"
+  },
+  "ラムパルド": {
+    "dexId": 409,
+    "enName": "Rampardos",
+    "pokemonKey": "rampardos"
+  },
+  "タテトプス": {
+    "dexId": 410,
+    "enName": "Shieldon",
+    "pokemonKey": "shieldon"
+  },
+  "トリデプス": {
+    "dexId": 411,
+    "enName": "Bastiodon",
+    "pokemonKey": "bastiodon"
+  },
+  "ミノムッチ": {
+    "dexId": 412,
+    "enName": "Burmy",
+    "pokemonKey": "burmy"
+  },
+  "ミノマダム": {
+    "dexId": 413,
+    "enName": "Wormadam",
+    "pokemonKey": "wormadam"
+  },
+  "ガーメイル": {
+    "dexId": 414,
+    "enName": "Mothim",
+    "pokemonKey": "mothim"
+  },
+  "ミツハニー": {
+    "dexId": 415,
+    "enName": "Combee",
+    "pokemonKey": "combee"
+  },
+  "ビークイン": {
+    "dexId": 416,
+    "enName": "Vespiquen",
+    "pokemonKey": "vespiquen"
+  },
+  "パチリス": {
+    "dexId": 417,
+    "enName": "Pachirisu",
+    "pokemonKey": "pachirisu"
+  },
+  "ブイゼル": {
+    "dexId": 418,
+    "enName": "Buizel",
+    "pokemonKey": "buizel"
+  },
+  "フローゼル": {
+    "dexId": 419,
+    "enName": "Floatzel",
+    "pokemonKey": "floatzel"
+  },
+  "チェリンボ": {
+    "dexId": 420,
+    "enName": "Cherubi",
+    "pokemonKey": "cherubi"
+  },
+  "チェリム": {
+    "dexId": 421,
+    "enName": "Cherrim",
+    "pokemonKey": "cherrim"
+  },
+  "カラナクシ": {
+    "dexId": 422,
+    "enName": "Shellos",
+    "pokemonKey": "shellos"
+  },
+  "トリトドン": {
+    "dexId": 423,
+    "enName": "Gastrodon",
+    "pokemonKey": "gastrodon"
+  },
+  "エテボース": {
+    "dexId": 424,
+    "enName": "Ambipom",
+    "pokemonKey": "ambipom"
+  },
+  "フワンテ": {
+    "dexId": 425,
+    "enName": "Drifloon",
+    "pokemonKey": "drifloon"
+  },
+  "フワライド": {
+    "dexId": 426,
+    "enName": "Drifblim",
+    "pokemonKey": "drifblim"
+  },
+  "ミミロル": {
+    "dexId": 427,
+    "enName": "Buneary",
+    "pokemonKey": "buneary"
+  },
+  "ミミロップ": {
+    "dexId": 428,
+    "enName": "Lopunny",
+    "pokemonKey": "lopunny"
+  },
+  "ムウマージ": {
+    "dexId": 429,
+    "enName": "Mismagius",
+    "pokemonKey": "mismagius"
+  },
+  "ドンカラス": {
+    "dexId": 430,
+    "enName": "Honchkrow",
+    "pokemonKey": "honchkrow"
+  },
+  "ニャルマー": {
+    "dexId": 431,
+    "enName": "Glameow",
+    "pokemonKey": "glameow"
+  },
+  "ブニャット": {
+    "dexId": 432,
+    "enName": "Purugly",
+    "pokemonKey": "purugly"
+  },
+  "リーシャン": {
+    "dexId": 433,
+    "enName": "Chingling",
+    "pokemonKey": "chingling"
+  },
+  "スカンプー": {
+    "dexId": 434,
+    "enName": "Stunky",
+    "pokemonKey": "stunky"
+  },
+  "スカタンク": {
+    "dexId": 435,
+    "enName": "Skuntank",
+    "pokemonKey": "skuntank"
+  },
+  "ドーミラー": {
+    "dexId": 436,
+    "enName": "Bronzor",
+    "pokemonKey": "bronzor"
+  },
+  "ドータクン": {
+    "dexId": 437,
+    "enName": "Bronzong",
+    "pokemonKey": "bronzong"
+  },
+  "ウソハチ": {
+    "dexId": 438,
+    "enName": "Bonsly",
+    "pokemonKey": "bonsly"
+  },
+  "マネネ": {
+    "dexId": 439,
+    "enName": "Mime Jr.",
+    "pokemonKey": "mime jr."
+  },
+  "ピンプク": {
+    "dexId": 440,
+    "enName": "Happiny",
+    "pokemonKey": "happiny"
+  },
+  "ペラップ": {
+    "dexId": 441,
+    "enName": "Chatot",
+    "pokemonKey": "chatot"
+  },
+  "ミカルゲ": {
+    "dexId": 442,
+    "enName": "Spiritomb",
+    "pokemonKey": "spiritomb"
+  },
+  "フカマル": {
+    "dexId": 443,
+    "enName": "Gible",
+    "pokemonKey": "gible"
+  },
+  "ガバイト": {
+    "dexId": 444,
+    "enName": "Gabite",
+    "pokemonKey": "gabite"
+  },
+  "ガブリアス": {
+    "dexId": 445,
+    "enName": "Garchomp",
+    "pokemonKey": "garchomp"
+  },
+  "ゴンベ": {
+    "dexId": 446,
+    "enName": "Munchlax",
+    "pokemonKey": "munchlax"
+  },
+  "リオル": {
+    "dexId": 447,
+    "enName": "Riolu",
+    "pokemonKey": "riolu"
+  },
+  "ルカリオ": {
+    "dexId": 448,
+    "enName": "Lucario",
+    "pokemonKey": "lucario"
+  },
+  "ヒポポタス": {
+    "dexId": 449,
+    "enName": "Hippopotas",
+    "pokemonKey": "hippopotas"
+  },
+  "カバルドン": {
+    "dexId": 450,
+    "enName": "Hippowdon",
+    "pokemonKey": "hippowdon"
+  },
+  "スコルピ": {
+    "dexId": 451,
+    "enName": "Skorupi",
+    "pokemonKey": "skorupi"
+  },
+  "ドラピオン": {
+    "dexId": 452,
+    "enName": "Drapion",
+    "pokemonKey": "drapion"
+  },
+  "グレッグル": {
+    "dexId": 453,
+    "enName": "Croagunk",
+    "pokemonKey": "croagunk"
+  },
+  "ドクロッグ": {
+    "dexId": 454,
+    "enName": "Toxicroak",
+    "pokemonKey": "toxicroak"
+  },
+  "マスキッパ": {
+    "dexId": 455,
+    "enName": "Carnivine",
+    "pokemonKey": "carnivine"
+  },
+  "ケイコウオ": {
+    "dexId": 456,
+    "enName": "Finneon",
+    "pokemonKey": "finneon"
+  },
+  "ネオラント": {
+    "dexId": 457,
+    "enName": "Lumineon",
+    "pokemonKey": "lumineon"
+  },
+  "タマンタ": {
+    "dexId": 458,
+    "enName": "Mantyke",
+    "pokemonKey": "mantyke"
+  },
+  "ユキカブリ": {
+    "dexId": 459,
+    "enName": "Snover",
+    "pokemonKey": "snover"
+  },
+  "ユキノオー": {
+    "dexId": 460,
+    "enName": "Abomasnow",
+    "pokemonKey": "abomasnow"
+  },
+  "マニューラ": {
+    "dexId": 461,
+    "enName": "Weavile",
+    "pokemonKey": "weavile"
+  },
+  "ジバコイル": {
+    "dexId": 462,
+    "enName": "Magnezone",
+    "pokemonKey": "magnezone"
+  },
+  "ベロベルト": {
+    "dexId": 463,
+    "enName": "Lickilicky",
+    "pokemonKey": "lickilicky"
+  },
+  "ドサイドン": {
+    "dexId": 464,
+    "enName": "Rhyperior",
+    "pokemonKey": "rhyperior"
+  },
+  "モジャンボ": {
+    "dexId": 465,
+    "enName": "Tangrowth",
+    "pokemonKey": "tangrowth"
+  },
+  "エレキブル": {
+    "dexId": 466,
+    "enName": "Electivire",
+    "pokemonKey": "electivire"
+  },
+  "ブーバーン": {
+    "dexId": 467,
+    "enName": "Magmortar",
+    "pokemonKey": "magmortar"
+  },
+  "トゲキッス": {
+    "dexId": 468,
+    "enName": "Togekiss",
+    "pokemonKey": "togekiss"
+  },
+  "メガヤンマ": {
+    "dexId": 469,
+    "enName": "Yanmega",
+    "pokemonKey": "yanmega"
+  },
+  "リーフィア": {
+    "dexId": 470,
+    "enName": "Leafeon",
+    "pokemonKey": "leafeon"
+  },
+  "グレイシア": {
+    "dexId": 471,
+    "enName": "Glaceon",
+    "pokemonKey": "glaceon"
+  },
+  "グライオン": {
+    "dexId": 472,
+    "enName": "Gliscor",
+    "pokemonKey": "gliscor"
+  },
+  "マンムー": {
+    "dexId": 473,
+    "enName": "Mamoswine",
+    "pokemonKey": "mamoswine"
+  },
+  "ポリゴンＺ": {
+    "dexId": 474,
+    "enName": "Porygon-Z",
+    "pokemonKey": "porygon-z"
+  },
+  "エルレイド": {
+    "dexId": 475,
+    "enName": "Gallade",
+    "pokemonKey": "gallade"
+  },
+  "ダイノーズ": {
+    "dexId": 476,
+    "enName": "Probopass",
+    "pokemonKey": "probopass"
+  },
+  "ヨノワール": {
+    "dexId": 477,
+    "enName": "Dusknoir",
+    "pokemonKey": "dusknoir"
+  },
+  "ユキメノコ": {
+    "dexId": 478,
+    "enName": "Froslass",
+    "pokemonKey": "froslass"
+  },
+  "ロトム": {
+    "dexId": 479,
+    "enName": "Rotom",
+    "pokemonKey": "rotom"
+  },
+  "ユクシー": {
+    "dexId": 480,
+    "enName": "Uxie",
+    "pokemonKey": "uxie"
+  },
+  "エムリット": {
+    "dexId": 481,
+    "enName": "Mesprit",
+    "pokemonKey": "mesprit"
+  },
+  "アグノム": {
+    "dexId": 482,
+    "enName": "Azelf",
+    "pokemonKey": "azelf"
+  },
+  "ディアルガ": {
+    "dexId": 483,
+    "enName": "Dialga",
+    "pokemonKey": "dialga"
+  },
+  "パルキア": {
+    "dexId": 484,
+    "enName": "Palkia",
+    "pokemonKey": "palkia"
+  },
+  "ヒードラン": {
+    "dexId": 485,
+    "enName": "Heatran",
+    "pokemonKey": "heatran"
+  },
+  "レジギガス": {
+    "dexId": 486,
+    "enName": "Regigigas",
+    "pokemonKey": "regigigas"
+  },
+  "ギラティナ": {
+    "dexId": 487,
+    "enName": "Giratina",
+    "pokemonKey": "giratina"
+  },
+  "クレセリア": {
+    "dexId": 488,
+    "enName": "Cresselia",
+    "pokemonKey": "cresselia"
+  },
+  "フィオネ": {
+    "dexId": 489,
+    "enName": "Phione",
+    "pokemonKey": "phione"
+  },
+  "マナフィ": {
+    "dexId": 490,
+    "enName": "Manaphy",
+    "pokemonKey": "manaphy"
+  },
+  "ダークライ": {
+    "dexId": 491,
+    "enName": "Darkrai",
+    "pokemonKey": "darkrai"
+  },
+  "シェイミ": {
+    "dexId": 492,
+    "enName": "Shaymin",
+    "pokemonKey": "shaymin"
+  },
+  "アルセウス": {
+    "dexId": 493,
+    "enName": "Arceus",
+    "pokemonKey": "arceus"
+  },
+  "ビクティニ": {
+    "dexId": 494,
+    "enName": "Victini",
+    "pokemonKey": "victini"
+  },
+  "ツタージャ": {
+    "dexId": 495,
+    "enName": "Snivy",
+    "pokemonKey": "snivy"
+  },
+  "ジャノビー": {
+    "dexId": 496,
+    "enName": "Servine",
+    "pokemonKey": "servine"
+  },
+  "ジャローダ": {
+    "dexId": 497,
+    "enName": "Serperior",
+    "pokemonKey": "serperior"
+  },
+  "ポカブ": {
+    "dexId": 498,
+    "enName": "Tepig",
+    "pokemonKey": "tepig"
+  },
+  "チャオブー": {
+    "dexId": 499,
+    "enName": "Pignite",
+    "pokemonKey": "pignite"
+  },
+  "エンブオー": {
+    "dexId": 500,
+    "enName": "Emboar",
+    "pokemonKey": "emboar"
+  },
+  "ミジュマル": {
+    "dexId": 501,
+    "enName": "Oshawott",
+    "pokemonKey": "oshawott"
+  },
+  "フタチマル": {
+    "dexId": 502,
+    "enName": "Dewott",
+    "pokemonKey": "dewott"
+  },
+  "ダイケンキ": {
+    "dexId": 503,
+    "enName": "Samurott",
+    "pokemonKey": "samurott"
+  },
+  "ミネズミ": {
+    "dexId": 504,
+    "enName": "Patrat",
+    "pokemonKey": "patrat"
+  },
+  "ミルホッグ": {
+    "dexId": 505,
+    "enName": "Watchog",
+    "pokemonKey": "watchog"
+  },
+  "ヨーテリー": {
+    "dexId": 506,
+    "enName": "Lillipup",
+    "pokemonKey": "lillipup"
+  },
+  "ハーデリア": {
+    "dexId": 507,
+    "enName": "Herdier",
+    "pokemonKey": "herdier"
+  },
+  "ムーランド": {
+    "dexId": 508,
+    "enName": "Stoutland",
+    "pokemonKey": "stoutland"
+  },
+  "チョロネコ": {
+    "dexId": 509,
+    "enName": "Purrloin",
+    "pokemonKey": "purrloin"
+  },
+  "レパルダス": {
+    "dexId": 510,
+    "enName": "Liepard",
+    "pokemonKey": "liepard"
+  },
+  "ヤナップ": {
+    "dexId": 511,
+    "enName": "Pansage",
+    "pokemonKey": "pansage"
+  },
+  "ヤナッキー": {
+    "dexId": 512,
+    "enName": "Simisage",
+    "pokemonKey": "simisage"
+  },
+  "バオップ": {
+    "dexId": 513,
+    "enName": "Pansear",
+    "pokemonKey": "pansear"
+  },
+  "バオッキー": {
+    "dexId": 514,
+    "enName": "Simisear",
+    "pokemonKey": "simisear"
+  },
+  "ヒヤップ": {
+    "dexId": 515,
+    "enName": "Panpour",
+    "pokemonKey": "panpour"
+  },
+  "ヒヤッキー": {
+    "dexId": 516,
+    "enName": "Simipour",
+    "pokemonKey": "simipour"
+  },
+  "ムンナ": {
+    "dexId": 517,
+    "enName": "Munna",
+    "pokemonKey": "munna"
+  },
+  "ムシャーナ": {
+    "dexId": 518,
+    "enName": "Musharna",
+    "pokemonKey": "musharna"
+  },
+  "マメパト": {
+    "dexId": 519,
+    "enName": "Pidove",
+    "pokemonKey": "pidove"
+  },
+  "ハトーボー": {
+    "dexId": 520,
+    "enName": "Tranquill",
+    "pokemonKey": "tranquill"
+  },
+  "ケンホロウ": {
+    "dexId": 521,
+    "enName": "Unfezant",
+    "pokemonKey": "unfezant"
+  },
+  "シママ": {
+    "dexId": 522,
+    "enName": "Blitzle",
+    "pokemonKey": "blitzle"
+  },
+  "ゼブライカ": {
+    "dexId": 523,
+    "enName": "Zebstrika",
+    "pokemonKey": "zebstrika"
+  },
+  "ダンゴロ": {
+    "dexId": 524,
+    "enName": "Roggenrola",
+    "pokemonKey": "roggenrola"
+  },
+  "ガントル": {
+    "dexId": 525,
+    "enName": "Boldore",
+    "pokemonKey": "boldore"
+  },
+  "ギガイアス": {
+    "dexId": 526,
+    "enName": "Gigalith",
+    "pokemonKey": "gigalith"
+  },
+  "コロモリ": {
+    "dexId": 527,
+    "enName": "Woobat",
+    "pokemonKey": "woobat"
+  },
+  "ココロモリ": {
+    "dexId": 528,
+    "enName": "Swoobat",
+    "pokemonKey": "swoobat"
+  },
+  "モグリュー": {
+    "dexId": 529,
+    "enName": "Drilbur",
+    "pokemonKey": "drilbur"
+  },
+  "ドリュウズ": {
+    "dexId": 530,
+    "enName": "Excadrill",
+    "pokemonKey": "excadrill"
+  },
+  "タブンネ": {
+    "dexId": 531,
+    "enName": "Audino",
+    "pokemonKey": "audino"
+  },
+  "ドッコラー": {
+    "dexId": 532,
+    "enName": "Timburr",
+    "pokemonKey": "timburr"
+  },
+  "ドテッコツ": {
+    "dexId": 533,
+    "enName": "Gurdurr",
+    "pokemonKey": "gurdurr"
+  },
+  "ローブシン": {
+    "dexId": 534,
+    "enName": "Conkeldurr",
+    "pokemonKey": "conkeldurr"
+  },
+  "オタマロ": {
+    "dexId": 535,
+    "enName": "Tympole",
+    "pokemonKey": "tympole"
+  },
+  "ガマガル": {
+    "dexId": 536,
+    "enName": "Palpitoad",
+    "pokemonKey": "palpitoad"
+  },
+  "ガマゲロゲ": {
+    "dexId": 537,
+    "enName": "Seismitoad",
+    "pokemonKey": "seismitoad"
+  },
+  "ナゲキ": {
+    "dexId": 538,
+    "enName": "Throh",
+    "pokemonKey": "throh"
+  },
+  "ダゲキ": {
+    "dexId": 539,
+    "enName": "Sawk",
+    "pokemonKey": "sawk"
+  },
+  "クルミル": {
+    "dexId": 540,
+    "enName": "Sewaddle",
+    "pokemonKey": "sewaddle"
+  },
+  "クルマユ": {
+    "dexId": 541,
+    "enName": "Swadloon",
+    "pokemonKey": "swadloon"
+  },
+  "ハハコモリ": {
+    "dexId": 542,
+    "enName": "Leavanny",
+    "pokemonKey": "leavanny"
+  },
+  "フシデ": {
+    "dexId": 543,
+    "enName": "Venipede",
+    "pokemonKey": "venipede"
+  },
+  "ホイーガ": {
+    "dexId": 544,
+    "enName": "Whirlipede",
+    "pokemonKey": "whirlipede"
+  },
+  "ペンドラー": {
+    "dexId": 545,
+    "enName": "Scolipede",
+    "pokemonKey": "scolipede"
+  },
+  "モンメン": {
+    "dexId": 546,
+    "enName": "Cottonee",
+    "pokemonKey": "cottonee"
+  },
+  "エルフーン": {
+    "dexId": 547,
+    "enName": "Whimsicott",
+    "pokemonKey": "whimsicott"
+  },
+  "チュリネ": {
+    "dexId": 548,
+    "enName": "Petilil",
+    "pokemonKey": "petilil"
+  },
+  "ドレディア": {
+    "dexId": 549,
+    "enName": "Lilligant",
+    "pokemonKey": "lilligant"
+  },
+  "バスラオ": {
+    "dexId": 550,
+    "enName": "Basculin",
+    "pokemonKey": "basculin"
+  },
+  "メグロコ": {
+    "dexId": 551,
+    "enName": "Sandile",
+    "pokemonKey": "sandile"
+  },
+  "ワルビル": {
+    "dexId": 552,
+    "enName": "Krokorok",
+    "pokemonKey": "krokorok"
+  },
+  "ワルビアル": {
+    "dexId": 553,
+    "enName": "Krookodile",
+    "pokemonKey": "krookodile"
+  },
+  "ダルマッカ": {
+    "dexId": 554,
+    "enName": "Darumaka",
+    "pokemonKey": "darumaka"
+  },
+  "ヒヒダルマ": {
+    "dexId": 555,
+    "enName": "Darmanitan",
+    "pokemonKey": "darmanitan"
+  },
+  "マラカッチ": {
+    "dexId": 556,
+    "enName": "Maractus",
+    "pokemonKey": "maractus"
+  },
+  "イシズマイ": {
+    "dexId": 557,
+    "enName": "Dwebble",
+    "pokemonKey": "dwebble"
+  },
+  "イワパレス": {
+    "dexId": 558,
+    "enName": "Crustle",
+    "pokemonKey": "crustle"
+  },
+  "ズルッグ": {
+    "dexId": 559,
+    "enName": "Scraggy",
+    "pokemonKey": "scraggy"
+  },
+  "ズルズキン": {
+    "dexId": 560,
+    "enName": "Scrafty",
+    "pokemonKey": "scrafty"
+  },
+  "シンボラー": {
+    "dexId": 561,
+    "enName": "Sigilyph",
+    "pokemonKey": "sigilyph"
+  },
+  "デスマス": {
+    "dexId": 562,
+    "enName": "Yamask",
+    "pokemonKey": "yamask"
+  },
+  "デスカーン": {
+    "dexId": 563,
+    "enName": "Cofagrigus",
+    "pokemonKey": "cofagrigus"
+  },
+  "プロトーガ": {
+    "dexId": 564,
+    "enName": "Tirtouga",
+    "pokemonKey": "tirtouga"
+  },
+  "アバゴーラ": {
+    "dexId": 565,
+    "enName": "Carracosta",
+    "pokemonKey": "carracosta"
+  },
+  "アーケン": {
+    "dexId": 566,
+    "enName": "Archen",
+    "pokemonKey": "archen"
+  },
+  "アーケオス": {
+    "dexId": 567,
+    "enName": "Archeops",
+    "pokemonKey": "archeops"
+  },
+  "ヤブクロン": {
+    "dexId": 568,
+    "enName": "Trubbish",
+    "pokemonKey": "trubbish"
+  },
+  "ダストダス": {
+    "dexId": 569,
+    "enName": "Garbodor",
+    "pokemonKey": "garbodor"
+  },
+  "ゾロア": {
+    "dexId": 570,
+    "enName": "Zorua",
+    "pokemonKey": "zorua"
+  },
+  "ゾロアーク": {
+    "dexId": 571,
+    "enName": "Zoroark",
+    "pokemonKey": "zoroark"
+  },
+  "チラーミィ": {
+    "dexId": 572,
+    "enName": "Minccino",
+    "pokemonKey": "minccino"
+  },
+  "チラチーノ": {
+    "dexId": 573,
+    "enName": "Cinccino",
+    "pokemonKey": "cinccino"
+  },
+  "ゴチム": {
+    "dexId": 574,
+    "enName": "Gothita",
+    "pokemonKey": "gothita"
+  },
+  "ゴチミル": {
+    "dexId": 575,
+    "enName": "Gothorita",
+    "pokemonKey": "gothorita"
+  },
+  "ゴチルゼル": {
+    "dexId": 576,
+    "enName": "Gothitelle",
+    "pokemonKey": "gothitelle"
+  },
+  "ユニラン": {
+    "dexId": 577,
+    "enName": "Solosis",
+    "pokemonKey": "solosis"
+  },
+  "ダブラン": {
+    "dexId": 578,
+    "enName": "Duosion",
+    "pokemonKey": "duosion"
+  },
+  "ランクルス": {
+    "dexId": 579,
+    "enName": "Reuniclus",
+    "pokemonKey": "reuniclus"
+  },
+  "コアルヒー": {
+    "dexId": 580,
+    "enName": "Ducklett",
+    "pokemonKey": "ducklett"
+  },
+  "スワンナ": {
+    "dexId": 581,
+    "enName": "Swanna",
+    "pokemonKey": "swanna"
+  },
+  "バニプッチ": {
+    "dexId": 582,
+    "enName": "Vanillite",
+    "pokemonKey": "vanillite"
+  },
+  "バニリッチ": {
+    "dexId": 583,
+    "enName": "Vanillish",
+    "pokemonKey": "vanillish"
+  },
+  "バイバニラ": {
+    "dexId": 584,
+    "enName": "Vanilluxe",
+    "pokemonKey": "vanilluxe"
+  },
+  "シキジカ": {
+    "dexId": 585,
+    "enName": "Deerling",
+    "pokemonKey": "deerling"
+  },
+  "メブキジカ": {
+    "dexId": 586,
+    "enName": "Sawsbuck",
+    "pokemonKey": "sawsbuck"
+  },
+  "エモンガ": {
+    "dexId": 587,
+    "enName": "Emolga",
+    "pokemonKey": "emolga"
+  },
+  "カブルモ": {
+    "dexId": 588,
+    "enName": "Karrablast",
+    "pokemonKey": "karrablast"
+  },
+  "シュバルゴ": {
+    "dexId": 589,
+    "enName": "Escavalier",
+    "pokemonKey": "escavalier"
+  },
+  "タマゲタケ": {
+    "dexId": 590,
+    "enName": "Foongus",
+    "pokemonKey": "foongus"
+  },
+  "モロバレル": {
+    "dexId": 591,
+    "enName": "Amoonguss",
+    "pokemonKey": "amoonguss"
+  },
+  "プルリル": {
+    "dexId": 592,
+    "enName": "Frillish",
+    "pokemonKey": "frillish"
+  },
+  "ブルンゲル": {
+    "dexId": 593,
+    "enName": "Jellicent",
+    "pokemonKey": "jellicent"
+  },
+  "ママンボウ": {
+    "dexId": 594,
+    "enName": "Alomomola",
+    "pokemonKey": "alomomola"
+  },
+  "バチュル": {
+    "dexId": 595,
+    "enName": "Joltik",
+    "pokemonKey": "joltik"
+  },
+  "デンチュラ": {
+    "dexId": 596,
+    "enName": "Galvantula",
+    "pokemonKey": "galvantula"
+  },
+  "テッシード": {
+    "dexId": 597,
+    "enName": "Ferroseed",
+    "pokemonKey": "ferroseed"
+  },
+  "ナットレイ": {
+    "dexId": 598,
+    "enName": "Ferrothorn",
+    "pokemonKey": "ferrothorn"
+  },
+  "ギアル": {
+    "dexId": 599,
+    "enName": "Klink",
+    "pokemonKey": "klink"
+  },
+  "ギギアル": {
+    "dexId": 600,
+    "enName": "Klang",
+    "pokemonKey": "klang"
+  },
+  "ギギギアル": {
+    "dexId": 601,
+    "enName": "Klinklang",
+    "pokemonKey": "klinklang"
+  },
+  "シビシラス": {
+    "dexId": 602,
+    "enName": "Tynamo",
+    "pokemonKey": "tynamo"
+  },
+  "シビビール": {
+    "dexId": 603,
+    "enName": "Eelektrik",
+    "pokemonKey": "eelektrik"
+  },
+  "シビルドン": {
+    "dexId": 604,
+    "enName": "Eelektross",
+    "pokemonKey": "eelektross"
+  },
+  "リグレー": {
+    "dexId": 605,
+    "enName": "Elgyem",
+    "pokemonKey": "elgyem"
+  },
+  "オーベム": {
+    "dexId": 606,
+    "enName": "Beheeyem",
+    "pokemonKey": "beheeyem"
+  },
+  "ヒトモシ": {
+    "dexId": 607,
+    "enName": "Litwick",
+    "pokemonKey": "litwick"
+  },
+  "ランプラー": {
+    "dexId": 608,
+    "enName": "Lampent",
+    "pokemonKey": "lampent"
+  },
+  "シャンデラ": {
+    "dexId": 609,
+    "enName": "Chandelure",
+    "pokemonKey": "chandelure"
+  },
+  "キバゴ": {
+    "dexId": 610,
+    "enName": "Axew",
+    "pokemonKey": "axew"
+  },
+  "オノンド": {
+    "dexId": 611,
+    "enName": "Fraxure",
+    "pokemonKey": "fraxure"
+  },
+  "オノノクス": {
+    "dexId": 612,
+    "enName": "Haxorus",
+    "pokemonKey": "haxorus"
+  },
+  "クマシュン": {
+    "dexId": 613,
+    "enName": "Cubchoo",
+    "pokemonKey": "cubchoo"
+  },
+  "ツンベアー": {
+    "dexId": 614,
+    "enName": "Beartic",
+    "pokemonKey": "beartic"
+  },
+  "フリージオ": {
+    "dexId": 615,
+    "enName": "Cryogonal",
+    "pokemonKey": "cryogonal"
+  },
+  "チョボマキ": {
+    "dexId": 616,
+    "enName": "Shelmet",
+    "pokemonKey": "shelmet"
+  },
+  "アギルダー": {
+    "dexId": 617,
+    "enName": "Accelgor",
+    "pokemonKey": "accelgor"
+  },
+  "マッギョ": {
+    "dexId": 618,
+    "enName": "Stunfisk",
+    "pokemonKey": "stunfisk"
+  },
+  "コジョフー": {
+    "dexId": 619,
+    "enName": "Mienfoo",
+    "pokemonKey": "mienfoo"
+  },
+  "コジョンド": {
+    "dexId": 620,
+    "enName": "Mienshao",
+    "pokemonKey": "mienshao"
+  },
+  "クリムガン": {
+    "dexId": 621,
+    "enName": "Druddigon",
+    "pokemonKey": "druddigon"
+  },
+  "ゴビット": {
+    "dexId": 622,
+    "enName": "Golett",
+    "pokemonKey": "golett"
+  },
+  "ゴルーグ": {
+    "dexId": 623,
+    "enName": "Golurk",
+    "pokemonKey": "golurk"
+  },
+  "コマタナ": {
+    "dexId": 624,
+    "enName": "Pawniard",
+    "pokemonKey": "pawniard"
+  },
+  "キリキザン": {
+    "dexId": 625,
+    "enName": "Bisharp",
+    "pokemonKey": "bisharp"
+  },
+  "バッフロン": {
+    "dexId": 626,
+    "enName": "Bouffalant",
+    "pokemonKey": "bouffalant"
+  },
+  "ワシボン": {
+    "dexId": 627,
+    "enName": "Rufflet",
+    "pokemonKey": "rufflet"
+  },
+  "ウォーグル": {
+    "dexId": 628,
+    "enName": "Braviary",
+    "pokemonKey": "braviary"
+  },
+  "バルチャイ": {
+    "dexId": 629,
+    "enName": "Vullaby",
+    "pokemonKey": "vullaby"
+  },
+  "バルジーナ": {
+    "dexId": 630,
+    "enName": "Mandibuzz",
+    "pokemonKey": "mandibuzz"
+  },
+  "クイタラン": {
+    "dexId": 631,
+    "enName": "Heatmor",
+    "pokemonKey": "heatmor"
+  },
+  "アイアント": {
+    "dexId": 632,
+    "enName": "Durant",
+    "pokemonKey": "durant"
+  },
+  "モノズ": {
+    "dexId": 633,
+    "enName": "Deino",
+    "pokemonKey": "deino"
+  },
+  "ジヘッド": {
+    "dexId": 634,
+    "enName": "Zweilous",
+    "pokemonKey": "zweilous"
+  },
+  "サザンドラ": {
+    "dexId": 635,
+    "enName": "Hydreigon",
+    "pokemonKey": "hydreigon"
+  },
+  "メラルバ": {
+    "dexId": 636,
+    "enName": "Larvesta",
+    "pokemonKey": "larvesta"
+  },
+  "ウルガモス": {
+    "dexId": 637,
+    "enName": "Volcarona",
+    "pokemonKey": "volcarona"
+  },
+  "コバルオン": {
+    "dexId": 638,
+    "enName": "Cobalion",
+    "pokemonKey": "cobalion"
+  },
+  "テラキオン": {
+    "dexId": 639,
+    "enName": "Terrakion",
+    "pokemonKey": "terrakion"
+  },
+  "ビリジオン": {
+    "dexId": 640,
+    "enName": "Virizion",
+    "pokemonKey": "virizion"
+  },
+  "トルネロス": {
+    "dexId": 641,
+    "enName": "Tornadus",
+    "pokemonKey": "tornadus"
+  },
+  "ボルトロス": {
+    "dexId": 642,
+    "enName": "Thundurus",
+    "pokemonKey": "thundurus"
+  },
+  "レシラム": {
+    "dexId": 643,
+    "enName": "Reshiram",
+    "pokemonKey": "reshiram"
+  },
+  "ゼクロム": {
+    "dexId": 644,
+    "enName": "Zekrom",
+    "pokemonKey": "zekrom"
+  },
+  "ランドロス": {
+    "dexId": 645,
+    "enName": "Landorus",
+    "pokemonKey": "landorus"
+  },
+  "キュレム": {
+    "dexId": 646,
+    "enName": "Kyurem",
+    "pokemonKey": "kyurem"
+  },
+  "ケルディオ": {
+    "dexId": 647,
+    "enName": "Keldeo",
+    "pokemonKey": "keldeo"
+  },
+  "メロエッタ": {
+    "dexId": 648,
+    "enName": "Meloetta",
+    "pokemonKey": "meloetta"
+  },
+  "ゲノセクト": {
+    "dexId": 649,
+    "enName": "Genesect",
+    "pokemonKey": "genesect"
+  },
+  "ハリマロン": {
+    "dexId": 650,
+    "enName": "Chespin",
+    "pokemonKey": "chespin"
+  },
+  "ハリボーグ": {
+    "dexId": 651,
+    "enName": "Quilladin",
+    "pokemonKey": "quilladin"
+  },
+  "ブリガロン": {
+    "dexId": 652,
+    "enName": "Chesnaught",
+    "pokemonKey": "chesnaught"
+  },
+  "フォッコ": {
+    "dexId": 653,
+    "enName": "Fennekin",
+    "pokemonKey": "fennekin"
+  },
+  "テールナー": {
+    "dexId": 654,
+    "enName": "Braixen",
+    "pokemonKey": "braixen"
+  },
+  "マフォクシー": {
+    "dexId": 655,
+    "enName": "Delphox",
+    "pokemonKey": "delphox"
+  },
+  "ケロマツ": {
+    "dexId": 656,
+    "enName": "Froakie",
+    "pokemonKey": "froakie"
+  },
+  "ゲコガシラ": {
+    "dexId": 657,
+    "enName": "Frogadier",
+    "pokemonKey": "frogadier"
+  },
+  "ゲッコウガ": {
+    "dexId": 658,
+    "enName": "Greninja",
+    "pokemonKey": "greninja"
+  },
+  "ホルビー": {
+    "dexId": 659,
+    "enName": "Bunnelby",
+    "pokemonKey": "bunnelby"
+  },
+  "ホルード": {
+    "dexId": 660,
+    "enName": "Diggersby",
+    "pokemonKey": "diggersby"
+  },
+  "ヤヤコマ": {
+    "dexId": 661,
+    "enName": "Fletchling",
+    "pokemonKey": "fletchling"
+  },
+  "ヒノヤコマ": {
+    "dexId": 662,
+    "enName": "Fletchinder",
+    "pokemonKey": "fletchinder"
+  },
+  "ファイアロー": {
+    "dexId": 663,
+    "enName": "Talonflame",
+    "pokemonKey": "talonflame"
+  },
+  "コフキムシ": {
+    "dexId": 664,
+    "enName": "Scatterbug",
+    "pokemonKey": "scatterbug"
+  },
+  "コフーライ": {
+    "dexId": 665,
+    "enName": "Spewpa",
+    "pokemonKey": "spewpa"
+  },
+  "ビビヨン": {
+    "dexId": 666,
+    "enName": "Vivillon",
+    "pokemonKey": "vivillon"
+  },
+  "シシコ": {
+    "dexId": 667,
+    "enName": "Litleo",
+    "pokemonKey": "litleo"
+  },
+  "カエンジシ": {
+    "dexId": 668,
+    "enName": "Pyroar",
+    "pokemonKey": "pyroar"
+  },
+  "フラベベ": {
+    "dexId": 669,
+    "enName": "Flabébé",
+    "pokemonKey": "flabebe"
+  },
+  "フラエッテ": {
+    "dexId": 670,
+    "enName": "Floette",
+    "pokemonKey": "floette"
+  },
+  "フラージェス": {
+    "dexId": 671,
+    "enName": "Florges",
+    "pokemonKey": "florges"
+  },
+  "メェークル": {
+    "dexId": 672,
+    "enName": "Skiddo",
+    "pokemonKey": "skiddo"
+  },
+  "ゴーゴート": {
+    "dexId": 673,
+    "enName": "Gogoat",
+    "pokemonKey": "gogoat"
+  },
+  "ヤンチャム": {
+    "dexId": 674,
+    "enName": "Pancham",
+    "pokemonKey": "pancham"
+  },
+  "ゴロンダ": {
+    "dexId": 675,
+    "enName": "Pangoro",
+    "pokemonKey": "pangoro"
+  },
+  "トリミアン": {
+    "dexId": 676,
+    "enName": "Furfrou",
+    "pokemonKey": "furfrou"
+  },
+  "ニャスパー": {
+    "dexId": 677,
+    "enName": "Espurr",
+    "pokemonKey": "espurr"
+  },
+  "ニャオニクス": {
+    "dexId": 678,
+    "enName": "Meowstic",
+    "pokemonKey": "meowstic"
+  },
+  "ヒトツキ": {
+    "dexId": 679,
+    "enName": "Honedge",
+    "pokemonKey": "honedge"
+  },
+  "ニダンギル": {
+    "dexId": 680,
+    "enName": "Doublade",
+    "pokemonKey": "doublade"
+  },
+  "ギルガルド": {
+    "dexId": 681,
+    "enName": "Aegislash",
+    "pokemonKey": "aegislash"
+  },
+  "シュシュプ": {
+    "dexId": 682,
+    "enName": "Spritzee",
+    "pokemonKey": "spritzee"
+  },
+  "フレフワン": {
+    "dexId": 683,
+    "enName": "Aromatisse",
+    "pokemonKey": "aromatisse"
+  },
+  "ペロッパフ": {
+    "dexId": 684,
+    "enName": "Swirlix",
+    "pokemonKey": "swirlix"
+  },
+  "ペロリーム": {
+    "dexId": 685,
+    "enName": "Slurpuff",
+    "pokemonKey": "slurpuff"
+  },
+  "マーイーカ": {
+    "dexId": 686,
+    "enName": "Inkay",
+    "pokemonKey": "inkay"
+  },
+  "カラマネロ": {
+    "dexId": 687,
+    "enName": "Malamar",
+    "pokemonKey": "malamar"
+  },
+  "カメテテ": {
+    "dexId": 688,
+    "enName": "Binacle",
+    "pokemonKey": "binacle"
+  },
+  "ガメノデス": {
+    "dexId": 689,
+    "enName": "Barbaracle",
+    "pokemonKey": "barbaracle"
+  },
+  "クズモー": {
+    "dexId": 690,
+    "enName": "Skrelp",
+    "pokemonKey": "skrelp"
+  },
+  "ドラミドロ": {
+    "dexId": 691,
+    "enName": "Dragalge",
+    "pokemonKey": "dragalge"
+  },
+  "ウデッポウ": {
+    "dexId": 692,
+    "enName": "Clauncher",
+    "pokemonKey": "clauncher"
+  },
+  "ブロスター": {
+    "dexId": 693,
+    "enName": "Clawitzer",
+    "pokemonKey": "clawitzer"
+  },
+  "エリキテル": {
+    "dexId": 694,
+    "enName": "Helioptile",
+    "pokemonKey": "helioptile"
+  },
+  "エレザード": {
+    "dexId": 695,
+    "enName": "Heliolisk",
+    "pokemonKey": "heliolisk"
+  },
+  "チゴラス": {
+    "dexId": 696,
+    "enName": "Tyrunt",
+    "pokemonKey": "tyrunt"
+  },
+  "ガチゴラス": {
+    "dexId": 697,
+    "enName": "Tyrantrum",
+    "pokemonKey": "tyrantrum"
+  },
+  "アマルス": {
+    "dexId": 698,
+    "enName": "Amaura",
+    "pokemonKey": "amaura"
+  },
+  "アマルルガ": {
+    "dexId": 699,
+    "enName": "Aurorus",
+    "pokemonKey": "aurorus"
+  },
+  "ニンフィア": {
+    "dexId": 700,
+    "enName": "Sylveon",
+    "pokemonKey": "sylveon"
+  },
+  "ルチャブル": {
+    "dexId": 701,
+    "enName": "Hawlucha",
+    "pokemonKey": "hawlucha"
+  },
+  "デデンネ": {
+    "dexId": 702,
+    "enName": "Dedenne",
+    "pokemonKey": "dedenne"
+  },
+  "メレシー": {
+    "dexId": 703,
+    "enName": "Carbink",
+    "pokemonKey": "carbink"
+  },
+  "ヌメラ": {
+    "dexId": 704,
+    "enName": "Goomy",
+    "pokemonKey": "goomy"
+  },
+  "ヌメイル": {
+    "dexId": 705,
+    "enName": "Sliggoo",
+    "pokemonKey": "sliggoo"
+  },
+  "ヌメルゴン": {
+    "dexId": 706,
+    "enName": "Goodra",
+    "pokemonKey": "goodra"
+  },
+  "クレッフィ": {
+    "dexId": 707,
+    "enName": "Klefki",
+    "pokemonKey": "klefki"
+  },
+  "ボクレー": {
+    "dexId": 708,
+    "enName": "Phantump",
+    "pokemonKey": "phantump"
+  },
+  "オーロット": {
+    "dexId": 709,
+    "enName": "Trevenant",
+    "pokemonKey": "trevenant"
+  },
+  "バケッチャ": {
+    "dexId": 710,
+    "enName": "Pumpkaboo",
+    "pokemonKey": "pumpkaboo"
+  },
+  "パンプジン": {
+    "dexId": 711,
+    "enName": "Gourgeist",
+    "pokemonKey": "gourgeist"
+  },
+  "カチコール": {
+    "dexId": 712,
+    "enName": "Bergmite",
+    "pokemonKey": "bergmite"
+  },
+  "クレベース": {
+    "dexId": 713,
+    "enName": "Avalugg",
+    "pokemonKey": "avalugg"
+  },
+  "オンバット": {
+    "dexId": 714,
+    "enName": "Noibat",
+    "pokemonKey": "noibat"
+  },
+  "オンバーン": {
+    "dexId": 715,
+    "enName": "Noivern",
+    "pokemonKey": "noivern"
+  },
+  "ゼルネアス": {
+    "dexId": 716,
+    "enName": "Xerneas",
+    "pokemonKey": "xerneas"
+  },
+  "イベルタル": {
+    "dexId": 717,
+    "enName": "Yveltal",
+    "pokemonKey": "yveltal"
+  },
+  "ジガルデ": {
+    "dexId": 718,
+    "enName": "Zygarde",
+    "pokemonKey": "zygarde"
+  },
+  "ディアンシー": {
+    "dexId": 719,
+    "enName": "Diancie",
+    "pokemonKey": "diancie"
+  },
+  "フーパ": {
+    "dexId": 720,
+    "enName": "Hoopa",
+    "pokemonKey": "hoopa"
+  },
+  "ボルケニオン": {
+    "dexId": 721,
+    "enName": "Volcanion",
+    "pokemonKey": "volcanion"
+  },
+  "モクロー": {
+    "dexId": 722,
+    "enName": "Rowlet",
+    "pokemonKey": "rowlet"
+  },
+  "フクスロー": {
+    "dexId": 723,
+    "enName": "Dartrix",
+    "pokemonKey": "dartrix"
+  },
+  "ジュナイパー": {
+    "dexId": 724,
+    "enName": "Decidueye",
+    "pokemonKey": "decidueye"
+  },
+  "ニャビー": {
+    "dexId": 725,
+    "enName": "Litten",
+    "pokemonKey": "litten"
+  },
+  "ニャヒート": {
+    "dexId": 726,
+    "enName": "Torracat",
+    "pokemonKey": "torracat"
+  },
+  "ガオガエン": {
+    "dexId": 727,
+    "enName": "Incineroar",
+    "pokemonKey": "incineroar"
+  },
+  "アシマリ": {
+    "dexId": 728,
+    "enName": "Popplio",
+    "pokemonKey": "popplio"
+  },
+  "オシャマリ": {
+    "dexId": 729,
+    "enName": "Brionne",
+    "pokemonKey": "brionne"
+  },
+  "アシレーヌ": {
+    "dexId": 730,
+    "enName": "Primarina",
+    "pokemonKey": "primarina"
+  },
+  "ツツケラ": {
+    "dexId": 731,
+    "enName": "Pikipek",
+    "pokemonKey": "pikipek"
+  },
+  "ケララッパ": {
+    "dexId": 732,
+    "enName": "Trumbeak",
+    "pokemonKey": "trumbeak"
+  },
+  "ドデカバシ": {
+    "dexId": 733,
+    "enName": "Toucannon",
+    "pokemonKey": "toucannon"
+  },
+  "ヤングース": {
+    "dexId": 734,
+    "enName": "Yungoos",
+    "pokemonKey": "yungoos"
+  },
+  "デカグース": {
+    "dexId": 735,
+    "enName": "Gumshoos",
+    "pokemonKey": "gumshoos"
+  },
+  "アゴジムシ": {
+    "dexId": 736,
+    "enName": "Grubbin",
+    "pokemonKey": "grubbin"
+  },
+  "デンヂムシ": {
+    "dexId": 737,
+    "enName": "Charjabug",
+    "pokemonKey": "charjabug"
+  },
+  "クワガノン": {
+    "dexId": 738,
+    "enName": "Vikavolt",
+    "pokemonKey": "vikavolt"
+  },
+  "マケンカニ": {
+    "dexId": 739,
+    "enName": "Crabrawler",
+    "pokemonKey": "crabrawler"
+  },
+  "ケケンカニ": {
+    "dexId": 740,
+    "enName": "Crabominable",
+    "pokemonKey": "crabominable"
+  },
+  "オドリドリ": {
+    "dexId": 741,
+    "enName": "Oricorio",
+    "pokemonKey": "oricorio"
+  },
+  "アブリー": {
+    "dexId": 742,
+    "enName": "Cutiefly",
+    "pokemonKey": "cutiefly"
+  },
+  "アブリボン": {
+    "dexId": 743,
+    "enName": "Ribombee",
+    "pokemonKey": "ribombee"
+  },
+  "イワンコ": {
+    "dexId": 744,
+    "enName": "Rockruff",
+    "pokemonKey": "rockruff"
+  },
+  "ルガルガン": {
+    "dexId": 745,
+    "enName": "Lycanroc",
+    "pokemonKey": "lycanroc"
+  },
+  "ヨワシ": {
+    "dexId": 746,
+    "enName": "Wishiwashi",
+    "pokemonKey": "wishiwashi"
+  },
+  "ヒドイデ": {
+    "dexId": 747,
+    "enName": "Mareanie",
+    "pokemonKey": "mareanie"
+  },
+  "ドヒドイデ": {
+    "dexId": 748,
+    "enName": "Toxapex",
+    "pokemonKey": "toxapex"
+  },
+  "ドロバンコ": {
+    "dexId": 749,
+    "enName": "Mudbray",
+    "pokemonKey": "mudbray"
+  },
+  "バンバドロ": {
+    "dexId": 750,
+    "enName": "Mudsdale",
+    "pokemonKey": "mudsdale"
+  },
+  "シズクモ": {
+    "dexId": 751,
+    "enName": "Dewpider",
+    "pokemonKey": "dewpider"
+  },
+  "オニシズクモ": {
+    "dexId": 752,
+    "enName": "Araquanid",
+    "pokemonKey": "araquanid"
+  },
+  "カリキリ": {
+    "dexId": 753,
+    "enName": "Fomantis",
+    "pokemonKey": "fomantis"
+  },
+  "ラランテス": {
+    "dexId": 754,
+    "enName": "Lurantis",
+    "pokemonKey": "lurantis"
+  },
+  "ネマシュ": {
+    "dexId": 755,
+    "enName": "Morelull",
+    "pokemonKey": "morelull"
+  },
+  "マシェード": {
+    "dexId": 756,
+    "enName": "Shiinotic",
+    "pokemonKey": "shiinotic"
+  },
+  "ヤトウモリ": {
+    "dexId": 757,
+    "enName": "Salandit",
+    "pokemonKey": "salandit"
+  },
+  "エンニュート": {
+    "dexId": 758,
+    "enName": "Salazzle",
+    "pokemonKey": "salazzle"
+  },
+  "ヌイコグマ": {
+    "dexId": 759,
+    "enName": "Stufful",
+    "pokemonKey": "stufful"
+  },
+  "キテルグマ": {
+    "dexId": 760,
+    "enName": "Bewear",
+    "pokemonKey": "bewear"
+  },
+  "アマカジ": {
+    "dexId": 761,
+    "enName": "Bounsweet",
+    "pokemonKey": "bounsweet"
+  },
+  "アママイコ": {
+    "dexId": 762,
+    "enName": "Steenee",
+    "pokemonKey": "steenee"
+  },
+  "アマージョ": {
+    "dexId": 763,
+    "enName": "Tsareena",
+    "pokemonKey": "tsareena"
+  },
+  "キュワワー": {
+    "dexId": 764,
+    "enName": "Comfey",
+    "pokemonKey": "comfey"
+  },
+  "ヤレユータン": {
+    "dexId": 765,
+    "enName": "Oranguru",
+    "pokemonKey": "oranguru"
+  },
+  "ナゲツケサル": {
+    "dexId": 766,
+    "enName": "Passimian",
+    "pokemonKey": "passimian"
+  },
+  "コソクムシ": {
+    "dexId": 767,
+    "enName": "Wimpod",
+    "pokemonKey": "wimpod"
+  },
+  "グソクムシャ": {
+    "dexId": 768,
+    "enName": "Golisopod",
+    "pokemonKey": "golisopod"
+  },
+  "スナバァ": {
+    "dexId": 769,
+    "enName": "Sandygast",
+    "pokemonKey": "sandygast"
+  },
+  "シロデスナ": {
+    "dexId": 770,
+    "enName": "Palossand",
+    "pokemonKey": "palossand"
+  },
+  "ナマコブシ": {
+    "dexId": 771,
+    "enName": "Pyukumuku",
+    "pokemonKey": "pyukumuku"
+  },
+  "タイプ：ヌル": {
+    "dexId": 772,
+    "enName": "Type: Null",
+    "pokemonKey": "type: null"
+  },
+  "シルヴァディ": {
+    "dexId": 773,
+    "enName": "Silvally",
+    "pokemonKey": "silvally"
+  },
+  "メテノ": {
+    "dexId": 774,
+    "enName": "Minior",
+    "pokemonKey": "minior"
+  },
+  "ネッコアラ": {
+    "dexId": 775,
+    "enName": "Komala",
+    "pokemonKey": "komala"
+  },
+  "バクガメス": {
+    "dexId": 776,
+    "enName": "Turtonator",
+    "pokemonKey": "turtonator"
+  },
+  "トゲデマル": {
+    "dexId": 777,
+    "enName": "Togedemaru",
+    "pokemonKey": "togedemaru"
+  },
+  "ミミッキュ": {
+    "dexId": 778,
+    "enName": "Mimikyu",
+    "pokemonKey": "mimikyu"
+  },
+  "ハギギシリ": {
+    "dexId": 779,
+    "enName": "Bruxish",
+    "pokemonKey": "bruxish"
+  },
+  "ジジーロン": {
+    "dexId": 780,
+    "enName": "Drampa",
+    "pokemonKey": "drampa"
+  },
+  "ダダリン": {
+    "dexId": 781,
+    "enName": "Dhelmise",
+    "pokemonKey": "dhelmise"
+  },
+  "ジャラコ": {
+    "dexId": 782,
+    "enName": "Jangmo-o",
+    "pokemonKey": "jangmo-o"
+  },
+  "ジャランゴ": {
+    "dexId": 783,
+    "enName": "Hakamo-o",
+    "pokemonKey": "hakamo-o"
+  },
+  "ジャラランガ": {
+    "dexId": 784,
+    "enName": "Kommo-o",
+    "pokemonKey": "kommo-o"
+  },
+  "カプ・コケコ": {
+    "dexId": 785,
+    "enName": "Tapu Koko",
+    "pokemonKey": "tapu koko"
+  },
+  "カプ・テテフ": {
+    "dexId": 786,
+    "enName": "Tapu Lele",
+    "pokemonKey": "tapu lele"
+  },
+  "カプ・ブルル": {
+    "dexId": 787,
+    "enName": "Tapu Bulu",
+    "pokemonKey": "tapu bulu"
+  },
+  "カプ・レヒレ": {
+    "dexId": 788,
+    "enName": "Tapu Fini",
+    "pokemonKey": "tapu fini"
+  },
+  "コスモッグ": {
+    "dexId": 789,
+    "enName": "Cosmog",
+    "pokemonKey": "cosmog"
+  },
+  "コスモウム": {
+    "dexId": 790,
+    "enName": "Cosmoem",
+    "pokemonKey": "cosmoem"
+  },
+  "ソルガレオ": {
+    "dexId": 791,
+    "enName": "Solgaleo",
+    "pokemonKey": "solgaleo"
+  },
+  "ルナアーラ": {
+    "dexId": 792,
+    "enName": "Lunala",
+    "pokemonKey": "lunala"
+  },
+  "ウツロイド": {
+    "dexId": 793,
+    "enName": "Nihilego",
+    "pokemonKey": "nihilego"
+  },
+  "マッシブーン": {
+    "dexId": 794,
+    "enName": "Buzzwole",
+    "pokemonKey": "buzzwole"
+  },
+  "フェローチェ": {
+    "dexId": 795,
+    "enName": "Pheromosa",
+    "pokemonKey": "pheromosa"
+  },
+  "デンジュモク": {
+    "dexId": 796,
+    "enName": "Xurkitree",
+    "pokemonKey": "xurkitree"
+  },
+  "テッカグヤ": {
+    "dexId": 797,
+    "enName": "Celesteela",
+    "pokemonKey": "celesteela"
+  },
+  "カミツルギ": {
+    "dexId": 798,
+    "enName": "Kartana",
+    "pokemonKey": "kartana"
+  },
+  "アクジキング": {
+    "dexId": 799,
+    "enName": "Guzzlord",
+    "pokemonKey": "guzzlord"
+  },
+  "ネクロズマ": {
+    "dexId": 800,
+    "enName": "Necrozma",
+    "pokemonKey": "necrozma"
+  },
+  "マギアナ": {
+    "dexId": 801,
+    "enName": "Magearna",
+    "pokemonKey": "magearna"
+  },
+  "マーシャドー": {
+    "dexId": 802,
+    "enName": "Marshadow",
+    "pokemonKey": "marshadow"
+  },
+  "ベベノム": {
+    "dexId": 803,
+    "enName": "Poipole",
+    "pokemonKey": "poipole"
+  },
+  "アーゴヨン": {
+    "dexId": 804,
+    "enName": "Naganadel",
+    "pokemonKey": "naganadel"
+  },
+  "ツンデツンデ": {
+    "dexId": 805,
+    "enName": "Stakataka",
+    "pokemonKey": "stakataka"
+  },
+  "ズガドーン": {
+    "dexId": 806,
+    "enName": "Blacephalon",
+    "pokemonKey": "blacephalon"
+  },
+  "ゼラオラ": {
+    "dexId": 807,
+    "enName": "Zeraora",
+    "pokemonKey": "zeraora"
+  },
+  "メルタン": {
+    "dexId": 808,
+    "enName": "Meltan",
+    "pokemonKey": "meltan"
+  },
+  "メルメタル": {
+    "dexId": 809,
+    "enName": "Melmetal",
+    "pokemonKey": "melmetal"
+  },
+  "サルノリ": {
+    "dexId": 810,
+    "enName": "Grookey",
+    "pokemonKey": "grookey"
+  },
+  "バチンキー": {
+    "dexId": 811,
+    "enName": "Thwackey",
+    "pokemonKey": "thwackey"
+  },
+  "ゴリランダー": {
+    "dexId": 812,
+    "enName": "Rillaboom",
+    "pokemonKey": "rillaboom"
+  },
+  "ヒバニー": {
+    "dexId": 813,
+    "enName": "Scorbunny",
+    "pokemonKey": "scorbunny"
+  },
+  "ラビフット": {
+    "dexId": 814,
+    "enName": "Raboot",
+    "pokemonKey": "raboot"
+  },
+  "エースバーン": {
+    "dexId": 815,
+    "enName": "Cinderace",
+    "pokemonKey": "cinderace"
+  },
+  "メッソン": {
+    "dexId": 816,
+    "enName": "Sobble",
+    "pokemonKey": "sobble"
+  },
+  "ジメレオン": {
+    "dexId": 817,
+    "enName": "Drizzile",
+    "pokemonKey": "drizzile"
+  },
+  "インテレオン": {
+    "dexId": 818,
+    "enName": "Inteleon",
+    "pokemonKey": "inteleon"
+  },
+  "ホシガリス": {
+    "dexId": 819,
+    "enName": "Skwovet",
+    "pokemonKey": "skwovet"
+  },
+  "ヨクバリス": {
+    "dexId": 820,
+    "enName": "Greedent",
+    "pokemonKey": "greedent"
+  },
+  "ココガラ": {
+    "dexId": 821,
+    "enName": "Rookidee",
+    "pokemonKey": "rookidee"
+  },
+  "アオガラス": {
+    "dexId": 822,
+    "enName": "Corvisquire",
+    "pokemonKey": "corvisquire"
+  },
+  "アーマーガア": {
+    "dexId": 823,
+    "enName": "Corviknight",
+    "pokemonKey": "corviknight"
+  },
+  "サッチムシ": {
+    "dexId": 824,
+    "enName": "Blipbug",
+    "pokemonKey": "blipbug"
+  },
+  "レドームシ": {
+    "dexId": 825,
+    "enName": "Dottler",
+    "pokemonKey": "dottler"
+  },
+  "イオルブ": {
+    "dexId": 826,
+    "enName": "Orbeetle",
+    "pokemonKey": "orbeetle"
+  },
+  "クスネ": {
+    "dexId": 827,
+    "enName": "Nickit",
+    "pokemonKey": "nickit"
+  },
+  "フォクスライ": {
+    "dexId": 828,
+    "enName": "Thievul",
+    "pokemonKey": "thievul"
+  },
+  "ヒメンカ": {
+    "dexId": 829,
+    "enName": "Gossifleur",
+    "pokemonKey": "gossifleur"
+  },
+  "ワタシラガ": {
+    "dexId": 830,
+    "enName": "Eldegoss",
+    "pokemonKey": "eldegoss"
+  },
+  "ウールー": {
+    "dexId": 831,
+    "enName": "Wooloo",
+    "pokemonKey": "wooloo"
+  },
+  "バイウールー": {
+    "dexId": 832,
+    "enName": "Dubwool",
+    "pokemonKey": "dubwool"
+  },
+  "カムカメ": {
+    "dexId": 833,
+    "enName": "Chewtle",
+    "pokemonKey": "chewtle"
+  },
+  "カジリガメ": {
+    "dexId": 834,
+    "enName": "Drednaw",
+    "pokemonKey": "drednaw"
+  },
+  "ワンパチ": {
+    "dexId": 835,
+    "enName": "Yamper",
+    "pokemonKey": "yamper"
+  },
+  "パルスワン": {
+    "dexId": 836,
+    "enName": "Boltund",
+    "pokemonKey": "boltund"
+  },
+  "タンドン": {
+    "dexId": 837,
+    "enName": "Rolycoly",
+    "pokemonKey": "rolycoly"
+  },
+  "トロッゴン": {
+    "dexId": 838,
+    "enName": "Carkol",
+    "pokemonKey": "carkol"
+  },
+  "セキタンザン": {
+    "dexId": 839,
+    "enName": "Coalossal",
+    "pokemonKey": "coalossal"
+  },
+  "カジッチュ": {
+    "dexId": 840,
+    "enName": "Applin",
+    "pokemonKey": "applin"
+  },
+  "アップリュー": {
+    "dexId": 841,
+    "enName": "Flapple",
+    "pokemonKey": "flapple"
+  },
+  "タルップル": {
+    "dexId": 842,
+    "enName": "Appletun",
+    "pokemonKey": "appletun"
+  },
+  "スナヘビ": {
+    "dexId": 843,
+    "enName": "Silicobra",
+    "pokemonKey": "silicobra"
+  },
+  "サダイジャ": {
+    "dexId": 844,
+    "enName": "Sandaconda",
+    "pokemonKey": "sandaconda"
+  },
+  "ウッウ": {
+    "dexId": 845,
+    "enName": "Cramorant",
+    "pokemonKey": "cramorant"
+  },
+  "サシカマス": {
+    "dexId": 846,
+    "enName": "Arrokuda",
+    "pokemonKey": "arrokuda"
+  },
+  "カマスジョー": {
+    "dexId": 847,
+    "enName": "Barraskewda",
+    "pokemonKey": "barraskewda"
+  },
+  "エレズン": {
+    "dexId": 848,
+    "enName": "Toxel",
+    "pokemonKey": "toxel"
+  },
+  "ストリンダー": {
+    "dexId": 849,
+    "enName": "Toxtricity",
+    "pokemonKey": "toxtricity"
+  },
+  "ヤクデ": {
+    "dexId": 850,
+    "enName": "Sizzlipede",
+    "pokemonKey": "sizzlipede"
+  },
+  "マルヤクデ": {
+    "dexId": 851,
+    "enName": "Centiskorch",
+    "pokemonKey": "centiskorch"
+  },
+  "タタッコ": {
+    "dexId": 852,
+    "enName": "Clobbopus",
+    "pokemonKey": "clobbopus"
+  },
+  "オトスパス": {
+    "dexId": 853,
+    "enName": "Grapploct",
+    "pokemonKey": "grapploct"
+  },
+  "ヤバチャ": {
+    "dexId": 854,
+    "enName": "Sinistea",
+    "pokemonKey": "sinistea"
+  },
+  "ポットデス": {
+    "dexId": 855,
+    "enName": "Polteageist",
+    "pokemonKey": "polteageist"
+  },
+  "ミブリム": {
+    "dexId": 856,
+    "enName": "Hatenna",
+    "pokemonKey": "hatenna"
+  },
+  "テブリム": {
+    "dexId": 857,
+    "enName": "Hattrem",
+    "pokemonKey": "hattrem"
+  },
+  "ブリムオン": {
+    "dexId": 858,
+    "enName": "Hatterene",
+    "pokemonKey": "hatterene"
+  },
+  "ベロバー": {
+    "dexId": 859,
+    "enName": "Impidimp",
+    "pokemonKey": "impidimp"
+  },
+  "ギモー": {
+    "dexId": 860,
+    "enName": "Morgrem",
+    "pokemonKey": "morgrem"
+  },
+  "オーロンゲ": {
+    "dexId": 861,
+    "enName": "Grimmsnarl",
+    "pokemonKey": "grimmsnarl"
+  },
+  "タチフサグマ": {
+    "dexId": 862,
+    "enName": "Obstagoon",
+    "pokemonKey": "obstagoon"
+  },
+  "ニャイキング": {
+    "dexId": 863,
+    "enName": "Perrserker",
+    "pokemonKey": "perrserker"
+  },
+  "サニゴーン": {
+    "dexId": 864,
+    "enName": "Cursola",
+    "pokemonKey": "cursola"
+  },
+  "ネギガナイト": {
+    "dexId": 865,
+    "enName": "Sirfetch’d",
+    "pokemonKey": "sirfetch’d"
+  },
+  "バリコオル": {
+    "dexId": 866,
+    "enName": "Mr. Rime",
+    "pokemonKey": "mr. rime"
+  },
+  "デスバーン": {
+    "dexId": 867,
+    "enName": "Runerigus",
+    "pokemonKey": "runerigus"
+  },
+  "マホミル": {
+    "dexId": 868,
+    "enName": "Milcery",
+    "pokemonKey": "milcery"
+  },
+  "マホイップ": {
+    "dexId": 869,
+    "enName": "Alcremie",
+    "pokemonKey": "alcremie"
+  },
+  "タイレーツ": {
+    "dexId": 870,
+    "enName": "Falinks",
+    "pokemonKey": "falinks"
+  },
+  "バチンウニ": {
+    "dexId": 871,
+    "enName": "Pincurchin",
+    "pokemonKey": "pincurchin"
+  },
+  "ユキハミ": {
+    "dexId": 872,
+    "enName": "Snom",
+    "pokemonKey": "snom"
+  },
+  "モスノウ": {
+    "dexId": 873,
+    "enName": "Frosmoth",
+    "pokemonKey": "frosmoth"
+  },
+  "イシヘンジン": {
+    "dexId": 874,
+    "enName": "Stonjourner",
+    "pokemonKey": "stonjourner"
+  },
+  "コオリッポ": {
+    "dexId": 875,
+    "enName": "Eiscue",
+    "pokemonKey": "eiscue"
+  },
+  "イエッサン": {
+    "dexId": 876,
+    "enName": "Indeedee",
+    "pokemonKey": "indeedee"
+  },
+  "モルペコ": {
+    "dexId": 877,
+    "enName": "Morpeko",
+    "pokemonKey": "morpeko"
+  },
+  "ゾウドウ": {
+    "dexId": 878,
+    "enName": "Cufant",
+    "pokemonKey": "cufant"
+  },
+  "ダイオウドウ": {
+    "dexId": 879,
+    "enName": "Copperajah",
+    "pokemonKey": "copperajah"
+  },
+  "パッチラゴン": {
+    "dexId": 880,
+    "enName": "Dracozolt",
+    "pokemonKey": "dracozolt"
+  },
+  "パッチルドン": {
+    "dexId": 881,
+    "enName": "Arctozolt",
+    "pokemonKey": "arctozolt"
+  },
+  "ウオノラゴン": {
+    "dexId": 882,
+    "enName": "Dracovish",
+    "pokemonKey": "dracovish"
+  },
+  "ウオチルドン": {
+    "dexId": 883,
+    "enName": "Arctovish",
+    "pokemonKey": "arctovish"
+  },
+  "ジュラルドン": {
+    "dexId": 884,
+    "enName": "Duraludon",
+    "pokemonKey": "duraludon"
+  },
+  "ドラメシヤ": {
+    "dexId": 885,
+    "enName": "Dreepy",
+    "pokemonKey": "dreepy"
+  },
+  "ドロンチ": {
+    "dexId": 886,
+    "enName": "Drakloak",
+    "pokemonKey": "drakloak"
+  },
+  "ドラパルト": {
+    "dexId": 887,
+    "enName": "Dragapult",
+    "pokemonKey": "dragapult"
+  },
+  "ザシアン": {
+    "dexId": 888,
+    "enName": "Zacian",
+    "pokemonKey": "zacian"
+  },
+  "ザマゼンタ": {
+    "dexId": 889,
+    "enName": "Zamazenta",
+    "pokemonKey": "zamazenta"
+  },
+  "ムゲンダイナ": {
+    "dexId": 890,
+    "enName": "Eternatus",
+    "pokemonKey": "eternatus"
+  },
+  "ダクマ": {
+    "dexId": 891,
+    "enName": "Kubfu",
+    "pokemonKey": "kubfu"
+  },
+  "ウーラオス": {
+    "dexId": 892,
+    "enName": "Urshifu",
+    "pokemonKey": "urshifu"
+  },
+  "ザルード": {
+    "dexId": 893,
+    "enName": "Zarude",
+    "pokemonKey": "zarude"
+  },
+  "レジエレキ": {
+    "dexId": 894,
+    "enName": "Regieleki",
+    "pokemonKey": "regieleki"
+  },
+  "レジドラゴ": {
+    "dexId": 895,
+    "enName": "Regidrago",
+    "pokemonKey": "regidrago"
+  },
+  "ブリザポス": {
+    "dexId": 896,
+    "enName": "Glastrier",
+    "pokemonKey": "glastrier"
+  },
+  "レイスポス": {
+    "dexId": 897,
+    "enName": "Spectrier",
+    "pokemonKey": "spectrier"
+  },
+  "バドレックス": {
+    "dexId": 898,
+    "enName": "Calyrex",
+    "pokemonKey": "calyrex"
+  },
+  "アヤシシ": {
+    "dexId": 899,
+    "enName": "Wyrdeer",
+    "pokemonKey": "wyrdeer"
+  },
+  "バサギリ": {
+    "dexId": 900,
+    "enName": "Kleavor",
+    "pokemonKey": "kleavor"
+  },
+  "ガチグマ": {
+    "dexId": 901,
+    "enName": "Ursaluna",
+    "pokemonKey": "ursaluna"
+  },
+  "イダイトウ": {
+    "dexId": 902,
+    "enName": "Basculegion",
+    "pokemonKey": "basculegion"
+  },
+  "オオニューラ": {
+    "dexId": 903,
+    "enName": "Sneasler",
+    "pokemonKey": "sneasler"
+  },
+  "ハリーマン": {
+    "dexId": 904,
+    "enName": "Overqwil",
+    "pokemonKey": "overqwil"
+  },
+  "ラブトロス": {
+    "dexId": 905,
+    "enName": "Enamorus",
+    "pokemonKey": "enamorus"
+  },
+  "ニャオハ": {
+    "dexId": 906,
+    "enName": "Sprigatito",
+    "pokemonKey": "sprigatito"
+  },
+  "ニャローテ": {
+    "dexId": 907,
+    "enName": "Floragato",
+    "pokemonKey": "floragato"
+  },
+  "マスカーニャ": {
+    "dexId": 908,
+    "enName": "Meowscarada",
+    "pokemonKey": "meowscarada"
+  },
+  "ホゲータ": {
+    "dexId": 909,
+    "enName": "Fuecoco",
+    "pokemonKey": "fuecoco"
+  },
+  "アチゲータ": {
+    "dexId": 910,
+    "enName": "Crocalor",
+    "pokemonKey": "crocalor"
+  },
+  "ラウドボーン": {
+    "dexId": 911,
+    "enName": "Skeledirge",
+    "pokemonKey": "skeledirge"
+  },
+  "クワッス": {
+    "dexId": 912,
+    "enName": "Quaxly",
+    "pokemonKey": "quaxly"
+  },
+  "ウェルカモ": {
+    "dexId": 913,
+    "enName": "Quaxwell",
+    "pokemonKey": "quaxwell"
+  },
+  "ウェーニバル": {
+    "dexId": 914,
+    "enName": "Quaquaval",
+    "pokemonKey": "quaquaval"
+  },
+  "グルトン": {
+    "dexId": 915,
+    "enName": "Lechonk",
+    "pokemonKey": "lechonk"
+  },
+  "パフュートン": {
+    "dexId": 916,
+    "enName": "Oinkologne",
+    "pokemonKey": "oinkologne"
+  },
+  "タマンチュラ": {
+    "dexId": 917,
+    "enName": "Tarountula",
+    "pokemonKey": "tarountula"
+  },
+  "ワナイダー": {
+    "dexId": 918,
+    "enName": "Spidops",
+    "pokemonKey": "spidops"
+  },
+  "マメバッタ": {
+    "dexId": 919,
+    "enName": "Nymble",
+    "pokemonKey": "nymble"
+  },
+  "エクスレッグ": {
+    "dexId": 920,
+    "enName": "Lokix",
+    "pokemonKey": "lokix"
+  },
+  "パモ": {
+    "dexId": 921,
+    "enName": "Pawmi",
+    "pokemonKey": "pawmi"
+  },
+  "パモット": {
+    "dexId": 922,
+    "enName": "Pawmo",
+    "pokemonKey": "pawmo"
+  },
+  "パーモット": {
+    "dexId": 923,
+    "enName": "Pawmot",
+    "pokemonKey": "pawmot"
+  },
+  "ワッカネズミ": {
+    "dexId": 924,
+    "enName": "Tandemaus",
+    "pokemonKey": "tandemaus"
+  },
+  "イッカネズミ": {
+    "dexId": 925,
+    "enName": "Maushold",
+    "pokemonKey": "maushold"
+  },
+  "パピモッチ": {
+    "dexId": 926,
+    "enName": "Fidough",
+    "pokemonKey": "fidough"
+  },
+  "バウッツェル": {
+    "dexId": 927,
+    "enName": "Dachsbun",
+    "pokemonKey": "dachsbun"
+  },
+  "ミニーブ": {
+    "dexId": 928,
+    "enName": "Smoliv",
+    "pokemonKey": "smoliv"
+  },
+  "オリーニョ": {
+    "dexId": 929,
+    "enName": "Dolliv",
+    "pokemonKey": "dolliv"
+  },
+  "オリーヴァ": {
+    "dexId": 930,
+    "enName": "Arboliva",
+    "pokemonKey": "arboliva"
+  },
+  "イキリンコ": {
+    "dexId": 931,
+    "enName": "Squawkabilly",
+    "pokemonKey": "squawkabilly"
+  },
+  "コジオ": {
+    "dexId": 932,
+    "enName": "Nacli",
+    "pokemonKey": "nacli"
+  },
+  "ジオヅム": {
+    "dexId": 933,
+    "enName": "Naclstack",
+    "pokemonKey": "naclstack"
+  },
+  "キョジオーン": {
+    "dexId": 934,
+    "enName": "Garganacl",
+    "pokemonKey": "garganacl"
+  },
+  "カルボウ": {
+    "dexId": 935,
+    "enName": "Charcadet",
+    "pokemonKey": "charcadet"
+  },
+  "グレンアルマ": {
+    "dexId": 936,
+    "enName": "Armarouge",
+    "pokemonKey": "armarouge"
+  },
+  "ソウブレイズ": {
+    "dexId": 937,
+    "enName": "Ceruledge",
+    "pokemonKey": "ceruledge"
+  },
+  "ズピカ": {
+    "dexId": 938,
+    "enName": "Tadbulb",
+    "pokemonKey": "tadbulb"
+  },
+  "ハラバリー": {
+    "dexId": 939,
+    "enName": "Bellibolt",
+    "pokemonKey": "bellibolt"
+  },
+  "カイデン": {
+    "dexId": 940,
+    "enName": "Wattrel",
+    "pokemonKey": "wattrel"
+  },
+  "タイカイデン": {
+    "dexId": 941,
+    "enName": "Kilowattrel",
+    "pokemonKey": "kilowattrel"
+  },
+  "オラチフ": {
+    "dexId": 942,
+    "enName": "Maschiff",
+    "pokemonKey": "maschiff"
+  },
+  "マフィティフ": {
+    "dexId": 943,
+    "enName": "Mabosstiff",
+    "pokemonKey": "mabosstiff"
+  },
+  "シルシュルー": {
+    "dexId": 944,
+    "enName": "Shroodle",
+    "pokemonKey": "shroodle"
+  },
+  "タギングル": {
+    "dexId": 945,
+    "enName": "Grafaiai",
+    "pokemonKey": "grafaiai"
+  },
+  "アノクサ": {
+    "dexId": 946,
+    "enName": "Bramblin",
+    "pokemonKey": "bramblin"
+  },
+  "アノホラグサ": {
+    "dexId": 947,
+    "enName": "Brambleghast",
+    "pokemonKey": "brambleghast"
+  },
+  "ノノクラゲ": {
+    "dexId": 948,
+    "enName": "Toedscool",
+    "pokemonKey": "toedscool"
+  },
+  "リククラゲ": {
+    "dexId": 949,
+    "enName": "Toedscruel",
+    "pokemonKey": "toedscruel"
+  },
+  "ガケガニ": {
+    "dexId": 950,
+    "enName": "Klawf",
+    "pokemonKey": "klawf"
+  },
+  "カプサイジ": {
+    "dexId": 951,
+    "enName": "Capsakid",
+    "pokemonKey": "capsakid"
+  },
+  "スコヴィラン": {
+    "dexId": 952,
+    "enName": "Scovillain",
+    "pokemonKey": "scovillain"
+  },
+  "シガロコ": {
+    "dexId": 953,
+    "enName": "Rellor",
+    "pokemonKey": "rellor"
+  },
+  "ベラカス": {
+    "dexId": 954,
+    "enName": "Rabsca",
+    "pokemonKey": "rabsca"
+  },
+  "ヒラヒナ": {
+    "dexId": 955,
+    "enName": "Flittle",
+    "pokemonKey": "flittle"
+  },
+  "クエスパトラ": {
+    "dexId": 956,
+    "enName": "Espathra",
+    "pokemonKey": "espathra"
+  },
+  "カヌチャン": {
+    "dexId": 957,
+    "enName": "Tinkatink",
+    "pokemonKey": "tinkatink"
+  },
+  "ナカヌチャン": {
+    "dexId": 958,
+    "enName": "Tinkatuff",
+    "pokemonKey": "tinkatuff"
+  },
+  "デカヌチャン": {
+    "dexId": 959,
+    "enName": "Tinkaton",
+    "pokemonKey": "tinkaton"
+  },
+  "ウミディグダ": {
+    "dexId": 960,
+    "enName": "Wiglett",
+    "pokemonKey": "wiglett"
+  },
+  "ウミトリオ": {
+    "dexId": 961,
+    "enName": "Wugtrio",
+    "pokemonKey": "wugtrio"
+  },
+  "オトシドリ": {
+    "dexId": 962,
+    "enName": "Bombirdier",
+    "pokemonKey": "bombirdier"
+  },
+  "ナミイルカ": {
+    "dexId": 963,
+    "enName": "Finizen",
+    "pokemonKey": "finizen"
+  },
+  "イルカマン": {
+    "dexId": 964,
+    "enName": "Palafin",
+    "pokemonKey": "palafin"
+  },
+  "ブロロン": {
+    "dexId": 965,
+    "enName": "Varoom",
+    "pokemonKey": "varoom"
+  },
+  "ブロロローム": {
+    "dexId": 966,
+    "enName": "Revavroom",
+    "pokemonKey": "revavroom"
+  },
+  "モトトカゲ": {
+    "dexId": 967,
+    "enName": "Cyclizar",
+    "pokemonKey": "cyclizar"
+  },
+  "ミミズズ": {
+    "dexId": 968,
+    "enName": "Orthworm",
+    "pokemonKey": "orthworm"
+  },
+  "キラーメ": {
+    "dexId": 969,
+    "enName": "Glimmet",
+    "pokemonKey": "glimmet"
+  },
+  "キラフロル": {
+    "dexId": 970,
+    "enName": "Glimmora",
+    "pokemonKey": "glimmora"
+  },
+  "ボチ": {
+    "dexId": 971,
+    "enName": "Greavard",
+    "pokemonKey": "greavard"
+  },
+  "ハカドッグ": {
+    "dexId": 972,
+    "enName": "Houndstone",
+    "pokemonKey": "houndstone"
+  },
+  "カラミンゴ": {
+    "dexId": 973,
+    "enName": "Flamigo",
+    "pokemonKey": "flamigo"
+  },
+  "アルクジラ": {
+    "dexId": 974,
+    "enName": "Cetoddle",
+    "pokemonKey": "cetoddle"
+  },
+  "ハルクジラ": {
+    "dexId": 975,
+    "enName": "Cetitan",
+    "pokemonKey": "cetitan"
+  },
+  "ミガルーサ": {
+    "dexId": 976,
+    "enName": "Veluza",
+    "pokemonKey": "veluza"
+  },
+  "ヘイラッシャ": {
+    "dexId": 977,
+    "enName": "Dondozo",
+    "pokemonKey": "dondozo"
+  },
+  "シャリタツ": {
+    "dexId": 978,
+    "enName": "Tatsugiri",
+    "pokemonKey": "tatsugiri"
+  },
+  "コノヨザル": {
+    "dexId": 979,
+    "enName": "Annihilape",
+    "pokemonKey": "annihilape"
+  },
+  "ドオー": {
+    "dexId": 980,
+    "enName": "Clodsire",
+    "pokemonKey": "clodsire"
+  },
+  "リキキリン": {
+    "dexId": 981,
+    "enName": "Farigiraf",
+    "pokemonKey": "farigiraf"
+  },
+  "ノココッチ": {
+    "dexId": 982,
+    "enName": "Dudunsparce",
+    "pokemonKey": "dudunsparce"
+  },
+  "ドドゲザン": {
+    "dexId": 983,
+    "enName": "Kingambit",
+    "pokemonKey": "kingambit"
+  },
+  "イダイナキバ": {
+    "dexId": 984,
+    "enName": "Great Tusk",
+    "pokemonKey": "great tusk"
+  },
+  "サケブシッポ": {
+    "dexId": 985,
+    "enName": "Scream Tail",
+    "pokemonKey": "scream tail"
+  },
+  "アラブルタケ": {
+    "dexId": 986,
+    "enName": "Brute Bonnet",
+    "pokemonKey": "brute bonnet"
+  },
+  "ハバタクカミ": {
+    "dexId": 987,
+    "enName": "Flutter Mane",
+    "pokemonKey": "flutter mane"
+  },
+  "チヲハウハネ": {
+    "dexId": 988,
+    "enName": "Slither Wing",
+    "pokemonKey": "slither wing"
+  },
+  "スナノケガワ": {
+    "dexId": 989,
+    "enName": "Sandy Shocks",
+    "pokemonKey": "sandy shocks"
+  },
+  "テツノワダチ": {
+    "dexId": 990,
+    "enName": "Iron Treads",
+    "pokemonKey": "iron treads"
+  },
+  "テツノツツミ": {
+    "dexId": 991,
+    "enName": "Iron Bundle",
+    "pokemonKey": "iron bundle"
+  },
+  "テツノカイナ": {
+    "dexId": 992,
+    "enName": "Iron Hands",
+    "pokemonKey": "iron hands"
+  },
+  "テツノコウベ": {
+    "dexId": 993,
+    "enName": "Iron Jugulis",
+    "pokemonKey": "iron jugulis"
+  },
+  "テツノドクガ": {
+    "dexId": 994,
+    "enName": "Iron Moth",
+    "pokemonKey": "iron moth"
+  },
+  "テツノイバラ": {
+    "dexId": 995,
+    "enName": "Iron Thorns",
+    "pokemonKey": "iron thorns"
+  },
+  "セビエ": {
+    "dexId": 996,
+    "enName": "Frigibax",
+    "pokemonKey": "frigibax"
+  },
+  "セゴール": {
+    "dexId": 997,
+    "enName": "Arctibax",
+    "pokemonKey": "arctibax"
+  },
+  "セグレイブ": {
+    "dexId": 998,
+    "enName": "Baxcalibur",
+    "pokemonKey": "baxcalibur"
+  },
+  "コレクレー": {
+    "dexId": 999,
+    "enName": "Gimmighoul",
+    "pokemonKey": "gimmighoul"
+  },
+  "サーフゴー": {
+    "dexId": 1000,
+    "enName": "Gholdengo",
+    "pokemonKey": "gholdengo"
+  },
+  "チオンジェン": {
+    "dexId": 1001,
+    "enName": "Wo-Chien",
+    "pokemonKey": "wo-chien"
+  },
+  "パオジアン": {
+    "dexId": 1002,
+    "enName": "Chien-Pao",
+    "pokemonKey": "chien-pao"
+  },
+  "ディンルー": {
+    "dexId": 1003,
+    "enName": "Ting-Lu",
+    "pokemonKey": "ting-lu"
+  },
+  "イーユイ": {
+    "dexId": 1004,
+    "enName": "Chi-Yu",
+    "pokemonKey": "chi-yu"
+  },
+  "トドロクツキ": {
+    "dexId": 1005,
+    "enName": "Roaring Moon",
+    "pokemonKey": "roaring moon"
+  },
+  "テツノブジン": {
+    "dexId": 1006,
+    "enName": "Iron Valiant",
+    "pokemonKey": "iron valiant"
+  },
+  "コライドン": {
+    "dexId": 1007,
+    "enName": "Koraidon",
+    "pokemonKey": "koraidon"
+  },
+  "ミライドン": {
+    "dexId": 1008,
+    "enName": "Miraidon",
+    "pokemonKey": "miraidon"
+  },
+  "ウネルミナモ": {
+    "dexId": 1009,
+    "enName": "Walking Wake",
+    "pokemonKey": "walking wake"
+  },
+  "テツノイサハ": {
+    "dexId": 1010,
+    "enName": "Iron Leaves",
+    "pokemonKey": "iron leaves"
+  },
+  "カミッチュ": {
+    "dexId": 1011,
+    "enName": "Dipplin",
+    "pokemonKey": "dipplin"
+  },
+  "チャデス": {
+    "dexId": 1012,
+    "enName": "Poltchageist",
+    "pokemonKey": "poltchageist"
+  },
+  "ヤバソチャ": {
+    "dexId": 1013,
+    "enName": "Sinistcha",
+    "pokemonKey": "sinistcha"
+  },
+  "イイネイヌ": {
+    "dexId": 1014,
+    "enName": "Okidogi",
+    "pokemonKey": "okidogi"
+  },
+  "マシマシラ": {
+    "dexId": 1015,
+    "enName": "Munkidori",
+    "pokemonKey": "munkidori"
+  },
+  "キチキギス": {
+    "dexId": 1016,
+    "enName": "Fezandipiti",
+    "pokemonKey": "fezandipiti"
+  },
+  "オーガポン": {
+    "dexId": 1017,
+    "enName": "Ogerpon",
+    "pokemonKey": "ogerpon"
+  },
+  "ブリジュラス": {
+    "dexId": 1018,
+    "enName": "Archaludon",
+    "pokemonKey": "archaludon"
+  },
+  "カミツオロチ": {
+    "dexId": 1019,
+    "enName": "Hydrapple",
+    "pokemonKey": "hydrapple"
+  },
+  "ウガツホムラ": {
+    "dexId": 1020,
+    "enName": "Gouging Fire",
+    "pokemonKey": "gouging fire"
+  },
+  "タケルライコ": {
+    "dexId": 1021,
+    "enName": "Raging Bolt",
+    "pokemonKey": "raging bolt"
+  },
+  "テツノイワオ": {
+    "dexId": 1022,
+    "enName": "Iron Boulder",
+    "pokemonKey": "iron boulder"
+  },
+  "テツノカシラ": {
+    "dexId": 1023,
+    "enName": "Iron Crown",
+    "pokemonKey": "iron crown"
+  },
+  "テラパゴス": {
+    "dexId": 1024,
+    "enName": "Terapagos",
+    "pokemonKey": "terapagos"
+  },
+  "モモワロウ": {
+    "dexId": 1025,
+    "enName": "Pecharunt",
+    "pokemonKey": "pecharunt"
+  }
+}
