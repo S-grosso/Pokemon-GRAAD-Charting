@@ -217,7 +217,7 @@ async function buildCatalogFromTCGdex() {
     }
   }
 
-  // Enrichment: JP-only -> nameEn via dexId; immagini via detail se mancanti
+    // Enrichment: JP-only -> nameEn via dexId; immagini via detail se mancanti
   let detailFetches = 0;
 
   for (const v of agg.values()) {
@@ -234,18 +234,19 @@ async function buildCatalogFromTCGdex() {
     }
 
     // JP-only: riempi nameEn via dexId
-if (v.nameJa && !v.nameEn && v.cardIdJa) {
-  const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
-  detailFetches++;
+    if (v.nameJa && !v.nameEn && v.cardIdJa) {
+      const detail = await fetchTCGdexCardDetail("ja", v.cardIdJa);
+      detailFetches++;
 
-  const dex = pickDexId(detail);
-  if (dex != null) {
-    const enName = await getPokemonNameEnByDexId(dex);
-    if (enName) v.nameEn = enName;
-  }
+      const dex = pickDexId(detail);
+      if (dex != null) {
+        const enName = await getPokemonNameEnByDexId(dex);
+        if (enName) v.nameEn = enName;
+      }
 
-  if (detailFetches % 40 === 0) await sleep(700);
-}
+      if (detailFetches % 40 === 0) await sleep(700);
+    }
+  } // <-- QUESTA era la graffa mancante
 
   // Esplodi in record per lingua
   const out = [];
@@ -620,11 +621,11 @@ async function main() {
       const langCounts = validateCatalogShape(catalog);
       console.log(`Catalog rebuilt: total=${catalog.cards.length} en=${langCounts.en || 0} ja=${langCounts.ja || 0}`);
       writeJson(catalogFile, catalog);
-    } catch (e) {
+        } catch (e) {
       console.error("Catalog build failed:", e.message);
-    if (process.env.STRICT_CATALOG === "1") process.exit(1);
-    catalog = readJson(catalogFile, { cards: [] });
-  }
+      if (process.env.STRICT_CATALOG === "1") process.exit(1);
+      catalog = readJson(catalogFile, { cards: [] });
+    }
   } else {
     if (!catalog.cards?.length) {
       console.warn("SKIP_CATALOG=1 ma catalog.json è vuoto: rigenero comunque.");
