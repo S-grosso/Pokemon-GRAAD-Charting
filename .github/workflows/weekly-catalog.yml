@@ -34,6 +34,7 @@ jobs:
           STRICT_CATALOG: "1"
 
       - name: Debug output
+        if: always()
         run: |
           echo "== File info =="
           ls -lh data/catalog.json data/prices.json data/meta.json || true
@@ -46,8 +47,12 @@ jobs:
           echo ""
           echo "== Git diff (name-only) =="
           git diff --name-only
+          echo ""
+          echo "== Last 5 commits =="
+          git --no-pager log -5 --oneline
 
       - name: Commit and push if changed
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
