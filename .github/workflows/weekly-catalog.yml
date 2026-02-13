@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -28,18 +30,30 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Debug (pre)
+        run: |
+          echo "== Commit =="
+          git rev-parse HEAD
+          echo ""
+          echo "== File info (pre) =="
+          ls -lh data/catalog.json data/prices.json data/meta.json || true
+          echo ""
+          echo "== Hashes (pre) =="
+          sha256sum data/catalog.json data/prices.json data/meta.json || true
+          echo ""
+
       - name: Run updater (catalog + prices)
         run: node scripts/update.js
         env:
           STRICT_CATALOG: "1"
 
-      - name: Debug output
+      - name: Debug (post)
         if: always()
         run: |
-          echo "== File info =="
+          echo "== File info (post) =="
           ls -lh data/catalog.json data/prices.json data/meta.json || true
           echo ""
-          echo "== Hashes =="
+          echo "== Hashes (post) =="
           sha256sum data/catalog.json data/prices.json data/meta.json || true
           echo ""
           echo "== Git status (porcelain) =="
@@ -48,11 +62,8 @@ jobs:
           echo "== Git diff (name-only) =="
           git diff --name-only
           echo ""
-          echo "== Last 5 commits =="
-          git --no-pager log -5 --oneline
 
       - name: Commit and push if changed
-        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
